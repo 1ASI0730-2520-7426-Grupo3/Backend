@@ -6,8 +6,8 @@ using coolgym_webapi.Contexts.Equipments.Domain.Services;
 namespace coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 
 /// <summary>
-/// Servicio de aplicación para consultas de Equipment (Operaciones de lectura)
-/// Implementa la lógica para GET, LIST, FILTER
+///     Servicio de aplicación para consultas de Equipment (Operaciones de lectura)
+///     Implementa la lógica para GET, LIST, FILTER
 /// </summary>
 public class EquipmentQueryService : IEquipmentQueryService
 {
@@ -19,7 +19,7 @@ public class EquipmentQueryService : IEquipmentQueryService
     }
 
     /// <summary>
-    /// Maneja la consulta para obtener todos los equipos
+    ///     Maneja la consulta para obtener todos los equipos
     /// </summary>
     /// <param name="query">Consulta GetAllEquipment</param>
     /// <returns>Lista de todos los equipos</returns>
@@ -29,7 +29,7 @@ public class EquipmentQueryService : IEquipmentQueryService
     }
 
     /// <summary>
-    /// Maneja la consulta para obtener un equipo por su ID
+    ///     Maneja la consulta para obtener un equipo por su ID
     /// </summary>
     /// <param name="query">Consulta GetEquipmentById con el ID</param>
     /// <returns>El equipo encontrado o null si no existe</returns>
@@ -39,7 +39,7 @@ public class EquipmentQueryService : IEquipmentQueryService
     }
 
     /// <summary>
-    /// Maneja la consulta para obtener equipos filtrados por tipo
+    ///     Maneja la consulta para obtener equipos filtrados por tipo
     /// </summary>
     /// <param name="query">Consulta GetEquipmentByType con el tipo a buscar</param>
     /// <returns>Lista de equipos del tipo especificado</returns>
@@ -49,7 +49,7 @@ public class EquipmentQueryService : IEquipmentQueryService
     }
 
     /// <summary>
-    /// Maneja la consulta para obtener equipos filtrados por estado
+    ///     Maneja la consulta para obtener equipos filtrados por estado
     /// </summary>
     /// <param name="query">Consulta GetEquipmentByStatus con el estado a buscar</param>
     /// <returns>Lista de equipos con el estado especificado</returns>

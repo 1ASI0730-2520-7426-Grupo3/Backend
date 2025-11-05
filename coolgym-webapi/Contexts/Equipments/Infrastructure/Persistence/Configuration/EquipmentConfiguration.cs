@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 
 namespace coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Configuration;
 
 /// <summary>
-/// Configuración de Entity Framework para la entidad Equipment
-/// Implementa IEntityTypeConfiguration para separar la configuración del DbContext
+///     Configuración de Entity Framework para la entidad Equipment
+///     Implementa IEntityTypeConfiguration para separar la configuración del DbContext
 /// </summary>
 public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
 {
@@ -88,7 +88,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
             .HasColumnName("notes")
             .HasMaxLength(500)
             .IsRequired(false);
-        
+
         builder.Property(e => e.Image)
             .HasColumnName("image")
             .HasMaxLength(500)
@@ -108,7 +108,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
     }
 
     /// <summary>
-    /// Configura el Value Object Location (Ubicación del equipo)
+    ///     Configura el Value Object Location (Ubicación del equipo)
     /// </summary>
     private static void ConfigureLocationValueObject(EntityTypeBuilder<Equipment> builder)
     {
@@ -127,7 +127,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
     }
 
     /// <summary>
-    /// Configura el Value Object UsageStats (Estadísticas de uso)
+    ///     Configura el Value Object UsageStats (Estadísticas de uso)
     /// </summary>
     private static void ConfigureUsageValueObject(EntityTypeBuilder<Equipment> builder)
     {
@@ -148,7 +148,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
     }
 
     /// <summary>
-    /// Configura el Value Object ControlSettings (Controles y configuración)
+    ///     Configura el Value Object ControlSettings (Controles y configuración)
     /// </summary>
     private static void ConfigureControlsValueObject(EntityTypeBuilder<Equipment> builder)
     {
@@ -183,7 +183,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
     }
 
     /// <summary>
-    /// Configura el Value Object MaintenanceInfo (Información de mantenimiento)
+    ///     Configura el Value Object MaintenanceInfo (Información de mantenimiento)
     /// </summary>
     private static void ConfigureMaintenanceValueObject(EntityTypeBuilder<Equipment> builder)
     {

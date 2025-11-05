@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Repositories;
 
 /// <summary>
-/// Implementación del repositorio de Equipment
-/// Hereda de BaseRepository y añade métodos especializados
+///     Implementación del repositorio de Equipment
+///     Hereda de BaseRepository y añade métodos especializados
 /// </summary>
 public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentRepository
 {
@@ -20,7 +20,7 @@ public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentReposito
     }
 
     /// <summary>
-    /// Busca un equipo por su número de serie único
+    ///     Busca un equipo por su número de serie único
     /// </summary>
     public async Task<Equipment?> FindBySerialNumberAsync(string serialNumber)
     {
@@ -29,7 +29,7 @@ public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentReposito
     }
 
     /// <summary>
-    /// Obtiene todos los equipos de un tipo específico (treadmill, bike, etc.)
+    ///     Obtiene todos los equipos de un tipo específico (treadmill, bike, etc.)
     /// </summary>
     public async Task<IEnumerable<Equipment>> FindByTypeAsync(string type)
     {
@@ -39,7 +39,7 @@ public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentReposito
     }
 
     /// <summary>
-    /// Obtiene todos los equipos con un estado específico (active, pending_maintenance, inactive)
+    ///     Obtiene todos los equipos con un estado específico (active, pending_maintenance, inactive)
     /// </summary>
     public async Task<IEnumerable<Equipment>> FindByStatusAsync(string status)
     {
@@ -49,7 +49,7 @@ public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentReposito
     }
 
     /// <summary>
-    /// Obtiene solo los equipos activos
+    ///     Obtiene solo los equipos activos
     /// </summary>
     public async Task<IEnumerable<Equipment>> FindActiveEquipmentAsync()
     {
@@ -59,8 +59,8 @@ public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentReposito
     }
 
     /// <summary>
-    /// Verifica si existe un equipo con el número de serie dado
-    /// Útil para validaciones antes de crear nuevos equipos
+    ///     Verifica si existe un equipo con el número de serie dado
+    ///     Útil para validaciones antes de crear nuevos equipos
     /// </summary>
     public async Task<bool> ExistsBySerialNumberAsync(string serialNumber)
     {

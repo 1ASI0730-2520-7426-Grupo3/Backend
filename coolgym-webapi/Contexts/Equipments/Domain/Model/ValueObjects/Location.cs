@@ -1,27 +1,27 @@
-﻿namespace coolgym_webapi.Contexts.Equipments.Domain.Model.ValueObjects;
+﻿using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
+
+namespace coolgym_webapi.Contexts.Equipments.Domain.Model.ValueObjects;
 
 public record Location
 {
-    public string Name { get; init; }
-    public string Address { get; init; }
-
     public Location(string name, string address)
     {
-        // Validación de Name
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("El nombre de la ubicación no puede estar vacío.", nameof(name));
-        
+            throw InvalidLocationException.EmptyName();
+
         if (name.Length > 100)
-            throw new ArgumentException("El nombre de la ubicación no puede exceder 100 caracteres.", nameof(name));
-        
-        // Validación de Address
+            throw InvalidLocationException.NameTooLong(name.Length);
+
         if (string.IsNullOrWhiteSpace(address))
-            throw new ArgumentException("La dirección no puede estar vacía.", nameof(address));
-        
+            throw InvalidLocationException.EmptyAddress();
+
         if (address.Length > 200)
-            throw new ArgumentException("La dirección no puede exceder 200 caracteres.", nameof(address));
+            throw InvalidLocationException.AddressTooLong(address.Length);
 
         Name = name.Trim();
         Address = address.Trim();
     }
+
+    public string Name { get; init; }
+    public string Address { get; init; }
 }

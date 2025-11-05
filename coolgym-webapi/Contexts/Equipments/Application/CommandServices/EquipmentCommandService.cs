@@ -1,4 +1,5 @@
 ﻿using coolgym_webapi.Contexts.Equipments.Domain.Commands;
+using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 using coolgym_webapi.Contexts.Equipments.Domain.Model.ValueObjects;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
@@ -8,8 +9,8 @@ using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 namespace coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 
 /// <summary>
-/// Servicio de aplicación para comandos de Equipment (Operaciones de escritura)
-/// Implementa la lógica de negocio para CREATE, UPDATE, DELETE
+///     Servicio de aplicación para comandos de Equipment (Operaciones de escritura)
+///     Implementa la lógica de negocio para CREATE, UPDATE, DELETE
 /// </summary>
 public class EquipmentCommandService : IEquipmentCommandService
 {
@@ -25,39 +26,31 @@ public class EquipmentCommandService : IEquipmentCommandService
     }
 
     /// <summary>
-    /// Maneja el comando para crear un nuevo equipo
+    ///     Maneja el comando para crear un nuevo equipo
     /// </summary>
     /// <param name="command">Datos del equipo a crear</param>
     /// <returns>El equipo creado</returns>
     public async Task<Equipment> Handle(CreateEquipmentCommand command)
     {
-        // Validar que el SerialNumber no exista
         var existingEquipment = await _equipmentRepository.FindBySerialNumberAsync(command.SerialNumber);
-        if (existingEquipment != null)
-        {
-            throw new InvalidOperationException(
-                $"Ya existe un equipo con el número de serie '{command.SerialNumber}'.");
-        }
-        
+        if (existingEquipment != null) throw new DuplicateSerialNumberException(command.SerialNumber);
+
         var location = new Location(command.LocationName, command.LocationAddress);
-        
+
         var equipment = new Equipment(
-            name: command.Name,
-            type: command.Type,
-            model: command.Model,
-            manufacturer: command.Manufacturer,
-            serialNumber: command.SerialNumber,
-            code: command.Code,
-            installationDate: command.InstallationDate,
-            powerWatts: command.PowerWatts,
-            location: location
+            command.Name,
+            command.Type,
+            command.Model,
+            command.Manufacturer,
+            command.SerialNumber,
+            command.Code,
+            command.InstallationDate,
+            command.PowerWatts,
+            location
         );
-        
-        if (!string.IsNullOrWhiteSpace(command.Image))
-        {
-            equipment.UpdateImage(command.Image);
-        }
-        
+
+        if (!string.IsNullOrWhiteSpace(command.Image)) equipment.UpdateImage(command.Image);
+
         await _equipmentRepository.AddAsync(equipment);
         await _unitOfWork.CompleteAsync();
 
@@ -65,18 +58,16 @@ public class EquipmentCommandService : IEquipmentCommandService
     }
 
     /// <summary>
-    /// Maneja el comando para actualizar un equipo existente
+    ///     Maneja el comando para actualizar un equipo existente
     /// </summary>
     /// <param name="command">Datos del equipo a actualizar</param>
     /// <returns>El equipo actualizado o null si no existe</returns>
     public async Task<Equipment?> Handle(UpdateEquipmentCommand command)
     {
-        // Buscar el equipo existente
         var equipment = await _equipmentRepository.FindByIdAsync(command.Id);
         if (equipment == null)
-            return null;
+            throw new EquipmentNotFoundException(command.Id);
 
-        // Actualizar propiedades simples directamente
         equipment.Name = command.Name;
         equipment.Code = command.Code;
         equipment.PowerWatts = command.PowerWatts;
@@ -84,20 +75,14 @@ public class EquipmentCommandService : IEquipmentCommandService
         equipment.ActiveStatus = command.ActiveStatus;
         equipment.Notes = command.Notes;
 
-        // Actualizar Status usando el método de dominio
         equipment.UpdateStatus(command.Status);
 
-        // Actualizar Location usando el método de dominio
         var newLocation = new Location(command.LocationName, command.LocationAddress);
         equipment.UpdateLocation(newLocation);
-        
-        // Actualizar imagen
-        equipment.UpdateImage(command.Image);
 
-        // Actualizar UpdatedDate
+        equipment.UpdateImage(command.Image);
         equipment.UpdatedDate = DateTime.UtcNow;
 
-        // Guardar cambios
         _equipmentRepository.Update(equipment);
         await _unitOfWork.CompleteAsync();
 
@@ -105,31 +90,20 @@ public class EquipmentCommandService : IEquipmentCommandService
     }
 
     /// <summary>
-    /// Maneja el comando para eliminar un equipo
+    ///     Maneja el comando para eliminar un equipo
     /// </summary>
     /// <param name="command">ID del equipo a eliminar</param>
     /// <returns>True si se eliminó correctamente, False si no existe</returns>
     public async Task<bool> Handle(DeleteEquipmentCommand command)
     {
-        // Buscar el equipo
         var equipment = await _equipmentRepository.FindByIdAsync(command.Id);
         if (equipment == null)
-            return false;
+            throw new EquipmentNotFoundException(command.Id);
 
-        // Validaciones de reglas de negocio antes de eliminar
-        if (equipment.IsPoweredOn)
-        {
-            throw new InvalidOperationException(
-                $"No se puede eliminar el equipo '{equipment.Name}' porque está encendido. Apáguelo primero.");
-        }
+        if (equipment.IsPoweredOn) throw new EquipmentPoweredOnException(equipment.Name);
 
-        if (equipment.Status == "maintenance")
-        {
-            throw new InvalidOperationException(
-                $"No se puede eliminar el equipo '{equipment.Name}' porque está en mantenimiento.");
-        }
+        if (equipment.Status == "maintenance") throw new EquipmentInMaintenanceException(equipment.Name);
 
-        // Eliminar el equipo
         _equipmentRepository.Remove(equipment);
         await _unitOfWork.CompleteAsync();
 

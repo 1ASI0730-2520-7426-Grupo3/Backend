@@ -1,11 +1,11 @@
-using coolgym_webapi.Contexts.Shared.Domain.Repositories;
-using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
-using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 using coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 using coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
 using coolgym_webapi.Contexts.Equipments.Domain.Services;
-using coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Repositories;  
+using coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.Shared.Domain.Repositories;
+using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
+using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins"; // <--- agregar para probar el back en el front
@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(MyAllowSpecificOrigins,
         policy =>
         {
             // ESTA ES LA URL DEl FRONTEND 
@@ -53,8 +53,8 @@ builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 // Equipment Context
 builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
-builder.Services.AddScoped<IEquipmentCommandService, EquipmentCommandService>();
-builder.Services.AddScoped<IEquipmentQueryService, EquipmentQueryService>();
+builder.Services.AddTransient<IEquipmentCommandService, EquipmentCommandService>();
+builder.Services.AddTransient<IEquipmentQueryService, EquipmentQueryService>();
 
 
 var app = builder.Build();
@@ -71,7 +71,7 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
 // Usar el middleware de CORS ANTES de UseAuthorization()
-app.UseCors(MyAllowSpecificOrigins); 
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 

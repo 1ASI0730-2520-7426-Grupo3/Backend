@@ -1,15 +1,15 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain.Model.ValueObjects;
+﻿using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
+using coolgym_webapi.Contexts.Equipments.Domain.Model.ValueObjects;
 using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
 
 namespace coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 
 public class Equipment : BaseEntity // Hereda de BaseEntity para Id, CreatedDate, UpdatedDate
 {
-    // Constructor vacío protegido necesario para EF Core
     protected Equipment()
     {
     }
-    
+
     public Equipment(string name, string type, string model, string manufacturer, string serialNumber, string code,
         DateTime installationDate, int powerWatts, Location location)
     {
@@ -22,9 +22,9 @@ public class Equipment : BaseEntity // Hereda de BaseEntity para Id, CreatedDate
         InstallationDate = installationDate;
         PowerWatts = powerWatts;
         Location = location ?? throw new ArgumentNullException(nameof(location));
-        Status = "active"; 
+        Status = "active";
         IsPoweredOn = false;
-        ActiveStatus = "Normal"; 
+        ActiveStatus = "Normal";
         Image = null;
 
         // Inicializa los otros VOs con valores por defecto o pasados por parámetro
@@ -32,7 +32,6 @@ public class Equipment : BaseEntity // Hereda de BaseEntity para Id, CreatedDate
         // Define rangos por defecto razonables
         Controls = new ControlSettings("off", 1, 1, 1, 10, "Normal");
         MaintenanceInfo = new MaintenanceInfo(null, null);
-        
     }
 
     public string Name { get; set; } = string.Empty;
@@ -46,8 +45,8 @@ public class Equipment : BaseEntity // Hereda de BaseEntity para Id, CreatedDate
     public string Status { get; set; } = "active";
     public bool IsPoweredOn { get; set; }
     public string ActiveStatus { get; set; } = string.Empty;
-    public string? Notes { get; set; } 
-    
+    public string? Notes { get; set; }
+
     public string? Image { get; set; }
 
     // Propiedades para los Value Objects (usamos 'private set' para proteger la instancia)
@@ -60,7 +59,7 @@ public class Equipment : BaseEntity // Hereda de BaseEntity para Id, CreatedDate
     public void UpdateStatus(string newStatus)
     {
         if (string.IsNullOrWhiteSpace(newStatus))
-            throw new ArgumentException("El estado no puede estar vacío.", nameof(newStatus));
+            throw new InvalidStatusException(newStatus);
         Status = newStatus;
     }
 
@@ -79,5 +78,4 @@ public class Equipment : BaseEntity // Hereda de BaseEntity para Id, CreatedDate
     {
         Image = imageUrl;
     }
-    
 }

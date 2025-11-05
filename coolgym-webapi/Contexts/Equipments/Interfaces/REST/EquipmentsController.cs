@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net.Mime;
 using coolgym_webapi.Contexts.Equipments.Domain.Commands;
+using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 using coolgym_webapi.Contexts.Equipments.Domain.Queries;
 using coolgym_webapi.Contexts.Equipments.Domain.Services;
 using coolgym_webapi.Contexts.Equipments.Interfaces.REST.Resources;
 using coolgym_webapi.Contexts.Equipments.Interfaces.REST.Transform;
-using System.Net.Mime;
+using Microsoft.AspNetCore.Mvc;
 
 namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST;
 
 /// <summary>
-/// Controller REST para gestionar Equipment
-/// Expone endpoints HTTP para CRUD completo
+///     Controller REST para gestionar Equipment
+///     Expone endpoints HTTP para CRUD completo
 /// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -27,10 +28,10 @@ public class EquipmentsController : ControllerBase
         _equipmentCommandService = equipmentCommandService;
         _equipmentQueryService = equipmentQueryService;
     }
-    
+
     /// <summary>
-    /// GET /api/v1/equipments
-    /// Obtiene todos los equipos registrados
+    ///     GET /api/v1/equipments
+    ///     Obtiene todos los equipos registrados
     /// </summary>
     /// <returns>Lista de todos los equipos</returns>
     [HttpGet]
@@ -44,8 +45,8 @@ public class EquipmentsController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/v1/equipments/{id}
-    /// Obtiene un equipo específico por su ID
+    ///     GET /api/v1/equipments/{id}
+    ///     Obtiene un equipo específico por su ID
     /// </summary>
     /// <param name="id">ID del equipo</param>
     /// <returns>Equipo encontrado</returns>
@@ -65,8 +66,8 @@ public class EquipmentsController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/v1/equipments/type/{type}
-    /// Obtiene equipos filtrados por tipo (ej: "Treadmill", "Bike")
+    ///     GET /api/v1/equipments/type/{type}
+    ///     Obtiene equipos filtrados por tipo (ej: "Treadmill", "Bike")
     /// </summary>
     /// <param name="type">Tipo de equipo</param>
     /// <returns>Lista de equipos del tipo especificado</returns>
@@ -81,8 +82,8 @@ public class EquipmentsController : ControllerBase
     }
 
     /// <summary>
-    /// GET /api/v1/equipments/status/{status}
-    /// Obtiene equipos filtrados por estado (ej: "active", "maintenance")
+    ///     GET /api/v1/equipments/status/{status}
+    ///     Obtiene equipos filtrados por estado (ej: "active", "maintenance")
     /// </summary>
     /// <param name="status">Estado del equipo</param>
     /// <returns>Lista de equipos con el estado especificado</returns>
@@ -95,51 +96,64 @@ public class EquipmentsController : ControllerBase
         var resources = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipments);
         return Ok(resources);
     }
-    
+
     /// <summary>
-    /// POST /api/v1/equipments
-    /// Crea un nuevo equipo
+    ///     POST /api/v1/equipments
+    ///     Crea un nuevo equipo
     /// </summary>
     /// <param name="resource">Datos del equipo a crear</param>
     /// <returns>Equipo creado con su ID asignado</returns>
     [HttpPost]
     [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateEquipment([FromBody] CreateEquipmentResource resource)
     {
         try
         {
             // Convertir Resource → Command
             var command = CreateEquipmentCommandFromResourceAssembler.ToCommandFromResource(resource);
-
             // Ejecutar el comando
             var equipment = await _equipmentCommandService.Handle(command);
-
             // Convertir Entity → Resource
             var equipmentResource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment);
 
-            // Retornar 201 Created con Location header
             return CreatedAtAction(
                 nameof(GetEquipmentById),
                 new { id = equipment.Id },
                 equipmentResource
             );
         }
-        catch (InvalidOperationException ex)
+        catch (DuplicateSerialNumberException ex)
         {
-            // Error de validación de negocio (ej: SerialNumber duplicado)
+            return Conflict(new { message = ex.Message });
+        }
+        catch (InvalidLocationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (InvalidControlSettingsException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (InvalidUsageStatsException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
             return BadRequest(new { message = ex.Message });
         }
         catch (Exception ex)
         {
-            // Error inesperado
-            return StatusCode(500, new { message = "An error occurred while creating the equipment", detail = ex.Message });
+            return StatusCode(500,
+                new { message = "An error occurred while creating the equipment", detail = ex.Message });
         }
     }
 
     /// <summary>
-    /// PUT /api/v1/equipments/{id}
-    /// Actualiza un equipo existente
+    ///     PUT /api/v1/equipments/{id}
+    ///     Actualiza un equipo existente
     /// </summary>
     /// <param name="id">ID del equipo a actualizar</param>
     /// <param name="resource">Nuevos datos del equipo</param>
@@ -167,25 +181,32 @@ public class EquipmentsController : ControllerBase
 
             return Ok(equipmentResource);
         }
-        catch (InvalidOperationException ex)
+        catch (EquipmentNotFoundException ex)
         {
-            // Error de validación de dominio
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidStatusException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (InvalidLocationException ex)
+        {
             return BadRequest(new { message = ex.Message });
         }
         catch (ArgumentException ex)
         {
-            // Error de validación de argumentos (ej: Status vacío)
             return BadRequest(new { message = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "An error occurred while updating the equipment", detail = ex.Message });
+            return StatusCode(500,
+                new { message = "An error occurred while updating the equipment", detail = ex.Message });
         }
     }
 
     /// <summary>
-    /// DELETE /api/v1/equipments/{id}
-    /// Elimina un equipo
+    ///     DELETE /api/v1/equipments/{id}
+    ///     Elimina un equipo
     /// </summary>
     /// <param name="id">ID del equipo a eliminar</param>
     /// <returns>204 No Content si se eliminó correctamente</returns>
@@ -206,14 +227,22 @@ public class EquipmentsController : ControllerBase
             // 204 No Content: Éxito sin cuerpo de respuesta
             return NoContent();
         }
-        catch (InvalidOperationException ex)
+        catch (EquipmentNotFoundException ex)
         {
-            // Error de validación de negocio (ej: equipo encendido, en mantenimiento)
+            return NotFound(new { message = ex.Message });
+        }
+        catch (EquipmentPoweredOnException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (EquipmentInMaintenanceException ex)
+        {
             return BadRequest(new { message = ex.Message });
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "An error occurred while deleting the equipment", detail = ex.Message });
+            return StatusCode(500,
+                new { message = "An error occurred while deleting the equipment", detail = ex.Message });
         }
     }
 }
