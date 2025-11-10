@@ -16,19 +16,10 @@ namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST;
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-public class EquipmentsController : ControllerBase
+public class EquipmentsController(
+    IEquipmentCommandService equipmentCommandService,
+    IEquipmentQueryService equipmentQueryService) : ControllerBase
 {
-    private readonly IEquipmentCommandService _equipmentCommandService;
-    private readonly IEquipmentQueryService _equipmentQueryService;
-
-    public EquipmentsController(
-        IEquipmentCommandService equipmentCommandService,
-        IEquipmentQueryService equipmentQueryService)
-    {
-        _equipmentCommandService = equipmentCommandService;
-        _equipmentQueryService = equipmentQueryService;
-    }
-
     /// <summary>
     ///     GET /api/v1/equipments
     ///     Obtiene todos los equipos registrados
@@ -39,7 +30,7 @@ public class EquipmentsController : ControllerBase
     public async Task<IActionResult> GetAllEquipments()
     {
         var query = new GetAllEquipment();
-        var equipments = await _equipmentQueryService.Handle(query);
+        var equipments = await equipmentQueryService.Handle(query);
         var resources = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipments);
         return Ok(resources);
     }
@@ -56,7 +47,7 @@ public class EquipmentsController : ControllerBase
     public async Task<IActionResult> GetEquipmentById(int id)
     {
         var query = new GetEquipmentById(id);
-        var equipment = await _equipmentQueryService.Handle(query);
+        var equipment = await equipmentQueryService.Handle(query);
 
         if (equipment == null)
             return NotFound(new { message = $"Equipment with id {id} not found" });
@@ -76,7 +67,7 @@ public class EquipmentsController : ControllerBase
     public async Task<IActionResult> GetEquipmentsByType(string type)
     {
         var query = new GetEquipmentByType(type);
-        var equipments = await _equipmentQueryService.Handle(query);
+        var equipments = await equipmentQueryService.Handle(query);
         var resources = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipments);
         return Ok(resources);
     }
@@ -92,7 +83,7 @@ public class EquipmentsController : ControllerBase
     public async Task<IActionResult> GetEquipmentsByStatus(string status)
     {
         var query = new GetEquipmentByStatus(status);
-        var equipments = await _equipmentQueryService.Handle(query);
+        var equipments = await equipmentQueryService.Handle(query);
         var resources = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipments);
         return Ok(resources);
     }
@@ -114,7 +105,7 @@ public class EquipmentsController : ControllerBase
             // Convertir Resource → Command
             var command = CreateEquipmentCommandFromResourceAssembler.ToCommandFromResource(resource);
             // Ejecutar el comando
-            var equipment = await _equipmentCommandService.Handle(command);
+            var equipment = await equipmentCommandService.Handle(command);
             // Convertir Entity → Resource
             var equipmentResource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment);
 
@@ -170,7 +161,7 @@ public class EquipmentsController : ControllerBase
             var command = UpdateEquipmentCommandFromResourceAssembler.ToCommandFromResource(id, resource);
 
             // Ejecutar el comando
-            var equipment = await _equipmentCommandService.Handle(command);
+            var equipment = await equipmentCommandService.Handle(command);
 
             // Verificar si se encontró el equipo
             if (equipment == null)
@@ -219,7 +210,7 @@ public class EquipmentsController : ControllerBase
         try
         {
             var command = new DeleteEquipmentCommand(id);
-            var result = await _equipmentCommandService.Handle(command);
+            var result = await equipmentCommandService.Handle(command);
 
             if (!result)
                 return NotFound(new { message = $"Equipment with id {id} not found" });

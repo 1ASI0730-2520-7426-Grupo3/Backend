@@ -12,19 +12,9 @@ namespace coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 ///     Servicio de aplicación para comandos de Equipment (Operaciones de escritura)
 ///     Implementa la lógica de negocio para CREATE, UPDATE, DELETE
 /// </summary>
-public class EquipmentCommandService : IEquipmentCommandService
+public class EquipmentCommandService(IEquipmentRepository equipmentRepository, IUnitOfWork unitOfWork) 
+    : IEquipmentCommandService
 {
-    private readonly IEquipmentRepository _equipmentRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public EquipmentCommandService(
-        IEquipmentRepository equipmentRepository,
-        IUnitOfWork unitOfWork)
-    {
-        _equipmentRepository = equipmentRepository;
-        _unitOfWork = unitOfWork;
-    }
-
     /// <summary>
     ///     Maneja el comando para crear un nuevo equipo
     /// </summary>
@@ -32,7 +22,7 @@ public class EquipmentCommandService : IEquipmentCommandService
     /// <returns>El equipo creado</returns>
     public async Task<Equipment> Handle(CreateEquipmentCommand command)
     {
-        var existingEquipment = await _equipmentRepository.FindBySerialNumberAsync(command.SerialNumber);
+        var existingEquipment = await equipmentRepository.FindBySerialNumberAsync(command.SerialNumber);
         if (existingEquipment != null) throw new DuplicateSerialNumberException(command.SerialNumber);
 
         var location = new Location(command.LocationName, command.LocationAddress);
@@ -51,8 +41,8 @@ public class EquipmentCommandService : IEquipmentCommandService
 
         if (!string.IsNullOrWhiteSpace(command.Image)) equipment.UpdateImage(command.Image);
 
-        await _equipmentRepository.AddAsync(equipment);
-        await _unitOfWork.CompleteAsync();
+        await equipmentRepository.AddAsync(equipment);
+        await unitOfWork.CompleteAsync();
 
         return equipment;
     }
@@ -64,7 +54,7 @@ public class EquipmentCommandService : IEquipmentCommandService
     /// <returns>El equipo actualizado o null si no existe</returns>
     public async Task<Equipment?> Handle(UpdateEquipmentCommand command)
     {
-        var equipment = await _equipmentRepository.FindByIdAsync(command.Id);
+        var equipment = await equipmentRepository.FindByIdAsync(command.Id);
         if (equipment == null)
             throw new EquipmentNotFoundException(command.Id);
 
@@ -83,8 +73,8 @@ public class EquipmentCommandService : IEquipmentCommandService
         equipment.UpdateImage(command.Image);
         equipment.UpdatedDate = DateTime.UtcNow;
 
-        _equipmentRepository.Update(equipment);
-        await _unitOfWork.CompleteAsync();
+        equipmentRepository.Update(equipment);
+        await unitOfWork.CompleteAsync();
 
         return equipment;
     }
@@ -96,7 +86,7 @@ public class EquipmentCommandService : IEquipmentCommandService
     /// <returns>True si se eliminó correctamente, False si no existe</returns>
     public async Task<bool> Handle(DeleteEquipmentCommand command)
     {
-        var equipment = await _equipmentRepository.FindByIdAsync(command.Id);
+        var equipment = await equipmentRepository.FindByIdAsync(command.Id);
         if (equipment == null)
             throw new EquipmentNotFoundException(command.Id);
 
@@ -104,8 +94,8 @@ public class EquipmentCommandService : IEquipmentCommandService
 
         if (equipment.Status == "maintenance") throw new EquipmentInMaintenanceException(equipment.Name);
 
-        _equipmentRepository.Remove(equipment);
-        await _unitOfWork.CompleteAsync();
+        equipmentRepository.Remove(equipment);
+        await unitOfWork.CompleteAsync();
 
         return true;
     }

@@ -9,15 +9,9 @@ namespace coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 ///     Servicio de aplicación para consultas de Equipment (Operaciones de lectura)
 ///     Implementa la lógica para GET, LIST, FILTER
 /// </summary>
-public class EquipmentQueryService : IEquipmentQueryService
+public class EquipmentQueryService(IEquipmentRepository equipmentRepository) 
+    : IEquipmentQueryService
 {
-    private readonly IEquipmentRepository _equipmentRepository;
-
-    public EquipmentQueryService(IEquipmentRepository equipmentRepository)
-    {
-        _equipmentRepository = equipmentRepository;
-    }
-
     /// <summary>
     ///     Maneja la consulta para obtener todos los equipos
     /// </summary>
@@ -25,7 +19,7 @@ public class EquipmentQueryService : IEquipmentQueryService
     /// <returns>Lista de todos los equipos</returns>
     public async Task<IEnumerable<Equipment>> Handle(GetAllEquipment query)
     {
-        return await _equipmentRepository.ListAsync();
+        return await equipmentRepository.ListAsync();
     }
 
     /// <summary>
@@ -35,7 +29,7 @@ public class EquipmentQueryService : IEquipmentQueryService
     /// <returns>El equipo encontrado o null si no existe</returns>
     public async Task<Equipment?> Handle(GetEquipmentById query)
     {
-        return await _equipmentRepository.FindByIdAsync(query.Id);
+        return await equipmentRepository.FindByIdAsync(query.Id);
     }
 
     /// <summary>
@@ -45,7 +39,7 @@ public class EquipmentQueryService : IEquipmentQueryService
     /// <returns>Lista de equipos del tipo especificado</returns>
     public async Task<IEnumerable<Equipment>> Handle(GetEquipmentByType query)
     {
-        return await _equipmentRepository.FindByTypeAsync(query.Type);
+        return await equipmentRepository.FindByTypeAsync(query.Type);
     }
 
     /// <summary>
@@ -55,6 +49,6 @@ public class EquipmentQueryService : IEquipmentQueryService
     /// <returns>Lista de equipos con el estado especificado</returns>
     public async Task<IEnumerable<Equipment>> Handle(GetEquipmentByStatus query)
     {
-        return await _equipmentRepository.FindByStatusAsync(query.Status);
+        return await equipmentRepository.FindByStatusAsync(query.Status);
     }
 }

@@ -10,21 +10,15 @@ namespace coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Reposito
 ///     Implementación del repositorio de Equipment
 ///     Hereda de BaseRepository y añade métodos especializados
 /// </summary>
-public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentRepository
+public class EquipmentRepository(CoolgymContext context) 
+    : BaseRepository<Equipment>(context), IEquipmentRepository
 {
-    private readonly CoolgymContext _context;
-
-    public EquipmentRepository(CoolgymContext context) : base(context)
-    {
-        _context = context;
-    }
-
     /// <summary>
     ///     Busca un equipo por su número de serie único
     /// </summary>
     public async Task<Equipment?> FindBySerialNumberAsync(string serialNumber)
     {
-        return await _context.Equipments
+        return await context.Equipments
             .FirstOrDefaultAsync(e => e.SerialNumber == serialNumber);
     }
 
@@ -33,7 +27,7 @@ public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentReposito
     /// </summary>
     public async Task<IEnumerable<Equipment>> FindByTypeAsync(string type)
     {
-        return await _context.Equipments
+        return await context.Equipments
             .Where(e => e.Type == type)
             .ToListAsync();
     }
@@ -43,7 +37,7 @@ public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentReposito
     /// </summary>
     public async Task<IEnumerable<Equipment>> FindByStatusAsync(string status)
     {
-        return await _context.Equipments
+        return await context.Equipments
             .Where(e => e.Status == status)
             .ToListAsync();
     }
@@ -53,7 +47,7 @@ public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentReposito
     /// </summary>
     public async Task<IEnumerable<Equipment>> FindActiveEquipmentAsync()
     {
-        return await _context.Equipments
+        return await context.Equipments
             .Where(e => e.Status == "active")
             .ToListAsync();
     }
@@ -64,7 +58,7 @@ public class EquipmentRepository : BaseRepository<Equipment>, IEquipmentReposito
     /// </summary>
     public async Task<bool> ExistsBySerialNumberAsync(string serialNumber)
     {
-        return await _context.Equipments
+        return await context.Equipments
             .AnyAsync(e => e.SerialNumber == serialNumber);
     }
 }
