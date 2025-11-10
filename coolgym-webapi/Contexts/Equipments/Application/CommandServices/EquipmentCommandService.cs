@@ -12,7 +12,7 @@ namespace coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 ///     Servicio de aplicación para comandos de Equipment (Operaciones de escritura)
 ///     Implementa la lógica de negocio para CREATE, UPDATE, DELETE
 /// </summary>
-public class EquipmentCommandService(IEquipmentRepository equipmentRepository, IUnitOfWork unitOfWork) 
+public class EquipmentCommandService(IEquipmentRepository equipmentRepository, IUnitOfWork unitOfWork)
     : IEquipmentCommandService
 {
     /// <summary>
@@ -87,22 +87,22 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
     public async Task<bool> Handle(DeleteEquipmentCommand command)
     {
         var equipment = await equipmentRepository.FindByIdAsync(command.Id);
-        
+
         if (equipment == null || equipment.IsDeleted == 1)
             throw new EquipmentNotFoundException(command.Id);
 
         // Validaciones de reglas de negocio
-        if (equipment.IsPoweredOn) 
+        if (equipment.IsPoweredOn)
             throw new EquipmentPoweredOnException(equipment.Name);
 
-        if (equipment.Status == "maintenance") 
+        if (equipment.Status == "maintenance")
             throw new EquipmentInMaintenanceException(equipment.Name);
 
         // Marcar como eliminado en vez de borrar físicamente
         equipment.IsDeleted = 1;
         equipment.UpdatedDate = DateTime.UtcNow;
-    
-        equipmentRepository.Update(equipment); 
+
+        equipmentRepository.Update(equipment);
         await unitOfWork.CompleteAsync();
 
         return true;

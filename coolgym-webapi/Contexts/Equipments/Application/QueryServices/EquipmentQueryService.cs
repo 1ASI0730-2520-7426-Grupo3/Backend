@@ -9,7 +9,7 @@ namespace coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 ///     Servicio de aplicación para consultas de Equipment (Operaciones de lectura)
 ///     Implementa la lógica para GET, LIST, FILTER
 /// </summary>
-public class EquipmentQueryService(IEquipmentRepository equipmentRepository) 
+public class EquipmentQueryService(IEquipmentRepository equipmentRepository)
     : IEquipmentQueryService
 {
     /// <summary>

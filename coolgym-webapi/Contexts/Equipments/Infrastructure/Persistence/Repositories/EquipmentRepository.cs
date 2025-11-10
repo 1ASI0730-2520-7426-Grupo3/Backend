@@ -10,7 +10,7 @@ namespace coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Reposito
 ///     Implementación del repositorio de Equipment
 ///     Hereda de BaseRepository y añade métodos especializados
 /// </summary>
-public class EquipmentRepository(CoolgymContext context) 
+public class EquipmentRepository(CoolgymContext context)
     : BaseRepository<Equipment>(context), IEquipmentRepository
 {
     /// <summary>
@@ -19,7 +19,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<Equipment?> FindBySerialNumberAsync(string serialNumber)
     {
         return await context.Equipments
-            .Where(e => e.IsDeleted == 0) 
+            .Where(e => e.IsDeleted == 0)
             .FirstOrDefaultAsync(e => e.SerialNumber == serialNumber);
     }
 
@@ -29,7 +29,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<IEnumerable<Equipment>> FindByTypeAsync(string type)
     {
         return await context.Equipments
-            .Where(e => e.Type == type && e.IsDeleted == 0) 
+            .Where(e => e.Type == type && e.IsDeleted == 0)
             .ToListAsync();
     }
 
@@ -39,7 +39,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<IEnumerable<Equipment>> FindByStatusAsync(string status)
     {
         return await context.Equipments
-            .Where(e => e.Status == status && e.IsDeleted == 0) 
+            .Where(e => e.Status == status && e.IsDeleted == 0)
             .ToListAsync();
     }
 
@@ -49,7 +49,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<IEnumerable<Equipment>> FindActiveEquipmentAsync()
     {
         return await context.Equipments
-            .Where(e => e.Status == "active" && e.IsDeleted == 0) 
+            .Where(e => e.Status == "active" && e.IsDeleted == 0)
             .ToListAsync();
     }
 
@@ -60,7 +60,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<bool> ExistsBySerialNumberAsync(string serialNumber)
     {
         return await context.Equipments
-            .Where(e => e.IsDeleted == 0) 
+            .Where(e => e.IsDeleted == 0)
             .AnyAsync(e => e.SerialNumber == serialNumber);
     }
 }
