@@ -29,6 +29,11 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
         builder.Property(e => e.UpdatedDate)
             .HasColumnName("updated_date")
             .IsRequired(false);
+        
+        builder.Property(e => e.IsDeleted)
+            .HasColumnName("is_deleted")
+            .IsRequired()
+            .HasDefaultValue(0);
 
         // ===== PROPIEDADES BÁSICAS =====
         builder.Property(e => e.Name)

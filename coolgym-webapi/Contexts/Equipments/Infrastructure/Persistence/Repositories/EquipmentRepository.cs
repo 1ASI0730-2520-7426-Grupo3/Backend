@@ -19,6 +19,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<Equipment?> FindBySerialNumberAsync(string serialNumber)
     {
         return await context.Equipments
+            .Where(e => e.IsDeleted == 0) 
             .FirstOrDefaultAsync(e => e.SerialNumber == serialNumber);
     }
 
@@ -28,7 +29,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<IEnumerable<Equipment>> FindByTypeAsync(string type)
     {
         return await context.Equipments
-            .Where(e => e.Type == type)
+            .Where(e => e.Type == type && e.IsDeleted == 0) 
             .ToListAsync();
     }
 
@@ -38,7 +39,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<IEnumerable<Equipment>> FindByStatusAsync(string status)
     {
         return await context.Equipments
-            .Where(e => e.Status == status)
+            .Where(e => e.Status == status && e.IsDeleted == 0) 
             .ToListAsync();
     }
 
@@ -48,7 +49,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<IEnumerable<Equipment>> FindActiveEquipmentAsync()
     {
         return await context.Equipments
-            .Where(e => e.Status == "active")
+            .Where(e => e.Status == "active" && e.IsDeleted == 0) 
             .ToListAsync();
     }
 
@@ -59,6 +60,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<bool> ExistsBySerialNumberAsync(string serialNumber)
     {
         return await context.Equipments
+            .Where(e => e.IsDeleted == 0) 
             .AnyAsync(e => e.SerialNumber == serialNumber);
     }
 }
