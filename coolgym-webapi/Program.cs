@@ -1,3 +1,8 @@
+using coolgym_webapi.Contexts.BillingInvoices.Application.CommandServices;
+using coolgym_webapi.Contexts.BillingInvoices.Application.QueryServices;
+using coolgym_webapi.Contexts.BillingInvoices.Domain.Repositories;
+using coolgym_webapi.Contexts.BillingInvoices.Domain.Services;
+using coolgym_webapi.Contexts.BillingInvoices.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 using coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
@@ -55,6 +60,11 @@ builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddTransient<IEquipmentCommandService, EquipmentCommandService>();
 builder.Services.AddTransient<IEquipmentQueryService, EquipmentQueryService>();
+
+// Billing Invoices Context
+builder.Services.AddScoped<IBillingInvoiceRepository, BillingInvoiceRepository>();
+builder.Services.AddTransient<IInvoiceQueryService, InvoiceQueryService>();
+builder.Services.AddTransient<IInvoiceCommandService, InvoiceCommandService>();
 
 
 var app = builder.Build();
