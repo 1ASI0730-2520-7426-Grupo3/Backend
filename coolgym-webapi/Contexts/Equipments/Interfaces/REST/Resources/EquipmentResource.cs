@@ -1,8 +1,8 @@
 ﻿namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST.Resources;
 
 /// <summary>
-///     DTO: Representación completa de Equipment para respuestas de la API
-///     Este es el objeto que se envía al cliente en formato JSON
+///     DTO: Representación completa de Equipment para respuestas de la API.
+///     Este es el objeto que se envía al cliente en formato JSON.
 /// </summary>
 public record EquipmentResource(
     int Id,

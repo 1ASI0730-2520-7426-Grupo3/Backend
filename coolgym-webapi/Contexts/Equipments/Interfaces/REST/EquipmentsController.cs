@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST;
 
 /// <summary>
-///     Controller REST para gestionar Equipment
-///     Expone endpoints HTTP para CRUD completo
+///     Controller REST para gestionar Equipment (equipos de fitness)
+///     Expone endpoints HTTP para operaciones CRUD completas con monitoreo en tiempo real
 /// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -21,10 +21,29 @@ public class EquipmentsController(
     IEquipmentQueryService equipmentQueryService) : ControllerBase
 {
     /// <summary>
-    ///     GET /api/v1/equipments
-    ///     Obtiene todos los equipos registrados
+    ///     Obtiene todos los equipos de fitness registrados en el sistema
     /// </summary>
-    /// <returns>Lista de todos los equipos</returns>
+    /// <remarks>
+    ///     Retorna una lista completa de equipos activos (no eliminados lógicamente).
+    ///     Cada equipo incluye información de ubicación, uso, controles y mantenimiento.
+    ///     Ejemplo de respuesta:
+    ///     GET /api/v1/equipments
+    ///     [
+    ///     {
+    ///     "id": 1,
+    ///     "name": "Treadmill Pro X-500",
+    ///     "type": "treadmill",
+    ///     "status": "active",
+    ///     "isPoweredOn": true,
+    ///     "location": {
+    ///     "name": "Cardio Area",
+    ///     "address": "Floor 1, Section A"
+    ///     }
+    ///     }
+    ///     ]
+    /// </remarks>
+    /// <returns>Lista de todos los equipos registrados</returns>
+    /// <response code="200">Retorna la lista de equipos exitosamente</response>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<EquipmentResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllEquipments()
@@ -36,11 +55,22 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     GET /api/v1/equipments/{id}
-    ///     Obtiene un equipo específico por su ID
+    ///     Obtiene un equipo específico por su identificador único
     /// </summary>
-    /// <param name="id">ID del equipo</param>
-    /// <returns>Equipo encontrado</returns>
+    /// <remarks>
+    ///     Retorna la información detallada de un equipo incluyendo:
+    ///     - Datos básicos (nombre, tipo, modelo, fabricante)
+    ///     - Ubicación actual
+    ///     - Estadísticas de uso en tiempo real
+    ///     - Configuración de controles
+    ///     - Historial de mantenimiento
+    ///     Ejemplo de solicitud:
+    ///     GET /api/v1/equipments/1
+    /// </remarks>
+    /// <param name="id">Identificador único del equipo (número entero positivo)</param>
+    /// <returns>Equipo encontrado con toda su información</returns>
+    /// <response code="200">Equipo encontrado exitosamente</response>
+    /// <response code="404">No se encontró un equipo con el ID especificado</response>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -57,11 +87,20 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     GET /api/v1/equipments/type/{type}
-    ///     Obtiene equipos filtrados por tipo (ej: "Treadmill", "Bike")
+    ///     Obtiene equipos filtrados por tipo (categoría)
     /// </summary>
-    /// <param name="type">Tipo de equipo</param>
+    /// <remarks>
+    ///     Filtra equipos según su categoría. Tipos válidos incluyen:
+    ///     - **treadmill**: Caminadoras y cintas de correr
+    ///     - **bike**: Bicicletas estáticas
+    ///     - **elliptical**: Máquinas elípticas
+    ///     - **rower**: Máquinas de remo
+    ///     Ejemplo de solicitud:
+    ///     GET /api/v1/equipments/type/treadmill
+    /// </remarks>
+    /// <param name="type">Tipo/categoría del equipo (ej: "treadmill", "bike", "elliptical")</param>
     /// <returns>Lista de equipos del tipo especificado</returns>
+    /// <response code="200">Retorna lista de equipos filtrados (puede estar vacía)</response>
     [HttpGet("type/{type}")]
     [ProducesResponseType(typeof(IEnumerable<EquipmentResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetEquipmentsByType(string type)
@@ -73,11 +112,20 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     GET /api/v1/equipments/status/{status}
-    ///     Obtiene equipos filtrados por estado (ej: "active", "maintenance")
+    ///     Obtiene equipos filtrados por su estado operativo
     /// </summary>
-    /// <param name="status">Estado del equipo</param>
+    /// <remarks>
+    ///     Filtra equipos según su estado actual. Estados válidos:
+    ///     - **active**: Equipo operativo y disponible para uso
+    ///     - **maintenance**: Equipo en mantenimiento programado
+    ///     - **pending_maintenance**: Requiere mantenimiento pronto
+    ///     - **inactive**: Equipo temporalmente fuera de servicio
+    ///     Ejemplo de solicitud:
+    ///     GET /api/v1/equipments/status/active
+    /// </remarks>
+    /// <param name="status">Estado del equipo (ej: "active", "maintenance", "inactive")</param>
     /// <returns>Lista de equipos con el estado especificado</returns>
+    /// <response code="200">Retorna lista de equipos filtrados</response>
     [HttpGet("status/{status}")]
     [ProducesResponseType(typeof(IEnumerable<EquipmentResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetEquipmentsByStatus(string status)
@@ -89,24 +137,46 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     POST /api/v1/equipments
-    ///     Crea un nuevo equipo
+    ///     Registra un nuevo equipo de fitness en el sistema
     /// </summary>
-    /// <param name="resource">Datos del equipo a crear</param>
-    /// <returns>Equipo creado con su ID asignado</returns>
+    /// <remarks>
+    ///     Crea un nuevo equipo con validaciones de negocio:
+    ///     - El número de serie debe ser único en el sistema
+    ///     - La ubicación debe tener nombre y dirección válidos
+    ///     - Los datos técnicos (potencia, modelo) son obligatorios
+    ///     Ejemplo de solicitud:
+    ///     POST /api/v1/equipments
+    ///     {
+    ///     "name": "Treadmill Pro X-500",
+    ///     "type": "treadmill",
+    ///     "model": "TRX-500",
+    ///     "manufacturer": "LifeFitness",
+    ///     "serialNumber": "TRX500-001",
+    ///     "code": "CAM-001",
+    ///     "installationDate": "2025-01-15",
+    ///     "powerWatts": 1500,
+    ///     "locationName": "Cardio Area",
+    ///     "locationAddress": "Floor 1, Section A",
+    ///     "image": "https://example.com/images/treadmill.jpg"
+    ///     }
+    /// </remarks>
+    /// <param name="resource">Datos del equipo a registrar</param>
+    /// <returns>Equipo creado con su ID asignado automáticamente</returns>
+    /// <response code="201">Equipo creado exitosamente. Retorna el equipo completo con su ID</response>
+    /// <response code="400">Datos de entrada inválidos (validaciones de Value Objects)</response>
+    /// <response code="409">Conflicto: Ya existe un equipo con ese número de serie</response>
+    /// <response code="500">Error interno del servidor</response>
     [HttpPost]
     [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateEquipment([FromBody] CreateEquipmentResource resource)
     {
         try
         {
-            // Convertir Resource → Command
             var command = CreateEquipmentCommandFromResourceAssembler.ToCommandFromResource(resource);
-            // Ejecutar el comando
             var equipment = await equipmentCommandService.Handle(command);
-            // Convertir Entity → Resource
             var equipmentResource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment);
 
             return CreatedAtAction(
@@ -143,33 +213,60 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     PUT /api/v1/equipments/{id}
-    ///     Actualiza un equipo existente
+    ///     Actualiza la información de un equipo existente
     /// </summary>
-    /// <param name="id">ID del equipo a actualizar</param>
+    /// <remarks>
+    ///     Permite modificar datos de un equipo previamente registrado.
+    ///     **Campos actualizables:**
+    ///     - Nombre y código del equipo
+    ///     - Potencia eléctrica (watts)
+    ///     - Estado de encendido (on/off)
+    ///     - Estado operativo
+    ///     - Ubicación (nombre y dirección)
+    ///     - Notas adicionales
+    ///     - Imagen/foto del equipo
+    ///     **Campos NO modificables:**
+    ///     - Número de serie (inmutable por seguridad)
+    ///     - Fecha de instalación
+    ///     - Modelo y fabricante
+    ///     Ejemplo de solicitud:
+    ///     PUT /api/v1/equipments/1
+    ///     {
+    ///     "name": "Treadmill Pro X-500 Updated",
+    ///     "code": "CAM-001-MOD",
+    ///     "powerWatts": 1600,
+    ///     "isPoweredOn": true,
+    ///     "activeStatus": "Normal",
+    ///     "notes": "Recently serviced",
+    ///     "status": "active",
+    ///     "locationName": "Cardio Area VIP",
+    ///     "locationAddress": "Floor 2, Section B",
+    ///     "image": "https://example.com/images/treadmill-updated.jpg"
+    ///     }
+    /// </remarks>
+    /// <param name="id">Identificador del equipo a actualizar</param>
     /// <param name="resource">Nuevos datos del equipo</param>
-    /// <returns>Equipo actualizado</returns>
+    /// <returns>Equipo actualizado con los nuevos valores</returns>
+    /// <response code="200">Equipo actualizado exitosamente</response>
+    /// <response code="400">Datos de entrada inválidos</response>
+    /// <response code="404">No se encontró un equipo con el ID especificado</response>
+    /// <response code="500">Error interno del servidor</response>
     [HttpPut("{id:int}")]
     [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> UpdateEquipment(int id, [FromBody] UpdateEquipmentResource resource)
     {
         try
         {
-            // Convertir Resource → Command
             var command = UpdateEquipmentCommandFromResourceAssembler.ToCommandFromResource(id, resource);
-
-            // Ejecutar el comando
             var equipment = await equipmentCommandService.Handle(command);
 
-            // Verificar si se encontró el equipo
             if (equipment == null)
                 return NotFound(new { message = $"Equipment with id {id} not found" });
 
-            // Convertir Entity → Resource
             var equipmentResource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment);
-
             return Ok(equipmentResource);
         }
         catch (EquipmentNotFoundException ex)
@@ -196,15 +293,32 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     DELETE /api/v1/equipments/{id}
-    ///     Elimina un equipo
+    ///     Elimina (desactiva) un equipo del sistema mediante borrado lógico
     /// </summary>
-    /// <param name="id">ID del equipo a eliminar</param>
+    /// <remarks>
+    ///     **Importante:** Esta operación NO borra físicamente el equipo de la base de datos.
+    ///     Realiza un "soft delete" marcando el campo `IsDeleted = 1`.
+    ///     **Validaciones de negocio antes de eliminar:**
+    ///     - ❌ El equipo NO debe estar encendido (IsPoweredOn = true)
+    ///     - ❌ El equipo NO debe estar en mantenimiento (Status = "maintenance")
+    ///     Si alguna validación falla, la operación se rechaza con error 400.
+    ///     **Recuperación:**
+    ///     Los equipos eliminados lógicamente pueden recuperarse mediante
+    ///     un script de base de datos cambiando `IsDeleted = 0`.
+    ///     Ejemplo de solicitud:
+    ///     DELETE /api/v1/equipments/1
+    /// </remarks>
+    /// <param name="id">Identificador del equipo a eliminar</param>
     /// <returns>204 No Content si se eliminó correctamente</returns>
+    /// <response code="204">Equipo eliminado exitosamente (sin contenido en respuesta)</response>
+    /// <response code="400">No se puede eliminar: equipo encendido o en mantenimiento</response>
+    /// <response code="404">No se encontró un equipo con el ID especificado</response>
+    /// <response code="500">Error interno del servidor</response>
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteEquipment(int id)
     {
         try
@@ -215,7 +329,6 @@ public class EquipmentsController(
             if (!result)
                 return NotFound(new { message = $"Equipment with id {id} not found" });
 
-            // 204 No Content: Éxito sin cuerpo de respuesta
             return NoContent();
         }
         catch (EquipmentNotFoundException ex)

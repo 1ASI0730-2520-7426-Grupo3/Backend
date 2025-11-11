@@ -1,3 +1,4 @@
+using System.Reflection;
 using coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 using coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
@@ -7,8 +8,9 @@ using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins"; // <--- agregar para probar el back en el front
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -24,7 +26,6 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -56,9 +57,55 @@ builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddTransient<IEquipmentCommandService, EquipmentCommandService>();
 builder.Services.AddTransient<IEquipmentQueryService, EquipmentQueryService>();
 
+//Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    // Información general de la API
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "CoolGym Equipment Management API",
+        Description = "An ASP.NET Core Web API for managing fitness equipment with real-time monitoring capabilities",
+        TermsOfService = new Uri("https://example.com/terms"),
+        Contact = new OpenApiContact
+        {
+            Name = "CoolGym Support Team",
+            Email = "support@coolgym.com",
+            Url = new Uri("https://example.com/contact")
+        },
+        License = new OpenApiLicense
+        {
+            Name = "CoolGym License",
+            Url = new Uri("https://example.com/license")
+        }
+    });
+
+    // using System.Reflection;
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    options.UseInlineDefinitionsForEnums();
+    // options.OrderActionsBy(apiDesc => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.HttpMethod}");
+});
 
 var app = builder.Build();
 
+//swagger
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
+        options.RoutePrefix = "swagger"; 
+        
+        options.DocumentTitle = "CoolGym API Documentation";
+        options.DisplayRequestDuration(); 
+        options.EnableDeepLinking(); 
+        options.EnableFilter(); 
+        options.ShowExtensions(); 
+    });
+}
 
 // Ensure DB is created
 using (var scope = app.Services.CreateScope())
