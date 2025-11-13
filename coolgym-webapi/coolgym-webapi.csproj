@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Contexts\maintenance\Domain\Model\ValueObjects\" />
         <Folder Include="Contexts\Equipments\Application\"/>
         <Folder Include="Contexts\Equipments\Interfaces\"/>
     </ItemGroup>
