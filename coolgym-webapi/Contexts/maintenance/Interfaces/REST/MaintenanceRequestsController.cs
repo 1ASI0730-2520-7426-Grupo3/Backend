@@ -1,9 +1,13 @@
 using System.Net.Mime;
+using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
+using coolgym_webapi.Contexts.maintenance.Domain.Commands;
+using coolgym_webapi.Contexts.maintenance.Domain.Exceptions;
 using coolgym_webapi.Contexts.maintenance.Domain.Queries;
 using coolgym_webapi.Contexts.maintenance.Domain.Services;
 using coolgym_webapi.Contexts.maintenance.Interfaces.REST.Resources;
 using coolgym_webapi.Contexts.maintenance.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
+using InvalidDataException = System.IO.InvalidDataException;
 
 namespace coolgym_webapi.Contexts.maintenance.Interfaces.REST;
 
@@ -85,6 +89,69 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
         return Ok(resources);
     }
     
+    [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(MaintenanceRequestResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateMaintenanceRequestStatus(int id, [FromBody] UpdateMaintenanceRequestStatusResource resource)
+    {
+        try
+        {
+            var command = UpdateMaintenanceRequestStatusCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+            var maintenanceRequest = await maintenanceRequestCommandService.Handle(command);
+
+            if (maintenanceRequest == null)
+                return NotFound(new { message = $"Maintenance Request with id {id} not found" });
+
+            var maintenanceRequestResource = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
+            return Ok(maintenanceRequestResource);
+        }
+        catch (MaintenanceRequestNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (InvalidDataException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500,
+                new { message = "An error occurred while updating the equipment", detail = ex.Message });
+        }
+    }
     
+    [HttpDelete("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteMaintenanceRequest(int id)
+    {
+        try
+        {
+            var command = new DeleteMaintenanceRequestCommand(id);
+            var result = await maintenanceRequestCommandService.Handle(command);
+
+            if (!result)
+                return NotFound(new { message = $"Maintenance Request with id {id} not found" });
+
+            return NoContent();
+        }
+        catch (MaintenanceRequestNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500,
+                new { message = "An error occurred while deleting the equipment", detail = ex.Message });
+        }
+    }
     
 }
