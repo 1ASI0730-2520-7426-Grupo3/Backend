@@ -1,4 +1,9 @@
 using System.Reflection;
+using coolgym_webapi.Contexts.BillingInvoices.Application.CommandServices;
+using coolgym_webapi.Contexts.BillingInvoices.Application.QueryServices;
+using coolgym_webapi.Contexts.BillingInvoices.Domain.Repositories;
+using coolgym_webapi.Contexts.BillingInvoices.Domain.Services;
+using coolgym_webapi.Contexts.BillingInvoices.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 using coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
@@ -14,6 +19,7 @@ using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -66,6 +72,11 @@ builder.Services.AddTransient<IEquipmentQueryService, EquipmentQueryService>();
 builder.Services.AddScoped<IMaintenanceRequestRepository, MaintenanceRequestRepository>();
 builder.Services.AddScoped<IMaintenanceRequestCommandService, MaintenanceRequestCommandService>();
 builder.Services.AddScoped<IMaintenanceRequestQueryService, MaintenanceRequestQueryService>();
+// Billing Invoices Context
+builder.Services.AddScoped<IBillingInvoiceRepository, BillingInvoiceRepository>();
+builder.Services.AddTransient<IInvoiceQueryService, InvoiceQueryService>();
+builder.Services.AddTransient<IInvoiceCommandService, InvoiceCommandService>();
+
 
 //Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -97,6 +108,7 @@ builder.Services.AddSwaggerGen(options =>
     options.UseInlineDefinitionsForEnums();
     // options.OrderActionsBy(apiDesc => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.HttpMethod}");
 });
+
 
 var app = builder.Build();
 
