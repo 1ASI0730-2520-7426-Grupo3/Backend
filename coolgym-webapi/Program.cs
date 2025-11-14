@@ -12,8 +12,9 @@ using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins"; // <--- agregar para probar el back en el front
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
@@ -29,7 +30,6 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -69,6 +69,22 @@ builder.Services.AddTransient<IInvoiceCommandService, InvoiceCommandService>();
 
 var app = builder.Build();
 
+//swagger
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
+        options.RoutePrefix = "swagger"; 
+        
+        options.DocumentTitle = "CoolGym API Documentation";
+        options.DisplayRequestDuration(); 
+        options.EnableDeepLinking(); 
+        options.EnableFilter(); 
+        options.ShowExtensions(); 
+    });
+}
 
 // Ensure DB is created
 using (var scope = app.Services.CreateScope())
