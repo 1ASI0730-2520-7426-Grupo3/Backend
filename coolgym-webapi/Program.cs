@@ -9,6 +9,11 @@ using coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
 using coolgym_webapi.Contexts.Equipments.Domain.Services;
 using coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.maintenance.Application.CommandServices;
+using coolgym_webapi.Contexts.maintenance.Application.QueryServices;
+using coolgym_webapi.Contexts.maintenance.Domain.Repositories;
+using coolgym_webapi.Contexts.maintenance.Domain.Services;
+using coolgym_webapi.Contexts.maintenance.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
@@ -63,6 +68,10 @@ builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddTransient<IEquipmentCommandService, EquipmentCommandService>();
 builder.Services.AddTransient<IEquipmentQueryService, EquipmentQueryService>();
 
+//Maintenance Request Context
+builder.Services.AddScoped<IMaintenanceRequestRepository, MaintenanceRequestRepository>();
+builder.Services.AddScoped<IMaintenanceRequestCommandService, MaintenanceRequestCommandService>();
+builder.Services.AddScoped<IMaintenanceRequestQueryService, MaintenanceRequestQueryService>();
 // Billing Invoices Context
 builder.Services.AddScoped<IBillingInvoiceRepository, BillingInvoiceRepository>();
 builder.Services.AddTransient<IInvoiceQueryService, InvoiceQueryService>();
