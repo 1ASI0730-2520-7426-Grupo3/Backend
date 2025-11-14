@@ -1,4 +1,8 @@
-using System.Reflection;
+using coolgym_webapi.Contexts.BillingInvoices.Application.CommandServices;
+using coolgym_webapi.Contexts.BillingInvoices.Application.QueryServices;
+using coolgym_webapi.Contexts.BillingInvoices.Domain.Repositories;
+using coolgym_webapi.Contexts.BillingInvoices.Domain.Services;
+using coolgym_webapi.Contexts.BillingInvoices.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 using coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
@@ -57,36 +61,11 @@ builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddTransient<IEquipmentCommandService, EquipmentCommandService>();
 builder.Services.AddTransient<IEquipmentQueryService, EquipmentQueryService>();
 
-//Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    // Información general de la API
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Version = "v1",
-        Title = "CoolGym Equipment Management API",
-        Description = "An ASP.NET Core Web API for managing fitness equipment with real-time monitoring capabilities",
-        TermsOfService = new Uri("https://example.com/terms"),
-        Contact = new OpenApiContact
-        {
-            Name = "CoolGym Support Team",
-            Email = "support@coolgym.com",
-            Url = new Uri("https://example.com/contact")
-        },
-        License = new OpenApiLicense
-        {
-            Name = "CoolGym License",
-            Url = new Uri("https://example.com/license")
-        }
-    });
+// Billing Invoices Context
+builder.Services.AddScoped<IBillingInvoiceRepository, BillingInvoiceRepository>();
+builder.Services.AddTransient<IInvoiceQueryService, InvoiceQueryService>();
+builder.Services.AddTransient<IInvoiceCommandService, InvoiceCommandService>();
 
-    // using System.Reflection;
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-    options.UseInlineDefinitionsForEnums();
-    // options.OrderActionsBy(apiDesc => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.HttpMethod}");
-});
 
 var app = builder.Build();
 
