@@ -36,7 +36,7 @@ public class MaintenanceRequestCommandService(IMaintenanceRequestRepository main
         if (maintenanceRequest == null)
             throw new MaintenanceRequestNotFoundException(command.Id);
 
-        if (command.Status == "accepted")
+        if (command.Status == "completed")
         {
             maintenanceRequest.UpdateStatus(command.Status);
 
@@ -66,10 +66,10 @@ public class MaintenanceRequestCommandService(IMaintenanceRequestRepository main
 
         
         if (maintenanceRequest.Status == "pending")
-            throw new ArgumentException();
+            throw new ArgumentException("Cannot delete a pending maintenance request.");
 
         
-        maintenanceRequestRepository.Update(maintenanceRequest);
+        maintenanceRequestRepository.Remove(maintenanceRequest);
         await unitOfWork.CompleteAsync();
 
         return true;
