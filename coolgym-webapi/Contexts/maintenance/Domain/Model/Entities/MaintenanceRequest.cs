@@ -5,27 +5,27 @@ namespace coolgym_webapi.Contexts.maintenance.Domain.Model.Entities;
 
 public class MaintenanceRequest : BaseEntity
 {
-    protected MaintenanceRequest() { }
-    
+    protected MaintenanceRequest()
+    {
+    }
+
+    public MaintenanceRequest(int equipmentId, DateTime selectedDate, string observation)
+    {
+        EquipmentId = equipmentId;
+        SelectedDate = selectedDate;
+        Observation = observation;
+        Status = "Pending";
+    }
+
     public int EquipmentId { get; set; }
     public DateTime SelectedDate { get; set; }
     public string Observation { get; set; }
     public string Status { get; set; }
 
-    public MaintenanceRequest(int equipmentId, DateTime selectedDate, string observation)
-    {
-        this.EquipmentId = equipmentId;
-        this.SelectedDate = selectedDate;
-        this.Observation = observation;
-        Status = "Pending";
-    }
-    
     public void UpdateStatus(string newStatus)
     {
         if (string.IsNullOrWhiteSpace(newStatus))
             throw new InvalidDataException(newStatus);
         Status = newStatus;
     }
-    
-    
 }

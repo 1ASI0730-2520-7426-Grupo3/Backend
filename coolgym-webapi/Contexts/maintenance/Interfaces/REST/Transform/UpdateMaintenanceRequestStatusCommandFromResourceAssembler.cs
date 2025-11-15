@@ -5,7 +5,8 @@ namespace coolgym_webapi.Contexts.maintenance.Interfaces.REST.Transform;
 
 public static class UpdateMaintenanceRequestStatusCommandFromResourceAssembler
 {
-    public static UpdateMaintenanceRequestStatusCommand ToCommandFromResource(int id, UpdateMaintenanceRequestStatusResource resource)
+    public static UpdateMaintenanceRequestStatusCommand ToCommandFromResource(int id,
+        UpdateMaintenanceRequestStatusResource resource)
     {
         return new UpdateMaintenanceRequestStatusCommand(
             id,

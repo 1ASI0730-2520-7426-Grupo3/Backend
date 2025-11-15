@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST;
 
 /// <summary>
-/// REST API Controller for billing invoices
-/// Provides endpoints for managing and viewing user invoices
+///     REST API Controller for billing invoices
+///     Provides endpoints for managing and viewing user invoices
 /// </summary>
 [ApiController]
 [Route("api/v1/billing/invoices")]
@@ -18,7 +18,7 @@ public class BillingInvoicesController(
     IInvoiceCommandService invoiceCommandService) : ControllerBase
 {
     /// <summary>
-    /// Get all invoices for a specific user
+    ///     Get all invoices for a specific user
     /// </summary>
     /// <param name="userId">The user ID to filter invoices</param>
     /// <returns>List of invoices for the user</returns>
@@ -36,7 +36,7 @@ public class BillingInvoicesController(
     }
 
     /// <summary>
-    /// Get a specific invoice by ID
+    ///     Get a specific invoice by ID
     /// </summary>
     /// <param name="id">Invoice ID</param>
     /// <returns>Invoice details or 404 if not found</returns>
@@ -54,7 +54,7 @@ public class BillingInvoicesController(
     }
 
     /// <summary>
-    /// Get all invoices (for admin purposes)
+    ///     Get all invoices (for admin purposes)
     /// </summary>
     /// <returns>List of all invoices</returns>
     [HttpGet("all")]
@@ -68,7 +68,7 @@ public class BillingInvoicesController(
     }
 
     /// <summary>
-    /// Create a new billing invoice
+    ///     Create a new billing invoice
     /// </summary>
     /// <param name="resource">Invoice creation data</param>
     /// <returns>Created invoice or 400 if validation fails</returns>
@@ -98,7 +98,7 @@ public class BillingInvoicesController(
     }
 
     /// <summary>
-    /// Mark an invoice as paid
+    ///     Mark an invoice as paid
     /// </summary>
     /// <param name="id">Invoice ID</param>
     /// <param name="resource">Payment date information</param>
@@ -131,7 +131,7 @@ public class BillingInvoicesController(
     }
 
     /// <summary>
-    /// Delete an invoice (soft delete)
+    ///     Delete an invoice (soft delete)
     /// </summary>
     /// <param name="id">Invoice ID</param>
     /// <returns>NoContent if successful, NotFound if invoice doesn't exist</returns>

@@ -20,17 +20,15 @@ using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+// CORS Configuration - Allow All
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(MyAllowSpecificOrigins,
+    options.AddPolicy("AllowAll",
         policy =>
         {
-            // ESTA ES LA URL DEl FRONTEND 
-            policy.WithOrigins("http://localhost:5173")
+            policy.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -113,21 +111,19 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 //swagger
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
-        options.RoutePrefix = "swagger"; 
-        
-        options.DocumentTitle = "CoolGym API Documentation";
-        options.DisplayRequestDuration(); 
-        options.EnableDeepLinking(); 
-        options.EnableFilter(); 
-        options.ShowExtensions(); 
-    });
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
+    options.RoutePrefix = "swagger";
+
+    options.DocumentTitle = "CoolGym API Documentation";
+    options.DisplayRequestDuration();
+    options.EnableDeepLinking();
+    options.EnableFilter();
+    options.ShowExtensions();
+});
+
 
 // Ensure DB is created
 using (var scope = app.Services.CreateScope())
@@ -139,8 +135,7 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
-// Usar el middleware de CORS ANTES de UseAuthorization()
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

@@ -4,4 +4,4 @@ public record CreateMaintenanceRequestResource(
     int EquipmentId,
     DateTime SelectedDate,
     string Observation
-    );
+);

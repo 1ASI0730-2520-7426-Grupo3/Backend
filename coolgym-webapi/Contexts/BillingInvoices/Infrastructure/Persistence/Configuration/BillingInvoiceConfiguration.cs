@@ -1,13 +1,12 @@
 using coolgym_webapi.Contexts.BillingInvoices.Domain.Model.Entities;
-using coolgym_webapi.Contexts.BillingInvoices.Domain.Model.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace coolgym_webapi.Contexts.BillingInvoices.Infrastructure.Persistence.Configuration;
 
 /// <summary>
-/// Entity Framework Core configuration for BillingInvoice entity
-/// Maps domain model to database schema
+///     Entity Framework Core configuration for BillingInvoice entity
+///     Maps domain model to database schema
 /// </summary>
 public class BillingInvoiceConfiguration : IEntityTypeConfiguration<BillingInvoice>
 {

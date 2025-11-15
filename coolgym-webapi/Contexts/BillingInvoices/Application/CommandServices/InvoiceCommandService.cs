@@ -7,7 +7,7 @@ using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 namespace coolgym_webapi.Contexts.BillingInvoices.Application.CommandServices;
 
 /// <summary>
-/// Application service that handles billing invoice commands
+///     Application service that handles billing invoice commands
 /// </summary>
 public class InvoiceCommandService(
     IBillingInvoiceRepository invoiceRepository,
@@ -17,13 +17,13 @@ public class InvoiceCommandService(
     {
         // Create invoice using domain entity constructor (includes validation)
         var invoice = new BillingInvoice(
-            userId: command.UserId,
-            companyName: command.CompanyName,
-            amount: command.Amount,
-            currency: command.Currency,
-            status: command.Status,
-            issuedAt: command.IssuedAt,
-            paidAt: command.PaidAt
+            command.UserId,
+            command.CompanyName,
+            command.Amount,
+            command.Currency,
+            command.Status,
+            command.IssuedAt,
+            command.PaidAt
         );
 
         // Persist to repository

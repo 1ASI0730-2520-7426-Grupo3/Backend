@@ -1,7 +1,7 @@
 namespace coolgym_webapi.Contexts.BillingInvoices.Domain.Commands;
 
 /// <summary>
-/// Command to create a new billing invoice
+///     Command to create a new billing invoice
 /// </summary>
 public record CreateInvoiceCommand(
     int UserId,

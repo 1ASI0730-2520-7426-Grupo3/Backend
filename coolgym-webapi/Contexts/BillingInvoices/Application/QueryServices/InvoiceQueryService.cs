@@ -6,7 +6,7 @@ using coolgym_webapi.Contexts.BillingInvoices.Domain.Services;
 namespace coolgym_webapi.Contexts.BillingInvoices.Application.QueryServices;
 
 /// <summary>
-/// Application service that handles billing invoice queries
+///     Application service that handles billing invoice queries
 /// </summary>
 public class InvoiceQueryService(IBillingInvoiceRepository invoiceRepository) : IInvoiceQueryService
 {

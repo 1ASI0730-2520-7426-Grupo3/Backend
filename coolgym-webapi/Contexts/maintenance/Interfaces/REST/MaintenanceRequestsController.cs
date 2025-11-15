@@ -1,5 +1,4 @@
 using System.Net.Mime;
-using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 using coolgym_webapi.Contexts.maintenance.Domain.Commands;
 using coolgym_webapi.Contexts.maintenance.Domain.Exceptions;
 using coolgym_webapi.Contexts.maintenance.Domain.Queries;
@@ -10,8 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using InvalidDataException = System.IO.InvalidDataException;
 
 namespace coolgym_webapi.Contexts.maintenance.Interfaces.REST;
-
-
 
 /// <summary>
 ///     Controller REST para gestionar solicitudes de mantenimiento (Maintenance Requests)
@@ -25,23 +22,22 @@ namespace coolgym_webapi.Contexts.maintenance.Interfaces.REST;
 [ApiController]
 [Route("api/v1/[controller]")]
 [Produces(MediaTypeNames.Application.Json)]
-public class MaintenanceRequestsController(IMaintenanceRequestCommandService maintenanceRequestCommandService,
+public class MaintenanceRequestsController(
+    IMaintenanceRequestCommandService maintenanceRequestCommandService,
     IMaintenanceRequestQueryService maintenanceRequestQueryService) : ControllerBase
 {
-    
     /// <summary>
     ///     Registra una nueva solicitud de mantenimiento para un equipo.
     /// </summary>
     /// <remarks>
     ///     Crea una Maintenance Request asociada a un equipo determinado, incluyendo
     ///     información como el motivo de la falla y fecha de creación.
-    ///
     ///     Ejemplo de solicitud:
     ///     POST /api/v1/maintenancerequests
     ///     {
-    ///       "equipmentId": 1,
-    ///       "selectedDate": "2025-01-15T10:30:00Z",
-    ///       "observation": "Al correr a más de 8 km/h se escucha un golpe metálico."
+    ///     "equipmentId": 1,
+    ///     "selectedDate": "2025-01-15T10:30:00Z",
+    ///     "observation": "Al correr a más de 8 km/h se escucha un golpe metálico."
     ///     }
     /// </remarks>
     /// <param name="resource">Datos de la solicitud de mantenimiento a registrar.</param>
@@ -61,7 +57,8 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
         {
             var command = CreateMaintenanceRequestCommandFromResourceAssembler.ToCommandFromResource(resource);
             var maintenanceRequest = await maintenanceRequestCommandService.Handle(command);
-            var maintenanceRequestResource = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
+            var maintenanceRequestResource =
+                MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
 
             return CreatedAtAction(
                 nameof(GetMaintenanceRequestById),
@@ -84,14 +81,13 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
         }
     }
 
-    
+
     /// <summary>
     ///     Obtiene todas las solicitudes de mantenimiento registradas.
     /// </summary>
     /// <remarks>
     ///     Retorna la lista completa de Maintenance Requests, incluyendo solicitudes
     ///     pendientes o completadas.
-    ///
     ///     Ejemplo de solicitud:
     ///     GET /api/v1/maintenancerequests
     /// </remarks>
@@ -106,7 +102,7 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
         var resources = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequests);
         return Ok(resources);
     }
-    
+
     /// <summary>
     ///     Obtiene una solicitud de mantenimiento específica por su identificador único.
     /// </summary>
@@ -116,7 +112,6 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
     ///     - Fecha seleccionada para mantenimiento
     ///     - Descripción del problema
     ///     - Estado actual
-    ///
     ///     Ejemplo de solicitud:
     ///     GET /api/v1/maintenancerequests/1
     /// </remarks>
@@ -138,8 +133,8 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
         var resource = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
         return Ok(resource);
     }
-    
-    
+
+
     /// <summary>
     ///     Obtiene solicitudes de mantenimiento filtradas por su estado actual.
     /// </summary>
@@ -147,7 +142,6 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
     ///     Filtra las Maintenance Requests según su estado. Ejemplos de estados:
     ///     - <c>pending</c>: solicitud creada, en espera de atención
     ///     - <c>completed</c>: el mantenimiento fue completado
-    ///
     ///     Ejemplo de solicitud:
     ///     GET /api/v1/maintenancerequests/status/pending
     /// </remarks>
@@ -163,18 +157,17 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
         var resources = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequests);
         return Ok(resources);
     }
-    
+
     /// <summary>
     ///     Actualiza el estado de una solicitud de mantenimiento existente.
     /// </summary>
     /// <remarks>
     ///     Permite cambiar el estado de la Maintenance Request (de
     ///     <c>pending</c> a <c>completed</c>).
-    ///
     ///     Ejemplo de solicitud:
     ///     PUT /api/v1/maintenancerequests/1
     ///     {
-    ///       "status": "completed"
+    ///     "status": "completed"
     ///     }
     /// </remarks>
     /// <param name="id">Identificador de la solicitud de mantenimiento a actualizar.</param>
@@ -189,17 +182,20 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateMaintenanceRequestStatus(int id, [FromBody] UpdateMaintenanceRequestStatusResource resource)
+    public async Task<IActionResult> UpdateMaintenanceRequestStatus(int id,
+        [FromBody] UpdateMaintenanceRequestStatusResource resource)
     {
         try
         {
-            var command = UpdateMaintenanceRequestStatusCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+            var command =
+                UpdateMaintenanceRequestStatusCommandFromResourceAssembler.ToCommandFromResource(id, resource);
             var maintenanceRequest = await maintenanceRequestCommandService.Handle(command);
 
             if (maintenanceRequest == null)
                 return NotFound(new { message = $"Maintenance Request with id {id} not found" });
 
-            var maintenanceRequestResource = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
+            var maintenanceRequestResource =
+                MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
             return Ok(maintenanceRequestResource);
         }
         catch (MaintenanceRequestNotFoundException ex)
@@ -220,15 +216,13 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
                 new { message = "An error occurred while updating the equipment", detail = ex.Message });
         }
     }
-    
+
     /// <summary>
     ///     Elimina una solicitud de mantenimiento del sistema.
     /// </summary>
     /// <remarks>
     ///     Esta operación puede eliminar una solicitud de mantenimiento físicamente de la base de datos.
-    ///
     ///     Si la solicitud no existe, se retorna un error 404.
-    ///
     ///     Ejemplo de solicitud:
     ///     DELETE /api/v1/maintenancerequests/1
     /// </remarks>
@@ -265,5 +259,4 @@ public class MaintenanceRequestsController(IMaintenanceRequestCommandService mai
                 new { message = "An error occurred while deleting the equipment", detail = ex.Message });
         }
     }
-    
 }
