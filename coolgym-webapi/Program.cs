@@ -1,25 +1,34 @@
 using System.Reflection;
+using coolgym_webapi.Contexts.BillingInvoices.Application.CommandServices;
+using coolgym_webapi.Contexts.BillingInvoices.Application.QueryServices;
+using coolgym_webapi.Contexts.BillingInvoices.Domain.Repositories;
+using coolgym_webapi.Contexts.BillingInvoices.Domain.Services;
+using coolgym_webapi.Contexts.BillingInvoices.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 using coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
 using coolgym_webapi.Contexts.Equipments.Domain.Services;
 using coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.maintenance.Application.CommandServices;
+using coolgym_webapi.Contexts.maintenance.Application.QueryServices;
+using coolgym_webapi.Contexts.maintenance.Domain.Repositories;
+using coolgym_webapi.Contexts.maintenance.Domain.Services;
+using coolgym_webapi.Contexts.maintenance.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+// CORS Configuration - Allow All
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(MyAllowSpecificOrigins,
+    options.AddPolicy("AllowAll",
         policy =>
         {
-            // ESTA ES LA URL DEl FRONTEND 
-            policy.WithOrigins("http://localhost:5173")
+            policy.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -57,6 +66,16 @@ builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddTransient<IEquipmentCommandService, EquipmentCommandService>();
 builder.Services.AddTransient<IEquipmentQueryService, EquipmentQueryService>();
 
+//Maintenance Request Context
+builder.Services.AddScoped<IMaintenanceRequestRepository, MaintenanceRequestRepository>();
+builder.Services.AddScoped<IMaintenanceRequestCommandService, MaintenanceRequestCommandService>();
+builder.Services.AddScoped<IMaintenanceRequestQueryService, MaintenanceRequestQueryService>();
+// Billing Invoices Context
+builder.Services.AddScoped<IBillingInvoiceRepository, BillingInvoiceRepository>();
+builder.Services.AddTransient<IInvoiceQueryService, InvoiceQueryService>();
+builder.Services.AddTransient<IInvoiceCommandService, InvoiceCommandService>();
+
+
 //Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -88,24 +107,23 @@ builder.Services.AddSwaggerGen(options =>
     // options.OrderActionsBy(apiDesc => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.HttpMethod}");
 });
 
+
 var app = builder.Build();
 
 //swagger
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
-        options.RoutePrefix = "swagger"; 
-        
-        options.DocumentTitle = "CoolGym API Documentation";
-        options.DisplayRequestDuration(); 
-        options.EnableDeepLinking(); 
-        options.EnableFilter(); 
-        options.ShowExtensions(); 
-    });
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
+    options.RoutePrefix = "swagger";
+
+    options.DocumentTitle = "CoolGym API Documentation";
+    options.DisplayRequestDuration();
+    options.EnableDeepLinking();
+    options.EnableFilter();
+    options.ShowExtensions();
+});
+
 
 // Ensure DB is created
 using (var scope = app.Services.CreateScope())
@@ -117,8 +135,7 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
-// Usar el middleware de CORS ANTES de UseAuthorization()
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
