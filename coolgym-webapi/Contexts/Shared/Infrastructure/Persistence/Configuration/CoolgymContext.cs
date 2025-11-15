@@ -9,6 +9,8 @@ public class CoolgymContext(DbContextOptions<CoolgymContext> options) : DbContex
     // --- DbSets (Colecciones de Tablas) ---
     public DbSet<Equipment> Equipments { get; set; }
     public DbSet<BillingInvoice> BillingInvoices { get; set; }
+    
+    public DbSet<Contexts.RentalCatalog.Domain.Model.Entities.RentalItem> RentalItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -17,4 +19,5 @@ public class CoolgymContext(DbContextOptions<CoolgymContext> options) : DbContex
         // Aplica TODAS las configuraciones IEntityTypeConfiguration automáticamente
         builder.ApplyConfigurationsFromAssembly(typeof(CoolgymContext).Assembly);
     }
+    
 }

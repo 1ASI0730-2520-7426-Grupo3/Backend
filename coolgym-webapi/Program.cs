@@ -3,6 +3,10 @@ using coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
 using coolgym_webapi.Contexts.Equipments.Domain.Services;
 using coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.RentalCatalog.Application.CommandServices;
+using coolgym_webapi.Contexts.RentalCatalog.Application.QueryServices;
+using coolgym_webapi.Contexts.RentalCatalog.Domain.Repositories;
+using coolgym_webapi.Contexts.RentalCatalog.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
@@ -56,6 +60,10 @@ builder.Services.AddScoped<IEquipmentRepository, EquipmentRepository>();
 builder.Services.AddTransient<IEquipmentCommandService, EquipmentCommandService>();
 builder.Services.AddTransient<IEquipmentQueryService, EquipmentQueryService>();
 
+// RentalCatalog Context
+builder.Services.AddScoped<IRentalCatalogCommandService, RentalCatalogCommandService>();
+builder.Services.AddScoped<IRentalCatalogQueryService, RentalCatalogQueryService>();
+builder.Services.AddScoped<IRentalItemRepository, RentalItemRepository>();
 
 var app = builder.Build();
 
