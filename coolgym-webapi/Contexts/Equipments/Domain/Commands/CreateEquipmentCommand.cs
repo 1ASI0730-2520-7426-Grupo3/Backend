@@ -1,8 +1,8 @@
 ﻿namespace coolgym_webapi.Contexts.Equipments.Domain.Commands;
 
 /// <summary>
-///     Comando para crear un nuevo equipo
-///     Representa los datos necesarios para la operación de escritura
+///     Command to create new equipment
+///     Represents data needed for the write operation
 /// </summary>
 public record CreateEquipmentCommand(
     string Name,

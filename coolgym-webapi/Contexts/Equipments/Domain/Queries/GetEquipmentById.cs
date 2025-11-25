@@ -1,7 +1,7 @@
 ﻿namespace coolgym_webapi.Contexts.Equipments.Domain.Queries;
 
 /// <summary>
-///     Consulta para OBTENER UN equipo por su ID
-///     Se usa en: GET /api/equipments/{id}
+///     Query to GET ONE equipment by ID
+///     Used in: GET /api/equipments/{id}
 /// </summary>
 public record GetEquipmentById(int Id);

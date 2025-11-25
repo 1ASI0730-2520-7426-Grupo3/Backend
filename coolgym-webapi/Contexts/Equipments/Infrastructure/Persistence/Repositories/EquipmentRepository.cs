@@ -7,14 +7,14 @@ using Microsoft.EntityFrameworkCore;
 namespace coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Repositories;
 
 /// <summary>
-///     Implementación del repositorio de Equipment
-///     Hereda de BaseRepository y añade métodos especializados
+///     Equipment repository implementation
+///     Inherits from BaseRepository and adds specialized methods
 /// </summary>
 public class EquipmentRepository(CoolgymContext context)
     : BaseRepository<Equipment>(context), IEquipmentRepository
 {
     /// <summary>
-    ///     Busca un equipo por su número de serie único
+    ///     Finds equipment by unique serial number
     /// </summary>
     public async Task<Equipment?> FindBySerialNumberAsync(string serialNumber)
     {
@@ -24,7 +24,7 @@ public class EquipmentRepository(CoolgymContext context)
     }
 
     /// <summary>
-    ///     Obtiene todos los equipos de un tipo específico (treadmill, bike, etc.)
+    ///     Gets all equipment of a specific type (treadmill, bike, etc.)
     /// </summary>
     public async Task<IEnumerable<Equipment>> FindByTypeAsync(string type)
     {
@@ -34,7 +34,7 @@ public class EquipmentRepository(CoolgymContext context)
     }
 
     /// <summary>
-    ///     Obtiene todos los equipos con un estado específico (active, pending_maintenance, inactive)
+    ///     Gets all equipment with a specific status (active, pending_maintenance, inactive)
     /// </summary>
     public async Task<IEnumerable<Equipment>> FindByStatusAsync(string status)
     {
@@ -44,7 +44,7 @@ public class EquipmentRepository(CoolgymContext context)
     }
 
     /// <summary>
-    ///     Obtiene solo los equipos activos
+    ///     Gets only active equipment
     /// </summary>
     public async Task<IEnumerable<Equipment>> FindActiveEquipmentAsync()
     {
@@ -54,8 +54,8 @@ public class EquipmentRepository(CoolgymContext context)
     }
 
     /// <summary>
-    ///     Verifica si existe un equipo con el número de serie dado
-    ///     Útil para validaciones antes de crear nuevos equipos
+    ///     Checks if equipment exists with given serial number
+    ///     Useful for validations before creating new equipment
     /// </summary>
     public async Task<bool> ExistsBySerialNumberAsync(string serialNumber)
     {

@@ -4,7 +4,7 @@ using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
 
 namespace coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 
-public class Equipment : BaseEntity // Hereda de BaseEntity para Id, CreatedDate, UpdatedDate
+public class Equipment : BaseEntity
 {
     protected Equipment()
     {
@@ -27,9 +27,8 @@ public class Equipment : BaseEntity // Hereda de BaseEntity para Id, CreatedDate
         ActiveStatus = "Normal";
         Image = null;
 
-        // Inicializa los otros VOs con valores por defecto o pasados por parámetro
         Usage = new UsageStats(0, 0, 0);
-        // Define rangos por defecto razonables
+
         Controls = new ControlSettings("off", 1, 1, 1, 10, "Normal");
         MaintenanceInfo = new MaintenanceInfo(null, null);
     }
@@ -49,13 +48,11 @@ public class Equipment : BaseEntity // Hereda de BaseEntity para Id, CreatedDate
 
     public string? Image { get; set; }
 
-    // Propiedades para los Value Objects (usamos 'private set' para proteger la instancia)
     public Location Location { get; private set; } = null!;
     public UsageStats Usage { get; private set; } = null!;
     public ControlSettings Controls { get; private set; } = null!;
     public MaintenanceInfo MaintenanceInfo { get; private set; } = null!;
 
-    // --- Métodos para modificar el estado (Lógica de Dominio) ---
     public void UpdateStatus(string newStatus)
     {
         if (string.IsNullOrWhiteSpace(newStatus))

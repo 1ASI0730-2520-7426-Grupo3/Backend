@@ -1,9 +1,5 @@
 ﻿namespace coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 
-/// <summary>
-///     Excepción lanzada cuando no se encuentra un equipo por su ID
-///     Usado en: CommandService.Handle(UpdateEquipmentCommand), CommandService.Handle(DeleteEquipmentCommand)
-/// </summary>
 public class EquipmentNotFoundException : Exception
 {
     public EquipmentNotFoundException(int id)
@@ -15,10 +11,6 @@ public class EquipmentNotFoundException : Exception
     public int EquipmentId { get; }
 }
 
-/// <summary>
-///     Excepción lanzada cuando se intenta crear un equipo con un SerialNumber duplicado
-///     Usado en: CommandService.Handle(CreateEquipmentCommand)
-/// </summary>
 public class DuplicateSerialNumberException : Exception
 {
     public DuplicateSerialNumberException(string serialNumber)
@@ -30,10 +22,6 @@ public class DuplicateSerialNumberException : Exception
     public string SerialNumber { get; }
 }
 
-/// <summary>
-///     Excepción lanzada cuando se intenta eliminar un equipo que está encendido
-///     Usado en: CommandService.Handle(DeleteEquipmentCommand)
-/// </summary>
 public class EquipmentPoweredOnException : Exception
 {
     public EquipmentPoweredOnException(string name)
@@ -45,10 +33,6 @@ public class EquipmentPoweredOnException : Exception
     public string EquipmentName { get; }
 }
 
-/// <summary>
-///     Excepción lanzada cuando se intenta eliminar un equipo que está en mantenimiento
-///     Usado en: CommandService.Handle(DeleteEquipmentCommand)
-/// </summary>
 public class EquipmentInMaintenanceException : Exception
 {
     public EquipmentInMaintenanceException(string name)
@@ -60,10 +44,6 @@ public class EquipmentInMaintenanceException : Exception
     public string EquipmentName { get; }
 }
 
-/// <summary>
-///     Excepción lanzada cuando se intenta asignar un estado inválido a un equipo
-///     Usado en: Equipment.UpdateStatus()
-/// </summary>
 public class InvalidStatusException : Exception
 {
     public InvalidStatusException(string status)
@@ -75,10 +55,6 @@ public class InvalidStatusException : Exception
     public string AttemptedStatus { get; }
 }
 
-/// <summary>
-///     Excepción lanzada cuando se intenta crear una Location con datos inválidos
-///     Usado en: Location constructor
-/// </summary>
 public class InvalidLocationException : Exception
 {
     public InvalidLocationException(string message)
@@ -86,7 +62,6 @@ public class InvalidLocationException : Exception
     {
     }
 
-    // Factory methods para casos específicos
     public static InvalidLocationException EmptyName()
     {
         return new InvalidLocationException("Location name cannot be empty.");
@@ -108,10 +83,6 @@ public class InvalidLocationException : Exception
     }
 }
 
-/// <summary>
-///     Excepción lanzada cuando se intenta crear ControlSettings con datos inválidos
-///     Usado en: ControlSettings constructor
-/// </summary>
 public class InvalidControlSettingsException : Exception
 {
     public InvalidControlSettingsException(string message)
@@ -119,7 +90,6 @@ public class InvalidControlSettingsException : Exception
     {
     }
 
-    // Factory methods para casos específicos
     public static InvalidControlSettingsException EmptyPower()
     {
         return new InvalidControlSettingsException("Power status cannot be empty.");
@@ -154,10 +124,6 @@ public class InvalidControlSettingsException : Exception
     }
 }
 
-/// <summary>
-///     Excepción lanzada cuando se intenta crear UsageStats con datos inválidos
-///     Usado en: UsageStats constructor
-/// </summary>
 public class InvalidUsageStatsException : Exception
 {
     public InvalidUsageStatsException(string message)
@@ -165,7 +131,6 @@ public class InvalidUsageStatsException : Exception
     {
     }
 
-    // Factory methods para casos específicos
     public static InvalidUsageStatsException NegativeTotalMinutes(int totalMinutes)
     {
         return new InvalidUsageStatsException($"Total minutes cannot be negative. Value: {totalMinutes}");

@@ -4,12 +4,12 @@ using coolgym_webapi.Contexts.Equipments.Interfaces.REST.Resources;
 namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST.Transform;
 
 /// <summary>
-///     Assembler: Convierte UpdateEquipmentResource en UpdateEquipmentCommand
+///     Assembler: Converts UpdateEquipmentResource into UpdateEquipmentCommand
 /// </summary>
 public static class UpdateEquipmentCommandFromResourceAssembler
 {
     /// <summary>
-    ///     Convierte un UpdateEquipmentResource en un UpdateEquipmentCommand
+    ///     Converts UpdateEquipmentResource into UpdateEquipmentCommand
     /// </summary>
     public static UpdateEquipmentCommand ToCommandFromResource(int id, UpdateEquipmentResource resource)
     {

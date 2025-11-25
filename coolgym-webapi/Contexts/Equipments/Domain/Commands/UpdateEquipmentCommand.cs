@@ -1,9 +1,9 @@
 ﻿namespace coolgym_webapi.Contexts.Equipments.Domain.Commands;
 
 /// <summary>
-///     Comando para ACTUALIZAR un equipo existente
-///     Se usa en: PUT /api/equipments/{id}
-///     Actualiza datos básicos y ubicación (lo más común)
+///     Command to UPDATE existing equipment
+///     Used in: PUT /api/equipments/{id}
+///     Updates basic data and location (most common)
 /// </summary>
 public record UpdateEquipmentCommand(
     int Id,

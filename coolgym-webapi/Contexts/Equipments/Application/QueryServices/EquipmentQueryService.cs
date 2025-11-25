@@ -6,47 +6,47 @@ using coolgym_webapi.Contexts.Equipments.Domain.Services;
 namespace coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 
 /// <summary>
-///     Servicio de aplicación para consultas de Equipment (Operaciones de lectura)
-///     Implementa la lógica para GET, LIST, FILTER
+///     Application service for Equipment queries (Read operations)
+///     Implements logic for GET, LIST, FILTER
 /// </summary>
 public class EquipmentQueryService(IEquipmentRepository equipmentRepository)
     : IEquipmentQueryService
 {
     /// <summary>
-    ///     Maneja la consulta para obtener todos los equipos
+    ///     Handles query to get all equipment
     /// </summary>
-    /// <param name="query">Consulta GetAllEquipment</param>
-    /// <returns>Lista de todos los equipos</returns>
+    /// <param name="query">GetAllEquipment query</param>
+    /// <returns>List of all equipment</returns>
     public async Task<IEnumerable<Equipment>> Handle(GetAllEquipment query)
     {
         return await equipmentRepository.ListAsync();
     }
 
     /// <summary>
-    ///     Maneja la consulta para obtener un equipo por su ID
+    ///     Handles query to get equipment by ID
     /// </summary>
-    /// <param name="query">Consulta GetEquipmentById con el ID</param>
-    /// <returns>El equipo encontrado o null si no existe</returns>
+    /// <param name="query">GetEquipmentById query with ID</param>
+    /// <returns>Found equipment or null if not found</returns>
     public async Task<Equipment?> Handle(GetEquipmentById query)
     {
         return await equipmentRepository.FindByIdAsync(query.Id);
     }
 
     /// <summary>
-    ///     Maneja la consulta para obtener equipos filtrados por tipo
+    ///     Handles query to get equipment filtered by type
     /// </summary>
-    /// <param name="query">Consulta GetEquipmentByType con el tipo a buscar</param>
-    /// <returns>Lista de equipos del tipo especificado</returns>
+    /// <param name="query">GetEquipmentByType query with type to search</param>
+    /// <returns>List of equipment of specified type</returns>
     public async Task<IEnumerable<Equipment>> Handle(GetEquipmentByType query)
     {
         return await equipmentRepository.FindByTypeAsync(query.Type);
     }
 
     /// <summary>
-    ///     Maneja la consulta para obtener equipos filtrados por estado
+    ///     Handles query to get equipment filtered by status
     /// </summary>
-    /// <param name="query">Consulta GetEquipmentByStatus con el estado a buscar</param>
-    /// <returns>Lista de equipos con el estado especificado</returns>
+    /// <param name="query">GetEquipmentByStatus query with status to search</param>
+    /// <returns>List of equipment with specified status</returns>
     public async Task<IEnumerable<Equipment>> Handle(GetEquipmentByStatus query)
     {
         return await equipmentRepository.FindByStatusAsync(query.Status);

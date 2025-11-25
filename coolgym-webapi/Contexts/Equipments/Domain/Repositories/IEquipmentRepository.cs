@@ -4,8 +4,8 @@ using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 namespace coolgym_webapi.Contexts.Equipments.Domain.Repositories;
 
 /// <summary>
-///     Repositorio específico para la entidad Equipment
-///     Extiende IBaseRepository con métodos adicionales especializados
+///     Specific repository for Equipment entity
+///     Extends IBaseRepository with additional specialized methods
 /// </summary>
 public interface IEquipmentRepository : IBaseRepository<Equipment>
 {

@@ -7,9 +7,7 @@ namespace coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuratio
 
 public class CoolgymContext(DbContextOptions<CoolgymContext> options) : DbContext(options)
 {
-    // --- DbSets (Colecciones de Tablas) ---
     public DbSet<Equipment> Equipments { get; set; }
-
     public DbSet<MaintenanceRequest> MaintenanceRequests { get; set; }
     public DbSet<BillingInvoice> BillingInvoices { get; set; }
 
@@ -17,7 +15,6 @@ public class CoolgymContext(DbContextOptions<CoolgymContext> options) : DbContex
     {
         base.OnModelCreating(builder);
 
-        // Aplica TODAS las configuraciones IEntityTypeConfiguration automáticamente
         builder.ApplyConfigurationsFromAssembly(typeof(CoolgymContext).Assembly);
     }
 }

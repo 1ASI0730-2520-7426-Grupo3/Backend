@@ -4,13 +4,13 @@ using coolgym_webapi.Contexts.Equipments.Interfaces.REST.Resources;
 namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST.Transform;
 
 /// <summary>
-///     Assembler: Convierte Entity → Resource (Domain → API)
-///     Transforma la entidad de dominio en un DTO para la respuesta HTTP
+///     Assembler: Converts Entity → Resource (Domain → API)
+///     Transforms domain entity into DTO for HTTP response
 /// </summary>
 public static class EquipmentResourceFromEntityAssembler
 {
     /// <summary>
-    ///     Convierte una entidad Equipment en un EquipmentResource
+    ///     Converts Equipment entity into EquipmentResource
     /// </summary>
     public static EquipmentResource ToResourceFromEntity(Equipment entity)
     {
@@ -53,7 +53,7 @@ public static class EquipmentResourceFromEntityAssembler
     }
 
     /// <summary>
-    ///     Convierte una lista de entidades Equipment en una lista de EquipmentResource
+    ///     Converts a list of Equipment entities into a list of EquipmentResource
     /// </summary>
     public static IEnumerable<EquipmentResource> ToResourceFromEntity(IEnumerable<Equipment> entities)
     {

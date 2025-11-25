@@ -23,7 +23,6 @@ public record UsageStats
         CaloriesToday = caloriesToday;
     }
 
-    // Constructor vacío para nuevos equipos
     public UsageStats() : this(0, 0, 0)
     {
     }

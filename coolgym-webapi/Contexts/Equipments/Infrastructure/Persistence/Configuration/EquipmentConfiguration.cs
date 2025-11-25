@@ -5,23 +5,20 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace coolgym_webapi.Contexts.Equipments.Infrastructure.Persistence.Configuration;
 
 /// <summary>
-///     Configuración de Entity Framework para la entidad Equipment
-///     Implementa IEntityTypeConfiguration para separar la configuración del DbContext
+///     Entity Framework configuration for Equipment entity
+///     Implements IEntityTypeConfiguration to separate configuration from DbContext
 /// </summary>
 public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
 {
     public void Configure(EntityTypeBuilder<Equipment> builder)
     {
-        // ===== TABLA =====
         builder.ToTable("equipments");
 
-        // ===== CLAVE PRIMARIA =====
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id)
             .HasColumnName("id")
             .ValueGeneratedOnAdd();
 
-        // ===== CAMPOS HEREDADOS DE BASEENTITY =====
         builder.Property(e => e.CreatedDate)
             .HasColumnName("created_date")
             .IsRequired();
@@ -35,7 +32,6 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
             .IsRequired()
             .HasDefaultValue(0);
 
-        // ===== PROPIEDADES BÁSICAS =====
         builder.Property(e => e.Name)
             .HasColumnName("name")
             .IsRequired()
@@ -100,12 +96,10 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
             .IsRequired(false);
 
 
-        // ===== ÍNDICES ÚNICOS =====
         builder.HasIndex(e => e.SerialNumber)
             .IsUnique()
             .HasDatabaseName("ix_equipments_serial_number");
 
-        // ===== VALUE OBJECTS =====
         ConfigureLocationValueObject(builder);
         ConfigureUsageValueObject(builder);
         ConfigureControlsValueObject(builder);
@@ -113,7 +107,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
     }
 
     /// <summary>
-    ///     Configura el Value Object Location (Ubicación del equipo)
+    ///     Configures Location Value Object (Equipment location)
     /// </summary>
     private static void ConfigureLocationValueObject(EntityTypeBuilder<Equipment> builder)
     {
@@ -132,7 +126,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
     }
 
     /// <summary>
-    ///     Configura el Value Object UsageStats (Estadísticas de uso)
+    ///     Configures UsageStats Value Object (Usage statistics)
     /// </summary>
     private static void ConfigureUsageValueObject(EntityTypeBuilder<Equipment> builder)
     {
@@ -153,7 +147,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
     }
 
     /// <summary>
-    ///     Configura el Value Object ControlSettings (Controles y configuración)
+    ///     Configures ControlSettings Value Object (Controls and configuration)
     /// </summary>
     private static void ConfigureControlsValueObject(EntityTypeBuilder<Equipment> builder)
     {
@@ -188,7 +182,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
     }
 
     /// <summary>
-    ///     Configura el Value Object MaintenanceInfo (Información de mantenimiento)
+    ///     Configures MaintenanceInfo Value Object (Maintenance information)
     /// </summary>
     private static void ConfigureMaintenanceValueObject(EntityTypeBuilder<Equipment> builder)
     {

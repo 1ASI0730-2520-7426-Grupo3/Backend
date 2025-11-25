@@ -9,6 +9,5 @@ public interface IEquipmentCommandService
 
     Task<Equipment?> Handle(UpdateEquipmentCommand command);
 
-    //Elimina un equipo por su ID
     Task<bool> Handle(DeleteEquipmentCommand command);
 }

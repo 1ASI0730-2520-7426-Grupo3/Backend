@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST;
 
 /// <summary>
-///     Controller REST para gestionar Equipment (equipos de fitness)
-///     Expone endpoints HTTP para operaciones CRUD completas con monitoreo en tiempo real
+///     REST API Controller for managing fitness equipment
+///     Provides HTTP endpoints for complete CRUD operations with real-time monitoring
 /// </summary>
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -21,12 +21,12 @@ public class EquipmentsController(
     IEquipmentQueryService equipmentQueryService) : ControllerBase
 {
     /// <summary>
-    ///     Obtiene todos los equipos de fitness registrados en el sistema
+    ///     Gets all fitness equipment registered in the system
     /// </summary>
     /// <remarks>
-    ///     Retorna una lista completa de equipos activos (no eliminados lógicamente).
-    ///     Cada equipo incluye información de ubicación, uso, controles y mantenimiento.
-    ///     Ejemplo de respuesta:
+    ///     Returns a complete list of active equipment (not logically deleted).
+    ///     Each equipment includes location, usage, control, and maintenance information.
+    ///     Example response:
     ///     GET /api/v1/equipments
     ///     [
     ///     {
@@ -42,8 +42,8 @@ public class EquipmentsController(
     ///     }
     ///     ]
     /// </remarks>
-    /// <returns>Lista de todos los equipos registrados</returns>
-    /// <response code="200">Retorna la lista de equipos exitosamente</response>
+    /// <returns>List of all registered equipment</returns>
+    /// <response code="200">Returns the equipment list successfully</response>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<EquipmentResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllEquipments()
@@ -55,22 +55,22 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     Obtiene un equipo específico por su identificador único
+    ///     Gets a specific equipment by its unique identifier
     /// </summary>
     /// <remarks>
-    ///     Retorna la información detallada de un equipo incluyendo:
-    ///     - Datos básicos (nombre, tipo, modelo, fabricante)
-    ///     - Ubicación actual
-    ///     - Estadísticas de uso en tiempo real
-    ///     - Configuración de controles
-    ///     - Historial de mantenimiento
-    ///     Ejemplo de solicitud:
+    ///     Returns detailed information about an equipment including:
+    ///     - Basic data (name, type, model, manufacturer)
+    ///     - Current location
+    ///     - Real-time usage statistics
+    ///     - Control configuration
+    ///     - Maintenance history
+    ///     Example request:
     ///     GET /api/v1/equipments/1
     /// </remarks>
-    /// <param name="id">Identificador único del equipo (número entero positivo)</param>
-    /// <returns>Equipo encontrado con toda su información</returns>
-    /// <response code="200">Equipo encontrado exitosamente</response>
-    /// <response code="404">No se encontró un equipo con el ID especificado</response>
+    /// <param name="id">Unique equipment identifier (positive integer)</param>
+    /// <returns>Found equipment with all its information</returns>
+    /// <response code="200">Equipment found successfully</response>
+    /// <response code="404">Equipment with specified ID not found</response>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -87,20 +87,20 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     Obtiene equipos filtrados por tipo (categoría)
+    ///     Gets equipment filtered by type (category)
     /// </summary>
     /// <remarks>
-    ///     Filtra equipos según su categoría. Tipos válidos incluyen:
-    ///     - **treadmill**: Caminadoras y cintas de correr
-    ///     - **bike**: Bicicletas estáticas
-    ///     - **elliptical**: Máquinas elípticas
-    ///     - **rower**: Máquinas de remo
-    ///     Ejemplo de solicitud:
+    ///     Filters equipment by category. Valid types include:
+    ///     - **treadmill**: Treadmills and running machines
+    ///     - **bike**: Stationary bikes
+    ///     - **elliptical**: Elliptical machines
+    ///     - **rower**: Rowing machines
+    ///     Example request:
     ///     GET /api/v1/equipments/type/treadmill
     /// </remarks>
-    /// <param name="type">Tipo/categoría del equipo (ej: "treadmill", "bike", "elliptical")</param>
-    /// <returns>Lista de equipos del tipo especificado</returns>
-    /// <response code="200">Retorna lista de equipos filtrados (puede estar vacía)</response>
+    /// <param name="type">Equipment type/category (e.g., "treadmill", "bike", "elliptical")</param>
+    /// <returns>List of equipment of the specified type</returns>
+    /// <response code="200">Returns filtered equipment list (may be empty)</response>
     [HttpGet("type/{type}")]
     [ProducesResponseType(typeof(IEnumerable<EquipmentResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetEquipmentsByType(string type)
@@ -112,20 +112,20 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     Obtiene equipos filtrados por su estado operativo
+    ///     Gets equipment filtered by operational status
     /// </summary>
     /// <remarks>
-    ///     Filtra equipos según su estado actual. Estados válidos:
-    ///     - **active**: Equipo operativo y disponible para uso
-    ///     - **maintenance**: Equipo en mantenimiento programado
-    ///     - **pending_maintenance**: Requiere mantenimiento pronto
-    ///     - **inactive**: Equipo temporalmente fuera de servicio
-    ///     Ejemplo de solicitud:
+    ///     Filters equipment by current status. Valid statuses:
+    ///     - **active**: Equipment operational and available for use
+    ///     - **maintenance**: Equipment under scheduled maintenance
+    ///     - **pending_maintenance**: Requires maintenance soon
+    ///     - **inactive**: Equipment temporarily out of service
+    ///     Example request:
     ///     GET /api/v1/equipments/status/active
     /// </remarks>
-    /// <param name="status">Estado del equipo (ej: "active", "maintenance", "inactive")</param>
-    /// <returns>Lista de equipos con el estado especificado</returns>
-    /// <response code="200">Retorna lista de equipos filtrados</response>
+    /// <param name="status">Equipment status (e.g., "active", "maintenance", "inactive")</param>
+    /// <returns>List of equipment with the specified status</returns>
+    /// <response code="200">Returns filtered equipment list</response>
     [HttpGet("status/{status}")]
     [ProducesResponseType(typeof(IEnumerable<EquipmentResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetEquipmentsByStatus(string status)
@@ -137,14 +137,14 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     Registra un nuevo equipo de fitness en el sistema
+    ///     Registers new fitness equipment in the system
     /// </summary>
     /// <remarks>
-    ///     Crea un nuevo equipo con validaciones de negocio:
-    ///     - El número de serie debe ser único en el sistema
-    ///     - La ubicación debe tener nombre y dirección válidos
-    ///     - Los datos técnicos (potencia, modelo) son obligatorios
-    ///     Ejemplo de solicitud:
+    ///     Creates new equipment with business rule validations:
+    ///     - Serial number must be unique in the system
+    ///     - Location must have valid name and address
+    ///     - Technical data (power, model) are mandatory
+    ///     Example request:
     ///     POST /api/v1/equipments
     ///     {
     ///     "name": "Treadmill Pro X-500",
@@ -160,12 +160,12 @@ public class EquipmentsController(
     ///     "image": "https://example.com/images/treadmill.jpg"
     ///     }
     /// </remarks>
-    /// <param name="resource">Datos del equipo a registrar</param>
-    /// <returns>Equipo creado con su ID asignado automáticamente</returns>
-    /// <response code="201">Equipo creado exitosamente. Retorna el equipo completo con su ID</response>
-    /// <response code="400">Datos de entrada inválidos (validaciones de Value Objects)</response>
-    /// <response code="409">Conflicto: Ya existe un equipo con ese número de serie</response>
-    /// <response code="500">Error interno del servidor</response>
+    /// <param name="resource">Equipment data to register</param>
+    /// <returns>Created equipment with automatically assigned ID</returns>
+    /// <response code="201">Equipment created successfully. Returns complete equipment with ID</response>
+    /// <response code="400">Invalid input data (Value Object validations)</response>
+    /// <response code="409">Conflict: Equipment with that serial number already exists</response>
+    /// <response code="500">Internal server error</response>
     [HttpPost]
     [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -213,23 +213,23 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     Actualiza la información de un equipo existente
+    ///     Updates information of existing equipment
     /// </summary>
     /// <remarks>
-    ///     Permite modificar datos de un equipo previamente registrado.
-    ///     **Campos actualizables:**
-    ///     - Nombre y código del equipo
-    ///     - Potencia eléctrica (watts)
-    ///     - Estado de encendido (on/off)
-    ///     - Estado operativo
-    ///     - Ubicación (nombre y dirección)
-    ///     - Notas adicionales
-    ///     - Imagen/foto del equipo
-    ///     **Campos NO modificables:**
-    ///     - Número de serie (inmutable por seguridad)
-    ///     - Fecha de instalación
-    ///     - Modelo y fabricante
-    ///     Ejemplo de solicitud:
+    ///     Allows modifying data of previously registered equipment.
+    ///     **Updatable fields:**
+    ///     - Name and equipment code
+    ///     - Electrical power (watts)
+    ///     - Power status (on/off)
+    ///     - Operational status
+    ///     - Location (name and address)
+    ///     - Additional notes
+    ///     - Equipment image/photo
+    ///     **NON-modifiable fields:**
+    ///     - Serial number (immutable for security)
+    ///     - Installation date
+    ///     - Model and manufacturer
+    ///     Example request:
     ///     PUT /api/v1/equipments/1
     ///     {
     ///     "name": "Treadmill Pro X-500 Updated",
@@ -244,13 +244,13 @@ public class EquipmentsController(
     ///     "image": "https://example.com/images/treadmill-updated.jpg"
     ///     }
     /// </remarks>
-    /// <param name="id">Identificador del equipo a actualizar</param>
-    /// <param name="resource">Nuevos datos del equipo</param>
-    /// <returns>Equipo actualizado con los nuevos valores</returns>
-    /// <response code="200">Equipo actualizado exitosamente</response>
-    /// <response code="400">Datos de entrada inválidos</response>
-    /// <response code="404">No se encontró un equipo con el ID especificado</response>
-    /// <response code="500">Error interno del servidor</response>
+    /// <param name="id">Equipment identifier to update</param>
+    /// <param name="resource">New equipment data</param>
+    /// <returns>Updated equipment with new values</returns>
+    /// <response code="200">Equipment updated successfully</response>
+    /// <response code="400">Invalid input data</response>
+    /// <response code="404">Equipment with specified ID not found</response>
+    /// <response code="500">Internal server error</response>
     [HttpPut("{id:int}")]
     [ProducesResponseType(typeof(EquipmentResource), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -293,27 +293,27 @@ public class EquipmentsController(
     }
 
     /// <summary>
-    ///     Elimina (desactiva) un equipo del sistema mediante borrado lógico
+    ///     Deletes (deactivates) equipment from the system via soft delete
     /// </summary>
     /// <remarks>
-    ///     **Importante:** Esta operación NO borra físicamente el equipo de la base de datos.
-    ///     Realiza un "soft delete" marcando el campo `IsDeleted = 1`.
-    ///     **Validaciones de negocio antes de eliminar:**
-    ///     - ❌ El equipo NO debe estar encendido (IsPoweredOn = true)
-    ///     - ❌ El equipo NO debe estar en mantenimiento (Status = "maintenance")
-    ///     Si alguna validación falla, la operación se rechaza con error 400.
-    ///     **Recuperación:**
-    ///     Los equipos eliminados lógicamente pueden recuperarse mediante
-    ///     un script de base de datos cambiando `IsDeleted = 0`.
-    ///     Ejemplo de solicitud:
+    ///     **Important:** This operation does NOT physically delete equipment from the database.
+    ///     Performs a "soft delete" by marking the `IsDeleted = 1` field.
+    ///     **Business rule validations before deletion:**
+    ///     - ❌ Equipment must NOT be powered on (IsPoweredOn = true)
+    ///     - ❌ Equipment must NOT be under maintenance (Status = "maintenance")
+    ///     If any validation fails, the operation is rejected with error 400.
+    ///     **Recovery:**
+    ///     Logically deleted equipment can be recovered via
+    ///     a database script by changing `IsDeleted = 0`.
+    ///     Example request:
     ///     DELETE /api/v1/equipments/1
     /// </remarks>
-    /// <param name="id">Identificador del equipo a eliminar</param>
-    /// <returns>204 No Content si se eliminó correctamente</returns>
-    /// <response code="204">Equipo eliminado exitosamente (sin contenido en respuesta)</response>
-    /// <response code="400">No se puede eliminar: equipo encendido o en mantenimiento</response>
-    /// <response code="404">No se encontró un equipo con el ID especificado</response>
-    /// <response code="500">Error interno del servidor</response>
+    /// <param name="id">Equipment identifier to delete</param>
+    /// <returns>204 No Content if deleted successfully</returns>
+    /// <response code="204">Equipment deleted successfully (no content in response)</response>
+    /// <response code="400">Cannot delete: equipment is powered on or under maintenance</response>
+    /// <response code="404">Equipment with specified ID not found</response>
+    /// <response code="500">Internal server error</response>
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

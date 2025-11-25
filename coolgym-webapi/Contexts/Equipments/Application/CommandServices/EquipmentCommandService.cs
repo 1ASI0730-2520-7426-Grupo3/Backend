@@ -9,17 +9,17 @@ using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 namespace coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 
 /// <summary>
-///     Servicio de aplicación para comandos de Equipment (Operaciones de escritura)
-///     Implementa la lógica de negocio para CREATE, UPDATE, DELETE
+///     Application service for Equipment commands (Write operations)
+///     Implements business logic for CREATE, UPDATE, DELETE
 /// </summary>
 public class EquipmentCommandService(IEquipmentRepository equipmentRepository, IUnitOfWork unitOfWork)
     : IEquipmentCommandService
 {
     /// <summary>
-    ///     Maneja el comando para crear un nuevo equipo
+    ///     Handles the command to create new equipment
     /// </summary>
-    /// <param name="command">Datos del equipo a crear</param>
-    /// <returns>El equipo creado</returns>
+    /// <param name="command">Equipment data to create</param>
+    /// <returns>Created equipment</returns>
     public async Task<Equipment> Handle(CreateEquipmentCommand command)
     {
         var existingEquipment = await equipmentRepository.FindBySerialNumberAsync(command.SerialNumber);
@@ -48,10 +48,10 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
     }
 
     /// <summary>
-    ///     Maneja el comando para actualizar un equipo existente
+    ///     Handles the command to update existing equipment
     /// </summary>
-    /// <param name="command">Datos del equipo a actualizar</param>
-    /// <returns>El equipo actualizado o null si no existe</returns>
+    /// <param name="command">Equipment data to update</param>
+    /// <returns>Updated equipment or null if not found</returns>
     public async Task<Equipment?> Handle(UpdateEquipmentCommand command)
     {
         var equipment = await equipmentRepository.FindByIdAsync(command.Id);
@@ -80,10 +80,10 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
     }
 
     /// <summary>
-    ///     Maneja el comando para eliminar un equipo
+    ///     Handles the command to delete equipment
     /// </summary>
-    /// <param name="command">ID del equipo a eliminar</param>
-    /// <returns>True si se eliminó correctamente, False si no existe</returns>
+    /// <param name="command">ID of equipment to delete</param>
+    /// <returns>True if deleted successfully, False if not found</returns>
     public async Task<bool> Handle(DeleteEquipmentCommand command)
     {
         var equipment = await equipmentRepository.FindByIdAsync(command.Id);
@@ -91,14 +91,12 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
         if (equipment == null || equipment.IsDeleted == 1)
             throw new EquipmentNotFoundException(command.Id);
 
-        // Validaciones de reglas de negocio
         if (equipment.IsPoweredOn)
             throw new EquipmentPoweredOnException(equipment.Name);
 
         if (equipment.Status == "maintenance")
             throw new EquipmentInMaintenanceException(equipment.Name);
 
-        // Marcar como eliminado en vez de borrar físicamente
         equipment.IsDeleted = 1;
         equipment.UpdatedDate = DateTime.UtcNow;
 

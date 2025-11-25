@@ -2,13 +2,13 @@
 
 public interface IBaseRepository<TEntity> where TEntity : class
 {
-    Task AddAsync(TEntity entity); // Añadir una nueva entidad
+    Task AddAsync(TEntity entity);
 
-    Task<TEntity?> FindByIdAsync(int id); // Buscar una entidad por su ID
+    Task<TEntity?> FindByIdAsync(int id);
 
-    void Update(TEntity entity); // Marcar una entidad para actualizar
+    void Update(TEntity entity);
 
-    void Remove(TEntity entity); // Marcar una entidad para eliminar
+    void Remove(TEntity entity);
 
-    Task<IEnumerable<TEntity>> ListAsync(); // Obtener una lista de todas las entidades
+    Task<IEnumerable<TEntity>> ListAsync();
 }

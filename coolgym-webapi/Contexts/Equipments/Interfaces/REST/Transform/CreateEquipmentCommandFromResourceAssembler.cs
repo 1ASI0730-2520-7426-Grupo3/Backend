@@ -4,13 +4,13 @@ using coolgym_webapi.Contexts.Equipments.Interfaces.REST.Resources;
 namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST.Transform;
 
 /// <summary>
-///     Assembler: Convierte Resource → Command (API → Domain)
-///     Transforma el DTO del request HTTP en un Command de dominio
+///     Assembler: Converts Resource → Command (API → Domain)
+///     Transforms HTTP request DTO into domain Command
 /// </summary>
 public static class CreateEquipmentCommandFromResourceAssembler
 {
     /// <summary>
-    ///     Convierte un CreateEquipmentResource en un CreateEquipmentCommand
+    ///     Converts CreateEquipmentResource into CreateEquipmentCommand
     /// </summary>
     public static CreateEquipmentCommand ToCommandFromResource(CreateEquipmentResource resource)
     {
