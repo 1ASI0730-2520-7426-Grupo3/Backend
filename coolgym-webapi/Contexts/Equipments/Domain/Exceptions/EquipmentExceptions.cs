@@ -2,8 +2,9 @@
 
 public class EquipmentNotFoundException : Exception
 {
+    public const string ResourceKey = "EquipmentNotFound";
+
     public EquipmentNotFoundException(int id)
-        : base($"Equipment with id '{id}' not found.")
     {
         EquipmentId = id;
     }
@@ -13,8 +14,9 @@ public class EquipmentNotFoundException : Exception
 
 public class DuplicateSerialNumberException : Exception
 {
+    public const string ResourceKey = "DuplicateSerialNumber";
+
     public DuplicateSerialNumberException(string serialNumber)
-        : base($"Equipment with serial number '{serialNumber}' already exists.")
     {
         SerialNumber = serialNumber;
     }
@@ -24,8 +26,9 @@ public class DuplicateSerialNumberException : Exception
 
 public class EquipmentPoweredOnException : Exception
 {
+    public const string ResourceKey = "EquipmentPoweredOn";
+
     public EquipmentPoweredOnException(string name)
-        : base($"Cannot delete equipment '{name}' because it is powered on. Please turn it off first.")
     {
         EquipmentName = name;
     }
@@ -35,8 +38,9 @@ public class EquipmentPoweredOnException : Exception
 
 public class EquipmentInMaintenanceException : Exception
 {
+    public const string ResourceKey = "EquipmentInMaintenance";
+
     public EquipmentInMaintenanceException(string name)
-        : base($"Cannot delete equipment '{name}' because it is under maintenance.")
     {
         EquipmentName = name;
     }
@@ -47,7 +51,6 @@ public class EquipmentInMaintenanceException : Exception
 public class InvalidStatusException : Exception
 {
     public InvalidStatusException(string status)
-        : base($"The status '{status}' is invalid. Status cannot be empty or whitespace.")
     {
         AttemptedStatus = status;
     }
@@ -57,98 +60,92 @@ public class InvalidStatusException : Exception
 
 public class InvalidLocationException : Exception
 {
-    public InvalidLocationException(string message)
-        : base($"Invalid location: {message}")
+    private InvalidLocationException(string key) : base(key)
     {
     }
 
     public static InvalidLocationException EmptyName()
     {
-        return new InvalidLocationException("Location name cannot be empty.");
+        return new InvalidLocationException("LocationNameEmpty");
     }
 
     public static InvalidLocationException NameTooLong(int length)
     {
-        return new InvalidLocationException($"Location name cannot exceed 100 characters. Current length: {length}");
+        return new InvalidLocationException($"LocationNameTooLong:{length}");
     }
 
     public static InvalidLocationException EmptyAddress()
     {
-        return new InvalidLocationException("Location address cannot be empty.");
+        return new InvalidLocationException("LocationAddressEmpty");
     }
 
     public static InvalidLocationException AddressTooLong(int length)
     {
-        return new InvalidLocationException($"Location address cannot exceed 200 characters. Current length: {length}");
+        return new InvalidLocationException($"LocationAddressTooLong:{length}");
     }
 }
 
 public class InvalidControlSettingsException : Exception
 {
-    public InvalidControlSettingsException(string message)
-        : base($"Invalid control settings: {message}")
+    private InvalidControlSettingsException(string key) : base(key)
     {
     }
 
     public static InvalidControlSettingsException EmptyPower()
     {
-        return new InvalidControlSettingsException("Power status cannot be empty.");
+        return new InvalidControlSettingsException("ControlPowerEmpty");
     }
 
     public static InvalidControlSettingsException EmptyStatus()
     {
-        return new InvalidControlSettingsException("Control status cannot be empty.");
+        return new InvalidControlSettingsException("ControlStatusEmpty");
     }
 
     public static InvalidControlSettingsException NegativeMinLevel(int minLevel)
     {
-        return new InvalidControlSettingsException($"Minimum level cannot be negative. Value: {minLevel}");
+        return new InvalidControlSettingsException($"ControlNegativeMinLevel:{minLevel}");
     }
 
     public static InvalidControlSettingsException InvalidRange(int minLevel, int maxLevel)
     {
-        return new InvalidControlSettingsException(
-            $"Maximum level ({maxLevel}) must be greater than minimum level ({minLevel}).");
+        return new InvalidControlSettingsException($"ControlInvalidRange:{minLevel}:{maxLevel}");
     }
 
     public static InvalidControlSettingsException CurrentLevelOutOfRange(int currentLevel, int minLevel, int maxLevel)
     {
         return new InvalidControlSettingsException(
-            $"Current level ({currentLevel}) must be between {minLevel} and {maxLevel}.");
+            $"ControlCurrentLevelOutOfRange:{currentLevel}:{minLevel}:{maxLevel}");
     }
 
     public static InvalidControlSettingsException SetLevelOutOfRange(int setLevel, int minLevel, int maxLevel)
     {
-        return new InvalidControlSettingsException(
-            $"Set level ({setLevel}) must be between {minLevel} and {maxLevel}.");
+        return new InvalidControlSettingsException($"ControlSetLevelOutOfRange:{setLevel}:{minLevel}:{maxLevel}");
     }
 }
 
 public class InvalidUsageStatsException : Exception
 {
-    public InvalidUsageStatsException(string message)
-        : base($"Invalid usage stats: {message}")
+    private InvalidUsageStatsException(string key) : base(key)
     {
     }
 
     public static InvalidUsageStatsException NegativeTotalMinutes(int totalMinutes)
     {
-        return new InvalidUsageStatsException($"Total minutes cannot be negative. Value: {totalMinutes}");
+        return new InvalidUsageStatsException($"UsageTotalMinutesNegative:{totalMinutes}");
     }
 
     public static InvalidUsageStatsException NegativeTodayMinutes(int todayMinutes)
     {
-        return new InvalidUsageStatsException($"Today minutes cannot be negative. Value: {todayMinutes}");
+        return new InvalidUsageStatsException($"UsageTodayMinutesNegative:{todayMinutes}");
     }
 
     public static InvalidUsageStatsException NegativeCalories(int calories)
     {
-        return new InvalidUsageStatsException($"Calories cannot be negative. Value: {calories}");
+        return new InvalidUsageStatsException($"UsageNegativeCalories:{calories}");
     }
 
     public static InvalidUsageStatsException TodayExceedsTotal(int todayMinutes, int totalMinutes)
     {
-        return new InvalidUsageStatsException(
-            $"Today minutes ({todayMinutes}) cannot exceed total minutes ({totalMinutes}).");
+        return new InvalidUsageStatsException($"UsageTodayExceedsTotal:{todayMinutes}:{totalMinutes}");
     }
 }

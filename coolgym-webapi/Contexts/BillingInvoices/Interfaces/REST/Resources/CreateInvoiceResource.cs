@@ -1,7 +1,7 @@
 namespace coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.Resources;
 
 /// <summary>
-/// Request DTO for creating a new billing invoice
+///     Request DTO for creating a new billing invoice
 /// </summary>
 public record CreateInvoiceResource(
     int UserId,

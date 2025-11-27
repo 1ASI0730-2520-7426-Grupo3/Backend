@@ -1,5 +1,5 @@
-using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
 using coolgym_webapi.Contexts.maintenance.Domain.Exceptions;
+using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
 using InvalidDataException = coolgym_webapi.Contexts.maintenance.Domain.Exceptions.InvalidDataException;
 
 namespace coolgym_webapi.Contexts.maintenance.Domain.Model.Entities;
@@ -7,20 +7,15 @@ namespace coolgym_webapi.Contexts.maintenance.Domain.Model.Entities;
 public class MaintenanceRequest : BaseEntity
 {
     private const int MinObservationLength = 10;
-    private static readonly TimeSpan MinimumLeadTime = TimeSpan.FromHours(24);
 
     public const string PendingStatus = "pending";
     public const string CompletedStatus = "completed";
     public const string CancelledStatus = "cancelled";
+    private static readonly TimeSpan MinimumLeadTime = TimeSpan.FromHours(24);
 
     protected MaintenanceRequest()
     {
     }
-
-    public int EquipmentId { get; private set; }
-    public DateTime SelectedDate { get; private set; }
-    public string Observation { get; private set; } = string.Empty;
-    public string Status { get; private set; } = PendingStatus;
 
     public MaintenanceRequest(int equipmentId, DateTime selectedDate, string observation)
     {
@@ -48,6 +43,11 @@ public class MaintenanceRequest : BaseEntity
         Status = PendingStatus;
         CreatedDate = now;
     }
+
+    public int EquipmentId { get; private set; }
+    public DateTime SelectedDate { get; private set; }
+    public string Observation { get; private set; } = string.Empty;
+    public string Status { get; private set; } = PendingStatus;
 
     public void UpdateStatus(string newStatus)
     {

@@ -4,7 +4,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        
+
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);1591</NoWarn>
     </PropertyGroup>
@@ -24,45 +24,63 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.es.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.es.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.en.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.en.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.es.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.es.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.en.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.es.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.es.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.en.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.es.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.es.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.en.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.en.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.es.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.es.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Resources\coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.es.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.es.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.en.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.en.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.es.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.es.resx</DependentUpon>
-      </Compile>
+        <Compile Update="Resources\coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.es.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.maintenance.Interfaces.REST.MaintenanceRequestsController.es.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.es.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.BillingInvoicesController.es.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.en.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.en.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resources\coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.es.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.es.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>

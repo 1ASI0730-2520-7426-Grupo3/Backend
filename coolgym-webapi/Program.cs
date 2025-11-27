@@ -1,7 +1,4 @@
-using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Localization;
 using System.Globalization;
-
 using System.Reflection;
 using coolgym_webapi.Contexts.BillingInvoices.Application.CommandServices;
 using coolgym_webapi.Contexts.BillingInvoices.Application.QueryServices;
@@ -21,11 +18,9 @@ using coolgym_webapi.Contexts.maintenance.Infrastructure.Persistence.Repositorie
 using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
-
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -126,13 +121,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
-        options.RoutePrefix = "swagger"; 
-        
+        options.RoutePrefix = "swagger";
+
         options.DocumentTitle = "CoolGym API Documentation";
-        options.DisplayRequestDuration(); 
-        options.EnableDeepLinking(); 
-        options.EnableFilter(); 
-        options.ShowExtensions(); 
+        options.DisplayRequestDuration();
+        options.EnableDeepLinking();
+        options.EnableFilter();
+        options.ShowExtensions();
     });
 }
 

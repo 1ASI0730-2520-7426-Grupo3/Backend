@@ -6,16 +6,18 @@ public class MaintenanceRequestNotFoundException : Exception
     {
         MaintenanceRequestId = id;
     }
+
     public int MaintenanceRequestId { get; }
 }
 
 public class DuplicateEquipmentMaintenanceRequestException : Exception
 {
     public DuplicateEquipmentMaintenanceRequestException(int id) : base(
-        $"Maintenance request of this equipment already exists.")
+        "Maintenance request of this equipment already exists.")
     {
         EquipmentId = id;
     }
+
     public int EquipmentId { get; }
 }
 
@@ -32,7 +34,8 @@ public class InvalidDataException : Exception
 
     public static InvalidDataException ObservationTooShort(int length, int minLength)
     {
-        return new InvalidDataException($"Observation must be at least {minLength} characters long. Current length: {length}.");
+        return new InvalidDataException(
+            $"Observation must be at least {minLength} characters long. Current length: {length}.");
     }
 
     public static InvalidDataException InvalidSelectedDate()
@@ -42,7 +45,8 @@ public class InvalidDataException : Exception
 
     public static InvalidDataException SelectedDateTooSoon(TimeSpan difference, TimeSpan minimumDifference)
     {
-        return new InvalidDataException($"Selected date must be at least {minimumDifference.TotalHours} hours in the future. Current difference: {difference.TotalHours:F1} hours.");
+        return new InvalidDataException(
+            $"Selected date must be at least {minimumDifference.TotalHours} hours in the future. Current difference: {difference.TotalHours:F1} hours.");
     }
 
     public static InvalidDataException InvalidStatus(string status)
@@ -53,16 +57,14 @@ public class InvalidDataException : Exception
 
 public class InvalidMaintenanceRequestStatusException : Exception
 {
-    public InvalidMaintenanceRequestStatusException() : base($"Invalid Maintenance Request Status.")
+    public InvalidMaintenanceRequestStatusException() : base("Invalid Maintenance Request Status.")
     {
-        
     }
 }
 
 public class MaintenanceRequestIsAlreadyPendingException : Exception
 {
-    public MaintenanceRequestIsAlreadyPendingException(): base($"Maintenance Request Is Already Pending.")
+    public MaintenanceRequestIsAlreadyPendingException() : base("Maintenance Request Is Already Pending.")
     {
     }
 }
-

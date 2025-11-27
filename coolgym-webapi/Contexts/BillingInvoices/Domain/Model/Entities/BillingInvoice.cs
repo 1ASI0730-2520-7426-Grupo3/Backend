@@ -5,18 +5,11 @@ using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
 namespace coolgym_webapi.Contexts.BillingInvoices.Domain.Model.Entities;
 
 /// <summary>
-/// Billing invoice aggregate root. Represents a payment invoice for a user.
+///     Billing invoice aggregate root. Represents a payment invoice for a user.
 /// </summary>
 public class BillingInvoice : BaseEntity
 {
     private const int MaxCompanyNameLength = 255;
-
-    public int UserId { get; private set; }
-    public string CompanyName { get; private set; }
-    public Money Amount { get; private set; }
-    public InvoiceStatus Status { get; private set; }
-    public DateTime IssuedAt { get; private set; }
-    public DateTime? PaidAt { get; private set; }
 
     protected BillingInvoice()
     {
@@ -71,8 +64,15 @@ public class BillingInvoice : BaseEntity
         CreatedDate = DateTime.UtcNow;
     }
 
+    public int UserId { get; private set; }
+    public string CompanyName { get; private set; }
+    public Money Amount { get; private set; }
+    public InvoiceStatus Status { get; private set; }
+    public DateTime IssuedAt { get; }
+    public DateTime? PaidAt { get; private set; }
+
     /// <summary>
-    /// Marks invoice as paid using the given paid date.
+    ///     Marks invoice as paid using the given paid date.
     /// </summary>
     public void MarkAsPaid(DateTime paidAt)
     {
@@ -88,7 +88,7 @@ public class BillingInvoice : BaseEntity
     }
 
     /// <summary>
-    /// Cancels the invoice if it is not already paid.
+    ///     Cancels the invoice if it is not already paid.
     /// </summary>
     public void Cancel()
     {

@@ -6,6 +6,7 @@ using coolgym_webapi.Contexts.Equipments.Domain.Services;
 using coolgym_webapi.Contexts.Equipments.Interfaces.REST.Resources;
 using coolgym_webapi.Contexts.Equipments.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST;
 
@@ -18,7 +19,8 @@ namespace coolgym_webapi.Contexts.Equipments.Interfaces.REST;
 [Produces(MediaTypeNames.Application.Json)]
 public class EquipmentsController(
     IEquipmentCommandService equipmentCommandService,
-    IEquipmentQueryService equipmentQueryService) : ControllerBase
+    IEquipmentQueryService equipmentQueryService,
+    IStringLocalizer<EquipmentsController> localizer) : ControllerBase
 {
     /// <summary>
     ///     Gets all fitness equipment registered in the system
@@ -80,7 +82,7 @@ public class EquipmentsController(
         var equipment = await equipmentQueryService.Handle(query);
 
         if (equipment == null)
-            return NotFound(new { message = $"Equipment with id {id} not found" });
+            return NotFound(new { message = localizer["Equipment with id {0} not found", id].Value });
 
         var resource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment);
         return Ok(resource);
@@ -185,31 +187,37 @@ public class EquipmentsController(
                 equipmentResource
             );
         }
-
         catch (DuplicateSerialNumberException ex)
         {
-            return Conflict(new { message = ex.Message });
+            var message = localizer[DuplicateSerialNumberException.ResourceKey, ex.SerialNumber].Value;
+            return Conflict(new { message });
         }
         catch (InvalidLocationException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            var message = GetLocalizedMessageForValidationException(ex, localizer);
+            return BadRequest(new { message });
         }
         catch (InvalidControlSettingsException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            var message = GetLocalizedMessageForValidationException(ex, localizer);
+            return BadRequest(new { message });
         }
         catch (InvalidUsageStatsException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            var message = GetLocalizedMessageForValidationException(ex, localizer);
+            return BadRequest(new { message });
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new { message = localizer[ex.Message].Value });
         }
         catch (Exception ex)
         {
             return StatusCode(500,
-                new { message = "An error occurred while creating the equipment", detail = ex.Message });
+                new
+                {
+                    message = localizer["An error occurred while creating the equipment"].Value, detail = ex.Message
+                });
         }
     }
 
@@ -265,31 +273,37 @@ public class EquipmentsController(
             var equipment = await equipmentCommandService.Handle(command);
 
             if (equipment == null)
-                return NotFound(new { message = $"Equipment with id {id} not found" });
+                return NotFound(new { message = localizer["Equipment with id {0} not found", id].Value });
 
             var equipmentResource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment);
             return Ok(equipmentResource);
         }
         catch (EquipmentNotFoundException ex)
         {
-            return NotFound(new { message = ex.Message });
+            var message = localizer[EquipmentNotFoundException.ResourceKey, ex.EquipmentId].Value;
+            return NotFound(new { message });
         }
         catch (InvalidStatusException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            var message = localizer["InvalidStatus", ex.AttemptedStatus].Value;
+            return BadRequest(new { message });
         }
         catch (InvalidLocationException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            var message = GetLocalizedMessageForValidationException(ex, localizer);
+            return BadRequest(new { message });
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new { message = localizer[ex.Message].Value });
         }
         catch (Exception ex)
         {
             return StatusCode(500,
-                new { message = "An error occurred while updating the equipment", detail = ex.Message });
+                new
+                {
+                    message = localizer["An error occurred while updating the equipment"].Value, detail = ex.Message
+                });
         }
     }
 
@@ -328,26 +342,48 @@ public class EquipmentsController(
             var result = await equipmentCommandService.Handle(command);
 
             if (!result)
-                return NotFound(new { message = $"Equipment with id {id} not found" });
+                return NotFound(new { message = localizer["Equipment with id {0} not found", id].Value });
 
             return NoContent();
         }
         catch (EquipmentNotFoundException ex)
         {
-            return NotFound(new { message = ex.Message });
+            var message = localizer[EquipmentNotFoundException.ResourceKey, ex.EquipmentId].Value;
+            return NotFound(new { message });
         }
         catch (EquipmentPoweredOnException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            var message = localizer[EquipmentPoweredOnException.ResourceKey, ex.EquipmentName].Value;
+            return BadRequest(new { message });
         }
         catch (EquipmentInMaintenanceException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            var message = localizer[EquipmentInMaintenanceException.ResourceKey, ex.EquipmentName].Value;
+            return BadRequest(new { message });
         }
         catch (Exception ex)
         {
             return StatusCode(500,
-                new { message = "An error occurred while deleting the equipment", detail = ex.Message });
+                new
+                {
+                    message = localizer["An error occurred while deleting the equipment"].Value, detail = ex.Message
+                });
         }
+    }
+
+    private string GetLocalizedMessageForValidationException(Exception ex, IStringLocalizer localizer)
+    {
+        var keyParts = ex.Message?.Split(':');
+        var key = keyParts?[0];
+
+        if (string.IsNullOrEmpty(key)) return localizer["GenericValidationFailure"].Value;
+
+        var arguments = keyParts?.Skip(1).ToArray();
+
+        var localizedString = arguments != null && arguments.Any()
+            ? localizer[key, arguments.Cast<object>().ToArray()]
+            : localizer[key];
+
+        return localizedString.Value;
     }
 }

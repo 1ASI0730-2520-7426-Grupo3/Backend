@@ -8,7 +8,7 @@ using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 namespace coolgym_webapi.Contexts.BillingInvoices.Application.CommandServices;
 
 /// <summary>
-/// Application service that handles billing invoice commands.
+///     Application service that handles billing invoice commands.
 /// </summary>
 public class InvoiceCommandService(
     IBillingInvoiceRepository invoiceRepository,

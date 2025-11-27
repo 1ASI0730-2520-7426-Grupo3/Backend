@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+                id="root"
+                xmlns="">
+        <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+
+    <data name="An error occurred while creating the equipment" xml:space="preserve">
+        <value>Ocurrió un error al registrar el equipo</value>
+    </data>
+    <data name="An error occurred while updating the equipment" xml:space="preserve">
+        <value>Ocurrió un error al actualizar el equipo</value>
+    </data>
+    <data name="An error occurred while deleting the equipment" xml:space="preserve">
+        <value>Ocurrió un error al eliminar el equipo</value>
+    </data>
+    <data name="Equipment with id {0} not found" xml:space="preserve">
+        <value>Equipo con id {0} no encontrado</value>
+    </data>
+
+    <data name="EquipmentNotFound" xml:space="preserve">
+        <value>El equipo con id {0} no fue encontrado.</value>
+    </data>
+    <data name="DuplicateSerialNumber" xml:space="preserve">
+        <value>Ya existe un equipo con el número de serie '{0}'.</value>
+    </data>
+    <data name="EquipmentPoweredOn" xml:space="preserve">
+        <value>No se puede eliminar el equipo '{0}' porque está encendido. Por favor, apáguelo primero.</value>
+    </data>
+    <data name="EquipmentInMaintenance" xml:space="preserve">
+        <value>No se puede eliminar el equipo '{0}' porque está en mantenimiento.</value>
+    </data>
+    <data name="InvalidStatus" xml:space="preserve">
+        <value>El estado '{0}' no es válido.</value>
+    </data>
+
+    <data name="LocationNameEmpty" xml:space="preserve">
+        <value>El nombre de la ubicación no puede estar vacío.</value>
+    </data>
+    <data name="LocationNameTooLong" xml:space="preserve">
+        <value>El nombre de la ubicación no puede exceder los 100 caracteres. Longitud actual: {0}</value>
+    </data>
+    <data name="LocationAddressEmpty" xml:space="preserve">
+        <value>La dirección de la ubicación no puede estar vacía.</value>
+    </data>
+    <data name="LocationAddressTooLong" xml:space="preserve">
+        <value>La dirección de la ubicación no puede exceder los 200 caracteres. Longitud actual: {0}</value>
+    </data>
+
+    <data name="ControlPowerEmpty" xml:space="preserve">
+        <value>El estado de energía no puede estar vacío.</value>
+    </data>
+    <data name="ControlStatusEmpty" xml:space="preserve">
+        <value>El estado de control no puede estar vacío.</value>
+    </data>
+    <data name="ControlNegativeMinLevel" xml:space="preserve">
+        <value>El nivel mínimo no puede ser negativo. Valor: {0}</value>
+    </data>
+    <data name="ControlInvalidRange" xml:space="preserve">
+        <value>El nivel máximo ({0}) debe ser mayor que el nivel mínimo ({1}).</value>
+    </data>
+    <data name="ControlCurrentLevelOutOfRange" xml:space="preserve">
+        <value>El nivel actual ({0}) debe estar entre {1} y {2}.</value>
+    </data>
+    <data name="ControlSetLevelOutOfRange" xml:space="preserve">
+        <value>El nivel a establecer ({0}) debe estar entre {1} y {2}.</value>
+    </data>
+
+    <data name="UsageTotalMinutesNegative" xml:space="preserve">
+        <value>Los minutos totales no pueden ser negativos. Valor: {0}</value>
+    </data>
+    <data name="UsageTodayMinutesNegative" xml:space="preserve">
+        <value>Los minutos de hoy no pueden ser negativos. Valor: {0}</value>
+    </data>
+    <data name="UsageNegativeCalories" xml:space="preserve">
+        <value>Las calorías no pueden ser negativas. Valor: {0}</value>
+    </data>
+    <data name="UsageTodayExceedsTotal" xml:space="preserve">
+        <value>Los minutos de hoy ({0}) no pueden exceder los minutos totales ({1}).</value>
+    </data>
+    <data name="GenericValidationFailure" xml:space="preserve">
+        <value>Datos de entrada inválidos.</value>
+    </data>
+</root>

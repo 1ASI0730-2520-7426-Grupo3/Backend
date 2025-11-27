@@ -19,17 +19,20 @@ public class InvalidInvoiceDataException : Exception
 
     public static InvalidInvoiceDataException CompanyNameTooLong(int length, int maxLength)
     {
-        return new InvalidInvoiceDataException($"Company name cannot exceed {maxLength} characters. Current length: {length}.");
+        return new InvalidInvoiceDataException(
+            $"Company name cannot exceed {maxLength} characters. Current length: {length}.");
     }
 
     public static InvalidInvoiceDataException InvalidMoney(decimal amount, string currency)
     {
-        return new InvalidInvoiceDataException($"Invalid amount or currency. Amount: {amount}, Currency: '{currency}'.");
+        return new InvalidInvoiceDataException(
+            $"Invalid amount or currency. Amount: {amount}, Currency: '{currency}'.");
     }
 
     public static InvalidInvoiceDataException InvalidStatus(string status)
     {
-        return new InvalidInvoiceDataException($"Status '{status}' is invalid. Allowed values: 'paid', 'pending', 'cancelled'.");
+        return new InvalidInvoiceDataException(
+            $"Status '{status}' is invalid. Allowed values: 'paid', 'pending', 'cancelled'.");
     }
 
     public static InvalidInvoiceDataException PaidDateBeforeIssued(DateTime issuedAt, DateTime paidAt)
