@@ -6,4 +6,4 @@ public record MaintenanceRequestResource(
     DateTime SelectedDate,
     string Observation,
     string Status
-    );
+);

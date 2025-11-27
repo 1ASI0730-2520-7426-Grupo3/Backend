@@ -51,9 +51,11 @@ public class BillingInvoice : BaseEntity
         if (invoiceStatus == null)
             throw InvalidInvoiceDataException.InvalidStatus(status);
 
+        // Business Rule: paidAt must be after issuedAt
         if (paidAt.HasValue && paidAt.Value < issuedAt)
             throw InvalidInvoiceDataException.PaidDateBeforeIssued(issuedAt, paidAt.Value);
 
+        // Business Rule: paidAt should only be set when status is 'paid'
         if (invoiceStatus.IsPaid() && !paidAt.HasValue)
             throw InvalidInvoiceDataException.MissingPaidDate();
 

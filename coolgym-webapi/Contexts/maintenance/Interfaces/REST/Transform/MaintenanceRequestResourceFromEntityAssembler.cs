@@ -15,10 +15,9 @@ public static class MaintenanceRequestResourceFromEntityAssembler
             entity.Status
         );
     }
-    
+
     public static IEnumerable<MaintenanceRequestResource> ToResourceFromEntity(IEnumerable<MaintenanceRequest> entities)
     {
         return entities.Select(ToResourceFromEntity);
     }
-    
 }

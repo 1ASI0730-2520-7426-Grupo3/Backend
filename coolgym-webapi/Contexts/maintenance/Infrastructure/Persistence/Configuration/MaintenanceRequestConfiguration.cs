@@ -25,13 +25,13 @@ public class MaintenanceRequestConfiguration : IEntityTypeConfiguration<Maintena
         builder.Property(e => e.UpdatedDate)
             .HasColumnName("updated_date")
             .IsRequired(false);
-        
+
         builder.Property(e => e.IsDeleted)
             .HasColumnName("is_deleted")
             .IsRequired()
             .HasDefaultValue(0);
-        
-        
+
+
         // ===== CAMPOS ESPECÍFICOS DE MaintenanceRequest =====
         builder.Property(e => e.EquipmentId)
             .HasColumnName("equipment_id")
@@ -48,8 +48,5 @@ public class MaintenanceRequestConfiguration : IEntityTypeConfiguration<Maintena
         builder.Property(e => e.Status)
             .HasColumnName("status")
             .IsRequired(false);
-        
-        
     }
-    
 }

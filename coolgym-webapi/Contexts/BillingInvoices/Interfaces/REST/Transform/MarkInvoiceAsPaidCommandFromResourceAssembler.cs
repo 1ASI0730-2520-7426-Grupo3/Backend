@@ -4,7 +4,7 @@ using coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.Resources;
 namespace coolgym_webapi.Contexts.BillingInvoices.Interfaces.REST.Transform;
 
 /// <summary>
-/// Assembler to transform MarkInvoiceAsPaidResource to MarkInvoiceAsPaidCommand
+///     Assembler to transform MarkInvoiceAsPaidResource to MarkInvoiceAsPaidCommand
 /// </summary>
 public static class MarkInvoiceAsPaidCommandFromResourceAssembler
 {
@@ -13,8 +13,8 @@ public static class MarkInvoiceAsPaidCommandFromResourceAssembler
         MarkInvoiceAsPaidResource resource)
     {
         return new MarkInvoiceAsPaidCommand(
-            InvoiceId: invoiceId,
-            PaidAt: DateTime.Parse(resource.PaidAt)
+            invoiceId,
+            DateTime.Parse(resource.PaidAt)
         );
     }
 }

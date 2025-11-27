@@ -1,19 +1,19 @@
 namespace coolgym_webapi.Contexts.BillingInvoices.Domain.Model.ValueObjects;
 
 /// <summary>
-/// Represents a monetary amount with currency
-/// Ensures amount is always positive and currency is valid
+///     Represents a monetary amount with currency
+///     Ensures amount is always positive and currency is valid
 /// </summary>
 public record Money
 {
-    public decimal Amount { get; init; }
-    public string Currency { get; init; }
-
     private Money(decimal amount, string currency)
     {
         Amount = amount;
         Currency = currency;
     }
+
+    public decimal Amount { get; init; }
+    public string Currency { get; init; }
 
     public static Money? Create(decimal amount, string currency)
     {

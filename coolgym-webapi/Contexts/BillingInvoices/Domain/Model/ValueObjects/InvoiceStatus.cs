@@ -1,17 +1,17 @@
 namespace coolgym_webapi.Contexts.BillingInvoices.Domain.Model.ValueObjects;
 
 /// <summary>
-/// Represents the status of an invoice
-/// Valid values: paid, pending, cancelled
+///     Represents the status of an invoice
+///     Valid values: paid, pending, cancelled
 /// </summary>
 public record InvoiceStatus
 {
-    public string Value { get; init; }
-
     private InvoiceStatus(string value)
     {
         Value = value;
     }
+
+    public string Value { get; init; }
 
     // Valid status values
     public static InvoiceStatus Paid => new("paid");
@@ -31,9 +31,23 @@ public record InvoiceStatus
         };
     }
 
-    public bool IsPaid() => Value == "paid";
-    public bool IsPending() => Value == "pending";
-    public bool IsCancelled() => Value == "cancelled";
+    public bool IsPaid()
+    {
+        return Value == "paid";
+    }
 
-    public override string ToString() => Value;
+    public bool IsPending()
+    {
+        return Value == "pending";
+    }
+
+    public bool IsCancelled()
+    {
+        return Value == "cancelled";
+    }
+
+    public override string ToString()
+    {
+        return Value;
+    }
 }
