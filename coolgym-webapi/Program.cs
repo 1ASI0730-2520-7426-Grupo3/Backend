@@ -1,3 +1,7 @@
+using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+
 using System.Reflection;
 using coolgym_webapi.Contexts.BillingInvoices.Application.CommandServices;
 using coolgym_webapi.Contexts.BillingInvoices.Application.QueryServices;
@@ -19,16 +23,21 @@ using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-// CORS Configuration - Allow All
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
+    options.AddPolicy(MyAllowSpecificOrigins,
         policy =>
         {
-            policy.AllowAnyOrigin()
+            // ESTA ES LA URL DEl FRONTEND 
+            policy.WithOrigins("http://localhost:5173")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -111,19 +120,21 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 //swagger
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+if (app.Environment.IsDevelopment())
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
-    options.RoutePrefix = "swagger";
-
-    options.DocumentTitle = "CoolGym API Documentation";
-    options.DisplayRequestDuration();
-    options.EnableDeepLinking();
-    options.EnableFilter();
-    options.ShowExtensions();
-});
-
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
+        options.RoutePrefix = "swagger"; 
+        
+        options.DocumentTitle = "CoolGym API Documentation";
+        options.DisplayRequestDuration(); 
+        options.EnableDeepLinking(); 
+        options.EnableFilter(); 
+        options.ShowExtensions(); 
+    });
+}
 
 // Ensure DB is created
 using (var scope = app.Services.CreateScope())
@@ -135,8 +146,23 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
-app.UseCors("AllowAll");
 
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("es")
+};
+
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+
+app.UseRequestLocalization(localizationOptions);
+// Usar el middleware de CORS ANTES de UseAuthorization()
+app.UseCors(MyAllowSpecificOrigins);
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -11,8 +11,9 @@ public class MaintenanceRequestRepository(CoolgymContext context)
 {
     public async Task<IEnumerable<MaintenanceRequest>> FindByStatusAsync(string status)
     {
+        var normalizedStatus = status.ToLowerInvariant();
         return await context.MaintenanceRequests
-            .Where(e => e.Status == status)
+            .Where(e => e.Status == normalizedStatus)
             .ToListAsync();
     }
 
