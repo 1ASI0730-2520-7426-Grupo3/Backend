@@ -114,21 +114,18 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 //swagger
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
-        options.RoutePrefix = "swagger";
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "CoolGym API v1");
+    options.RoutePrefix = "swagger";
 
-        options.DocumentTitle = "CoolGym API Documentation";
-        options.DisplayRequestDuration();
-        options.EnableDeepLinking();
-        options.EnableFilter();
-        options.ShowExtensions();
-    });
-}
+    options.DocumentTitle = "CoolGym API Documentation";
+    options.DisplayRequestDuration();
+    options.EnableDeepLinking();
+    options.EnableFilter();
+    options.ShowExtensions();
+});
 
 // Ensure DB is created
 using (var scope = app.Services.CreateScope())
