@@ -1,14 +1,16 @@
+using coolgym_webapi.Contexts.BillingInvoices.Domain.Exceptions;
 using coolgym_webapi.Contexts.BillingInvoices.Domain.Model.ValueObjects;
 using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
 
 namespace coolgym_webapi.Contexts.BillingInvoices.Domain.Model.Entities;
 
 /// <summary>
-/// Billing Invoice aggregate root
-/// Represents an invoice for a user's payment
+/// Billing invoice aggregate root. Represents a payment invoice for a user.
 /// </summary>
 public class BillingInvoice : BaseEntity
 {
+    private const int MaxCompanyNameLength = 255;
+
     public int UserId { get; private set; }
     public string CompanyName { get; private set; }
     public Money Amount { get; private set; }
@@ -16,7 +18,6 @@ public class BillingInvoice : BaseEntity
     public DateTime IssuedAt { get; private set; }
     public DateTime? PaidAt { get; private set; }
 
-    // EF Core constructor
     protected BillingInvoice()
     {
         CompanyName = null!;
@@ -33,34 +34,34 @@ public class BillingInvoice : BaseEntity
         DateTime issuedAt,
         DateTime? paidAt = null)
     {
-        // Validation
         if (userId <= 0)
-            throw new ArgumentException("User ID must be positive", nameof(userId));
+            throw InvalidInvoiceDataException.InvalidUserId(userId);
 
         if (string.IsNullOrWhiteSpace(companyName))
-            throw new ArgumentException("Company name is required", nameof(companyName));
+            throw InvalidInvoiceDataException.EmptyCompanyName();
+
+        if (companyName.Length > MaxCompanyNameLength)
+            throw InvalidInvoiceDataException.CompanyNameTooLong(companyName.Length, MaxCompanyNameLength);
 
         var money = Money.Create(amount, currency);
         if (money == null)
-            throw new ArgumentException("Invalid amount or currency");
+            throw InvalidInvoiceDataException.InvalidMoney(amount, currency);
 
         var invoiceStatus = InvoiceStatus.FromString(status);
         if (invoiceStatus == null)
-            throw new ArgumentException($"Invalid status: {status}. Must be 'paid', 'pending', or 'cancelled'");
+            throw InvalidInvoiceDataException.InvalidStatus(status);
 
-        // Business Rule: paidAt must be after issuedAt
         if (paidAt.HasValue && paidAt.Value < issuedAt)
-            throw new ArgumentException("Paid date cannot be before issued date");
+            throw InvalidInvoiceDataException.PaidDateBeforeIssued(issuedAt, paidAt.Value);
 
-        // Business Rule: paidAt should only be set when status is 'paid'
         if (invoiceStatus.IsPaid() && !paidAt.HasValue)
-            throw new ArgumentException("Paid invoices must have a paid date");
+            throw InvalidInvoiceDataException.MissingPaidDate();
 
         if (!invoiceStatus.IsPaid() && paidAt.HasValue)
-            throw new ArgumentException("Only paid invoices can have a paid date");
+            throw InvalidInvoiceDataException.PaidDateForNonPaid();
 
         UserId = userId;
-        CompanyName = companyName;
+        CompanyName = companyName.Trim();
         Amount = money;
         Status = invoiceStatus;
         IssuedAt = issuedAt;
@@ -69,15 +70,15 @@ public class BillingInvoice : BaseEntity
     }
 
     /// <summary>
-    /// Mark invoice as paid
+    /// Marks invoice as paid using the given paid date.
     /// </summary>
     public void MarkAsPaid(DateTime paidAt)
     {
         if (Status.IsPaid())
-            throw new InvalidOperationException("Invoice is already paid");
+            throw InvoiceStatusTransitionException.AlreadyPaid();
 
         if (paidAt < IssuedAt)
-            throw new ArgumentException("Paid date cannot be before issued date");
+            throw InvalidInvoiceDataException.PaidDateBeforeIssued(IssuedAt, paidAt);
 
         Status = InvoiceStatus.Paid;
         PaidAt = paidAt;
@@ -85,12 +86,12 @@ public class BillingInvoice : BaseEntity
     }
 
     /// <summary>
-    /// Cancel invoice
+    /// Cancels the invoice if it is not already paid.
     /// </summary>
     public void Cancel()
     {
         if (Status.IsPaid())
-            throw new InvalidOperationException("Cannot cancel a paid invoice");
+            throw InvoiceStatusTransitionException.CannotCancelPaid();
 
         Status = InvoiceStatus.Cancelled;
         UpdatedDate = DateTime.UtcNow;

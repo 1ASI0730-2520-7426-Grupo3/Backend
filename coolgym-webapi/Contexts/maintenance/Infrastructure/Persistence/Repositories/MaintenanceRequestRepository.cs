@@ -6,19 +6,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace coolgym_webapi.Contexts.maintenance.Infrastructure.Persistence.Repositories;
 
-public class MaintenanceRequestRepository(CoolgymContext context) : BaseRepository<MaintenanceRequest>(context), IMaintenanceRequestRepository
+public class MaintenanceRequestRepository(CoolgymContext context)
+    : BaseRepository<MaintenanceRequest>(context), IMaintenanceRequestRepository
 {
     public async Task<IEnumerable<MaintenanceRequest>> FindByStatusAsync(string status)
     {
+        var normalizedStatus = status.ToLowerInvariant();
         return await context.MaintenanceRequests
-            .Where(e => e.Status == status)
+            .Where(e => e.Status == normalizedStatus)
             .ToListAsync();
     }
-    
+
     public async Task<MaintenanceRequest?> FindByEquipmentIdAsync(int equipmentId)
     {
         return await context.MaintenanceRequests
             .FirstOrDefaultAsync(e => e.EquipmentId == equipmentId);
     }
-    
 }

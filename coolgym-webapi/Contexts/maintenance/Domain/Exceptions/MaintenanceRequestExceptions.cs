@@ -21,31 +21,33 @@ public class DuplicateEquipmentMaintenanceRequestException : Exception
 
 public class InvalidDataException : Exception
 {
-    
-    public InvalidDataException(string message)
-        : base($"Invalid data: {message}")
+    public InvalidDataException(string message) : base($"Invalid data: {message}")
     {
     }
-    
-    public InvalidDataException EmptyObservation()
+
+    public static InvalidDataException EmptyObservation()
     {
-        return new InvalidDataException("Observation can't be empty.");
+        return new InvalidDataException("Observation cannot be empty.");
     }
-    public static InvalidDataException ObservationTooShort(int length)
+
+    public static InvalidDataException ObservationTooShort(int length, int minLength)
     {
-        return new InvalidDataException($"Observation can't be too short. Current length: {length}");
+        return new InvalidDataException($"Observation must be at least {minLength} characters long. Current length: {length}.");
     }
-    public InvalidDataException VerySoonSelectedDate()
-    {
-        return new InvalidDataException("Selected date must be almost 1 day in the future.");
-    }
-    public InvalidDataException InvalidSelectedDate()
+
+    public static InvalidDataException InvalidSelectedDate()
     {
         return new InvalidDataException("Selected date must be in the future.");
     }
-    public InvalidDataException InvalidStatus()
+
+    public static InvalidDataException SelectedDateTooSoon(TimeSpan difference, TimeSpan minimumDifference)
     {
-        return new InvalidDataException("Invalid status.");
+        return new InvalidDataException($"Selected date must be at least {minimumDifference.TotalHours} hours in the future. Current difference: {difference.TotalHours:F1} hours.");
+    }
+
+    public static InvalidDataException InvalidStatus(string status)
+    {
+        return new InvalidDataException($"Status '{status}' is invalid.");
     }
 }
 

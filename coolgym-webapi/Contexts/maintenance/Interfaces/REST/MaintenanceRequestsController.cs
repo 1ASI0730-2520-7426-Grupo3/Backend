@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Net.Mime;
 using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 using coolgym_webapi.Contexts.maintenance.Domain.Commands;
@@ -7,263 +9,286 @@ using coolgym_webapi.Contexts.maintenance.Domain.Services;
 using coolgym_webapi.Contexts.maintenance.Interfaces.REST.Resources;
 using coolgym_webapi.Contexts.maintenance.Interfaces.REST.Transform;
 using Microsoft.AspNetCore.Mvc;
-using InvalidDataException = System.IO.InvalidDataException;
+using Microsoft.Extensions.Localization;
+using InvalidDataException = coolgym_webapi.Contexts.maintenance.Domain.Exceptions.InvalidDataException;
 
-namespace coolgym_webapi.Contexts.maintenance.Interfaces.REST;
-
-
-
-/// <summary>
-///     Controller REST para gestionar solicitudes de mantenimiento (Maintenance Requests)
-///     asociadas a los equipos de fitness del gimnasio.
-/// </summary>
-/// <remarks>
-///     Permite registrar, consultar, filtrar, actualizar el estado y eliminar
-///     solicitudes de mantenimiento. Estas solicitudes sirven para coordinar
-///     el trabajo del personal técnico y mantener un historial de fallas y reparaciones.
-/// </remarks>
-[ApiController]
-[Route("api/v1/[controller]")]
-[Produces(MediaTypeNames.Application.Json)]
-public class MaintenanceRequestsController(IMaintenanceRequestCommandService maintenanceRequestCommandService,
-    IMaintenanceRequestQueryService maintenanceRequestQueryService) : ControllerBase
+namespace coolgym_webapi.Contexts.maintenance.Interfaces.REST
 {
-    
     /// <summary>
-    ///     Registra una nueva solicitud de mantenimiento para un equipo.
+    /// REST controller that exposes endpoints to manage maintenance requests
+    /// for CoolGym equipments.
     /// </summary>
     /// <remarks>
-    ///     Crea una Maintenance Request asociada a un equipo determinado, incluyendo
-    ///     información como el motivo de la falla y fecha de creación.
-    ///
-    ///     Ejemplo de solicitud:
-    ///     POST /api/v1/maintenancerequests
-    ///     {
-    ///       "equipmentId": 1,
-    ///       "selectedDate": "2025-01-15T10:30:00Z",
-    ///       "observation": "Al correr a más de 8 km/h se escucha un golpe metálico."
-    ///     }
+    /// All error messages returned by this controller are localized according
+    /// to the <c>Accept-Language</c> HTTP header (supports <c>en</c> and <c>es</c>).
     /// </remarks>
-    /// <param name="resource">Datos de la solicitud de mantenimiento a registrar.</param>
-    /// <returns>Solicitud de mantenimiento creada con su ID asignado automáticamente.</returns>
-    /// <response code="201">Solicitud creada exitosamente. Retorna la solicitud completa con su ID.</response>
-    /// <response code="400">Datos de entrada inválidos (validaciones de Value Objects o formato).</response>
-    /// <response code="409">Conflicto: ya existe una solicitud pendiente similar para el mismo equipo.</response>
-    /// <response code="500">Error interno del servidor.</response>
-    [HttpPost]
-    [ProducesResponseType(typeof(MaintenanceRequestResource), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateEquipment([FromBody] CreateMaintenanceRequestResource resource)
+    [ApiController]
+    [Route("api/v1/[controller]")]
+    [Produces(MediaTypeNames.Application.Json)]
+    public class MaintenanceRequestsController(
+        IMaintenanceRequestCommandService maintenanceRequestCommandService,
+        IMaintenanceRequestQueryService maintenanceRequestQueryService,
+        IStringLocalizer<MaintenanceRequestsController> localizer) : ControllerBase
     {
-        try
+        /// <summary>
+        /// Registers a new maintenance request for an equipment.
+        /// </summary>
+        /// <param name="resource">Maintenance request data.</param>
+        /// <returns>
+        /// Returns <c>201 Created</c> with the created maintenance request when the operation succeeds.
+        /// Returns <c>400 Bad Request</c> when the provided data is invalid.
+        /// Returns <c>404 Not Found</c> when the referenced equipment does not exist.
+        /// Returns <c>409 Conflict</c> when a similar maintenance request already exists.
+        /// Returns <c>500 Internal Server Error</c> when an unexpected error occurs.
+        /// </returns>
+        /// <remarks>
+        /// Typical usage is when a gym administrator or automated monitoring system
+        /// detects a problem in an equipment and needs to schedule a maintenance visit.
+        ///
+        /// <para>Sample request body:</para>
+        /// <code language="json">
+        /// {
+        ///   "equipmentId": 1243234325,
+        ///   "selectedDate": "2025-12-21T10:30:00Z",
+        ///   "observation": "Replace belts and lubricate the running surface."
+        /// }
+        /// </code>
+        ///
+        /// <para>Business rules applied:</para>
+        /// <list type="bullet">
+        /// <item>The equipment must exist in the system.</item>
+        /// <item>A duplicate maintenance request for the same equipment and date is not allowed.</item>
+        /// <item>Domain validations may reject inconsistent or incomplete data.</item>
+        /// </list>
+        ///
+        /// <para>
+        /// Error messages are localized based on the <c>Accept-Language</c> header.
+        /// </para>
+        /// </remarks>
+        [HttpPost]
+        [ProducesResponseType(typeof(MaintenanceRequestResource), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateMaintenanceRequest([FromBody] CreateMaintenanceRequestResource resource)
         {
-            var command = CreateMaintenanceRequestCommandFromResourceAssembler.ToCommandFromResource(resource);
-            var maintenanceRequest = await maintenanceRequestCommandService.Handle(command);
-            var maintenanceRequestResource = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
+            try
+            {
+                var command = CreateMaintenanceRequestCommandFromResourceAssembler.ToCommandFromResource(resource);
+                var maintenanceRequest = await maintenanceRequestCommandService.Handle(command);
+                var maintenanceRequestResource =
+                    MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
 
-            return CreatedAtAction(
-                nameof(GetMaintenanceRequestById),
-                new { id = maintenanceRequest.Id },
-                maintenanceRequestResource
-            );
+                return CreatedAtAction(
+                    nameof(GetMaintenanceRequestById),
+                    new { id = maintenanceRequest.Id },
+                    maintenanceRequestResource);
+            }
+            catch (DuplicateEquipmentMaintenanceRequestException ex)
+            {
+                return Conflict(new { message = localizer[ex.Message].Value });
+            }
+            catch (EquipmentNotFoundException ex)
+            {
+                return NotFound(new { message = localizer[ex.Message].Value });
+            }
+            catch (InvalidDataException ex)
+            {
+                return BadRequest(new { message = localizer[ex.Message].Value });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = localizer[ex.Message].Value });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new
+                    {
+                        message = localizer["An error occurred while creating the maintenance request."].Value,
+                        detail = ex.Message
+                    });
+            }
         }
-        catch (InvalidDataException ex)
+
+        /// <summary>
+        /// Gets all maintenance requests.
+        /// </summary>
+        /// <returns>
+        /// Returns <c>200 OK</c> with the complete list of maintenance requests.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint is typically used by back-office dashboards to display
+        /// all open and historical maintenance requests.
+        /// </remarks>
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<MaintenanceRequestResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllMaintenanceRequests()
         {
-            return BadRequest(new { message = ex.Message });
+            var query = new GetAllMaintenanceRequests();
+            var maintenanceRequests = await maintenanceRequestQueryService.Handle(query);
+            var resources = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequests);
+            return Ok(resources);
         }
-        catch (ArgumentException ex)
+
+        /// <summary>
+        /// Gets a maintenance request by its identifier.
+        /// </summary>
+        /// <param name="id">Maintenance request identifier.</param>
+        /// <returns>
+        /// Returns <c>200 OK</c> with the maintenance request when it exists.
+        /// Returns <c>404 Not Found</c> when the maintenance request cannot be found.
+        /// </returns>
+        /// <remarks>
+        /// Use this endpoint to show detailed information about a single maintenance
+        /// request in the UI or when debugging specific cases.
+        /// </remarks>
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(MaintenanceRequestResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetMaintenanceRequestById(int id)
         {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500,
-                new { message = "An error occurred while creating the Maintenance Request", detail = ex.Message });
-        }
-    }
-
-    
-    /// <summary>
-    ///     Obtiene todas las solicitudes de mantenimiento registradas.
-    /// </summary>
-    /// <remarks>
-    ///     Retorna la lista completa de Maintenance Requests, incluyendo solicitudes
-    ///     pendientes o completadas.
-    ///
-    ///     Ejemplo de solicitud:
-    ///     GET /api/v1/maintenancerequests
-    /// </remarks>
-    /// <returns>Lista de todas las solicitudes de mantenimiento registradas.</returns>
-    /// <response code="200">Retorna la lista de solicitudes exitosamente (puede ser vacía).</response>
-    [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<MaintenanceRequestResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllMaintenanceRequests()
-    {
-        var query = new GetAllMaintenanceRequests();
-        var maintenanceRequests = await maintenanceRequestQueryService.Handle(query);
-        var resources = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequests);
-        return Ok(resources);
-    }
-    
-    /// <summary>
-    ///     Obtiene una solicitud de mantenimiento específica por su identificador único.
-    /// </summary>
-    /// <remarks>
-    ///     Retorna los detalles de una Maintenance Request, incluyendo:
-    ///     - Equipo asociado
-    ///     - Fecha seleccionada para mantenimiento
-    ///     - Descripción del problema
-    ///     - Estado actual
-    ///
-    ///     Ejemplo de solicitud:
-    ///     GET /api/v1/maintenancerequests/1
-    /// </remarks>
-    /// <param name="id">Identificador único de la solicitud de mantenimiento.</param>
-    /// <returns>Solicitud de mantenimiento encontrada.</returns>
-    /// <response code="200">Solicitud encontrada exitosamente.</response>
-    /// <response code="404">No se encontró una solicitud con el ID especificado.</response>
-    [HttpGet("{id:int}")]
-    [ProducesResponseType(typeof(MaintenanceRequestResource), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetMaintenanceRequestById(int id)
-    {
-        var query = new GetMaintenanceRequestById(id);
-        var maintenanceRequest = await maintenanceRequestQueryService.Handle(query);
-
-        if (maintenanceRequest == null)
-            return NotFound(new { message = $"Maintenance Request with id {id} not found" });
-
-        var resource = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
-        return Ok(resource);
-    }
-    
-    
-    /// <summary>
-    ///     Obtiene solicitudes de mantenimiento filtradas por su estado actual.
-    /// </summary>
-    /// <remarks>
-    ///     Filtra las Maintenance Requests según su estado. Ejemplos de estados:
-    ///     - <c>pending</c>: solicitud creada, en espera de atención
-    ///     - <c>completed</c>: el mantenimiento fue completado
-    ///
-    ///     Ejemplo de solicitud:
-    ///     GET /api/v1/maintenancerequests/status/pending
-    /// </remarks>
-    /// <param name="status">Estado de la solicitud (p. ej. "pending", "completed").</param>
-    /// <returns>Lista de solicitudes de mantenimiento con el estado especificado.</returns>
-    /// <response code="200">Retorna la lista de solicitudes filtradas (puede ser vacía).</response>
-    [HttpGet("status/{status}")]
-    [ProducesResponseType(typeof(IEnumerable<MaintenanceRequestResource>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetMaintenanceRequestsByStatus(string status)
-    {
-        var query = new GetMaintenanceRequestsByStatus(status);
-        var maintenanceRequests = await maintenanceRequestQueryService.Handle(query);
-        var resources = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequests);
-        return Ok(resources);
-    }
-    
-    /// <summary>
-    ///     Actualiza el estado de una solicitud de mantenimiento existente.
-    /// </summary>
-    /// <remarks>
-    ///     Permite cambiar el estado de la Maintenance Request (de
-    ///     <c>pending</c> a <c>completed</c>).
-    ///
-    ///     Ejemplo de solicitud:
-    ///     PUT /api/v1/maintenancerequests/1
-    ///     {
-    ///       "status": "completed"
-    ///     }
-    /// </remarks>
-    /// <param name="id">Identificador de la solicitud de mantenimiento a actualizar.</param>
-    /// <param name="resource">Datos con el nuevo estado y/o notas de la solicitud.</param>
-    /// <returns>Solicitud de mantenimiento actualizada con los nuevos valores.</returns>
-    /// <response code="200">Solicitud actualizada exitosamente.</response>
-    /// <response code="400">Datos de entrada inválidos.</response>
-    /// <response code="404">No se encontró una solicitud con el ID especificado.</response>
-    /// <response code="500">Error interno del servidor.</response>
-    [HttpPut("{id:int}")]
-    [ProducesResponseType(typeof(MaintenanceRequestResource), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> UpdateMaintenanceRequestStatus(int id, [FromBody] UpdateMaintenanceRequestStatusResource resource)
-    {
-        try
-        {
-            var command = UpdateMaintenanceRequestStatusCommandFromResourceAssembler.ToCommandFromResource(id, resource);
-            var maintenanceRequest = await maintenanceRequestCommandService.Handle(command);
-
+            var query = new GetMaintenanceRequestById(id);
+            var maintenanceRequest = await maintenanceRequestQueryService.Handle(query);
             if (maintenanceRequest == null)
-                return NotFound(new { message = $"Maintenance Request with id {id} not found" });
+            {
+                return NotFound(new { message = localizer[$"Maintenance request with id {id} was not found."].Value });
+            }
 
-            var maintenanceRequestResource = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
-            return Ok(maintenanceRequestResource);
+            var resource = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
+            return Ok(resource);
         }
-        catch (MaintenanceRequestNotFoundException ex)
+
+        /// <summary>
+        /// Gets maintenance requests filtered by status.
+        /// </summary>
+        /// <param name="status">
+        /// Maintenance request status (for example, <c>pending</c>, <c>in-progress</c>, <c>completed</c>).
+        /// </param>
+        /// <returns>
+        /// Returns <c>200 OK</c> with the list of maintenance requests that match the given status.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint is useful to build filtered views, such as "Pending maintenance"
+        /// or "Completed maintenance" dashboards.
+        /// </remarks>
+        [HttpGet("status/{status}")]
+        [ProducesResponseType(typeof(IEnumerable<MaintenanceRequestResource>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetMaintenanceRequestsByStatus(string status)
         {
-            return NotFound(new { message = ex.Message });
+            var query = new GetMaintenanceRequestsByStatus(status);
+            var maintenanceRequests = await maintenanceRequestQueryService.Handle(query);
+            var resources = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequests);
+            return Ok(resources);
         }
-        catch (InvalidDataException ex)
+
+        /// <summary>
+        /// Updates the status of an existing maintenance request.
+        /// </summary>
+        /// <param name="id">Maintenance request identifier.</param>
+        /// <param name="resource">Data that contains the new status.</param>
+        /// <returns>
+        /// Returns <c>200 OK</c> with the updated maintenance request when the operation succeeds.
+        /// Returns <c>404 Not Found</c> when the maintenance request cannot be found.
+        /// Returns <c>400 Bad Request</c> when the new status is not valid or violates domain rules.
+        /// Returns <c>500 Internal Server Error</c> when an unexpected error occurs.
+        /// </returns>
+        /// <remarks>
+        /// This endpoint is commonly used by maintenance staff to move requests through
+        /// their lifecycle (for example, from <c>pending</c> to <c>in-progress</c> and
+        /// finally to <c>completed</c>).
+        /// </remarks>
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(typeof(MaintenanceRequestResource), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateMaintenanceRequestStatus(int id, [FromBody] UpdateMaintenanceRequestStatusResource resource)
         {
-            return BadRequest(new { message = ex.Message });
+            try
+            {
+                var command = UpdateMaintenanceRequestStatusCommandFromResourceAssembler.ToCommandFromResource(id, resource);
+                var maintenanceRequest = await maintenanceRequestCommandService.Handle(command);
+                if (maintenanceRequest == null)
+                {
+                    return NotFound(new { message = localizer[$"Maintenance request with id {id} was not found."].Value });
+                }
+
+                var maintenanceRequestResource =
+                    MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
+                return Ok(maintenanceRequestResource);
+            }
+            catch (MaintenanceRequestNotFoundException ex)
+            {
+                return NotFound(new { message = localizer[ex.Message].Value });
+            }
+            catch (InvalidDataException ex)
+            {
+                return BadRequest(new { message = localizer[ex.Message].Value });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = localizer[ex.Message].Value });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new
+                    {
+                        message = localizer["An error occurred while updating the maintenance request."].Value,
+                        detail = ex.Message
+                    });
+            }
         }
-        catch (ArgumentException ex)
+
+        /// <summary>
+        /// Deletes a maintenance request.
+        /// </summary>
+        /// <param name="id">Maintenance request identifier.</param>
+        /// <returns>
+        /// Returns <c>204 No Content</c> when the maintenance request is successfully deleted.
+        /// Returns <c>404 Not Found</c> when no maintenance request exists with the provided identifier.
+        /// Returns <c>400 Bad Request</c> or <c>500 Internal Server Error</c> in case of failures.
+        /// </returns>
+        /// <remarks>
+        /// Deleting maintenance requests should be done with caution and is usually reserved
+        /// for administrative tasks, such as removing test data or correcting erroneous records.
+        /// </remarks>
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteMaintenanceRequest(int id)
         {
-            return BadRequest(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500,
-                new { message = "An error occurred while updating the equipment", detail = ex.Message });
+            try
+            {
+                var command = new DeleteMaintenanceRequestCommand(id);
+                var result = await maintenanceRequestCommandService.Handle(command);
+                if (!result)
+                {
+                    return NotFound(new { message = localizer[$"Maintenance request with id {id} was not found."].Value });
+                }
+
+                return NoContent();
+            }
+            catch (MaintenanceRequestNotFoundException ex)
+            {
+                return NotFound(new { message = localizer[ex.Message].Value });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new
+                    {
+                        message = localizer["An error occurred while deleting the maintenance request."].Value,
+                        detail = ex.Message
+                    });
+            }
         }
     }
-    
-    /// <summary>
-    ///     Elimina una solicitud de mantenimiento del sistema.
-    /// </summary>
-    /// <remarks>
-    ///     Esta operación puede eliminar una solicitud de mantenimiento físicamente de la base de datos.
-    ///
-    ///     Si la solicitud no existe, se retorna un error 404.
-    ///
-    ///     Ejemplo de solicitud:
-    ///     DELETE /api/v1/maintenancerequests/1
-    /// </remarks>
-    /// <param name="id">Identificador de la solicitud de mantenimiento a eliminar.</param>
-    /// <returns><c>204 No Content</c> si la eliminación fue exitosa.</returns>
-    /// <response code="204">Solicitud eliminada exitosamente (sin contenido en la respuesta).</response>
-    /// <response code="404">No se encontró una solicitud con el ID especificado.</response>
-    /// <response code="400">Datos inválidos para la eliminación.</response>
-    /// <response code="500">Error interno del servidor.</response>
-    [HttpDelete("{id:int}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> DeleteMaintenanceRequest(int id)
-    {
-        try
-        {
-            var command = new DeleteMaintenanceRequestCommand(id);
-            var result = await maintenanceRequestCommandService.Handle(command);
-
-            if (!result)
-                return NotFound(new { message = $"Maintenance Request with id {id} not found" });
-
-            return NoContent();
-        }
-        catch (MaintenanceRequestNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500,
-                new { message = "An error occurred while deleting the equipment", detail = ex.Message });
-        }
-    }
-    
 }

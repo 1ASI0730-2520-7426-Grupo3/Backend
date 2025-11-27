@@ -1,3 +1,7 @@
+using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+
 using System.Reflection;
 using coolgym_webapi.Contexts.BillingInvoices.Application.CommandServices;
 using coolgym_webapi.Contexts.BillingInvoices.Application.QueryServices;
@@ -19,10 +23,13 @@ using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddCors(options =>
 {
@@ -139,9 +146,23 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
+
+var supportedCultures = new[]
+{
+    new CultureInfo("en"),
+    new CultureInfo("es")
+};
+
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+
+app.UseRequestLocalization(localizationOptions);
 // Usar el middleware de CORS ANTES de UseAuthorization()
 app.UseCors(MyAllowSpecificOrigins);
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

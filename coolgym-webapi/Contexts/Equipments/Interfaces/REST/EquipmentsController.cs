@@ -185,6 +185,7 @@ public class EquipmentsController(
                 equipmentResource
             );
         }
+
         catch (DuplicateSerialNumberException ex)
         {
             return Conflict(new { message = ex.Message });
