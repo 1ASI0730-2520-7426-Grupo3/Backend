@@ -1,4 +1,6 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
+﻿using coolgym_webapi.Contexts.Equipments.Domain;
+using coolgym_webapi.Contexts.Equipments.Domain.Constants;
+using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
@@ -19,7 +21,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<Equipment?> FindBySerialNumberAsync(string serialNumber)
     {
         return await context.Equipments
-            .Where(e => e.IsDeleted == 0)
+            .Where(e => e.IsDeleted == EquipmentDomainConstants.DeletedFlagFalse)
             .FirstOrDefaultAsync(e => e.SerialNumber == serialNumber);
     }
 
@@ -29,7 +31,8 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<IEnumerable<Equipment>> FindByTypeAsync(string type)
     {
         return await context.Equipments
-            .Where(e => e.Type == type && e.IsDeleted == 0)
+            .Where(e => e.Type == type &&
+                        e.IsDeleted == EquipmentDomainConstants.DeletedFlagFalse)
             .ToListAsync();
     }
 
@@ -39,7 +42,8 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<IEnumerable<Equipment>> FindByStatusAsync(string status)
     {
         return await context.Equipments
-            .Where(e => e.Status == status && e.IsDeleted == 0)
+            .Where(e => e.Status == status &&
+                        e.IsDeleted == EquipmentDomainConstants.DeletedFlagFalse)
             .ToListAsync();
     }
 
@@ -49,7 +53,9 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<IEnumerable<Equipment>> FindActiveEquipmentAsync()
     {
         return await context.Equipments
-            .Where(e => e.Status == "active" && e.IsDeleted == 0)
+            .Where(e =>
+                e.Status == EquipmentDomainConstants.StatusActive &&
+                e.IsDeleted == EquipmentDomainConstants.DeletedFlagFalse)
             .ToListAsync();
     }
 
@@ -60,7 +66,7 @@ public class EquipmentRepository(CoolgymContext context)
     public async Task<bool> ExistsBySerialNumberAsync(string serialNumber)
     {
         return await context.Equipments
-            .Where(e => e.IsDeleted == 0)
+            .Where(e => e.IsDeleted == EquipmentDomainConstants.DeletedFlagFalse)
             .AnyAsync(e => e.SerialNumber == serialNumber);
     }
 }

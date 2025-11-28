@@ -1,4 +1,6 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
+﻿using coolgym_webapi.Contexts.Equipments.Domain;
+using coolgym_webapi.Contexts.Equipments.Domain.Constants;
+using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -30,7 +32,7 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
         builder.Property(e => e.IsDeleted)
             .HasColumnName("is_deleted")
             .IsRequired()
-            .HasDefaultValue(0);
+            .HasDefaultValue(EquipmentDomainConstants.DeletedFlagFalse);
 
         builder.Property(e => e.Name)
             .HasColumnName("name")
@@ -95,7 +97,6 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
             .HasMaxLength(500)
             .IsRequired(false);
 
-
         builder.HasIndex(e => e.SerialNumber)
             .IsUnique()
             .HasDatabaseName("ix_equipments_serial_number");
@@ -115,12 +116,12 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
         {
             location.Property(l => l.Name)
                 .HasColumnName("location_name")
-                .HasMaxLength(100)
+                .HasMaxLength(EquipmentDomainConstants.MaxLocationNameLength)
                 .IsRequired();
 
             location.Property(l => l.Address)
                 .HasColumnName("location_address")
-                .HasMaxLength(200)
+                .HasMaxLength(EquipmentDomainConstants.MaxLocationAddressLength)
                 .IsRequired();
         });
     }

@@ -1,4 +1,6 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain.Commands;
+﻿using coolgym_webapi.Contexts.Equipments.Domain;
+using coolgym_webapi.Contexts.Equipments.Domain.Commands;
+using coolgym_webapi.Contexts.Equipments.Domain.Constants;
 using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 using coolgym_webapi.Contexts.Equipments.Domain.Model.ValueObjects;
@@ -23,7 +25,8 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
     public async Task<Equipment> Handle(CreateEquipmentCommand command)
     {
         var existingEquipment = await equipmentRepository.FindBySerialNumberAsync(command.SerialNumber);
-        if (existingEquipment != null) throw new DuplicateSerialNumberException(command.SerialNumber);
+        if (existingEquipment != null)
+            throw new DuplicateSerialNumberException(command.SerialNumber);
 
         var location = new Location(command.LocationName, command.LocationAddress);
 
@@ -39,7 +42,8 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
             location
         );
 
-        if (!string.IsNullOrWhiteSpace(command.Image)) equipment.UpdateImage(command.Image);
+        if (!string.IsNullOrWhiteSpace(command.Image))
+            equipment.UpdateImage(command.Image);
 
         await equipmentRepository.AddAsync(equipment);
         await unitOfWork.CompleteAsync();
@@ -61,11 +65,17 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
         equipment.Name = command.Name;
         equipment.Code = command.Code;
         equipment.PowerWatts = command.PowerWatts;
-        equipment.IsPoweredOn = command.IsPoweredOn;
         equipment.ActiveStatus = command.ActiveStatus;
         equipment.Notes = command.Notes;
 
+        // Status change uses domain validation
         equipment.UpdateStatus(command.Status);
+
+        // Power on/off now goes through domain methods to enforce rules
+        if (command.IsPoweredOn)
+            equipment.TurnOn();
+        else
+            equipment.TurnOff();
 
         var newLocation = new Location(command.LocationName, command.LocationAddress);
         equipment.UpdateLocation(newLocation);
@@ -88,17 +98,14 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
     {
         var equipment = await equipmentRepository.FindByIdAsync(command.Id);
 
-        if (equipment == null || equipment.IsDeleted == 1)
+        if (equipment == null ||
+            equipment.IsDeleted == EquipmentDomainConstants.DeletedFlagTrue)
+        {
             throw new EquipmentNotFoundException(command.Id);
+        }
 
-        if (equipment.IsPoweredOn)
-            throw new EquipmentPoweredOnException(equipment.Name);
-
-        if (equipment.Status == "maintenance")
-            throw new EquipmentInMaintenanceException(equipment.Name);
-
-        equipment.IsDeleted = 1;
-        equipment.UpdatedDate = DateTime.UtcNow;
+        // Business rules for deletion are now inside the aggregate root
+        equipment.SoftDelete();
 
         equipmentRepository.Update(equipment);
         await unitOfWork.CompleteAsync();

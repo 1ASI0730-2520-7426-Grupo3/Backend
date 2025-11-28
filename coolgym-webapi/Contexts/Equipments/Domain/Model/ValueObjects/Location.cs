@@ -1,4 +1,6 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
+﻿using coolgym_webapi.Contexts.Equipments.Domain;
+using coolgym_webapi.Contexts.Equipments.Domain.Constants;
+using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 
 namespace coolgym_webapi.Contexts.Equipments.Domain.Model.ValueObjects;
 
@@ -9,13 +11,13 @@ public record Location
         if (string.IsNullOrWhiteSpace(name))
             throw InvalidLocationException.EmptyName();
 
-        if (name.Length > 100)
+        if (name.Length > EquipmentDomainConstants.MaxLocationNameLength)
             throw InvalidLocationException.NameTooLong(name.Length);
 
         if (string.IsNullOrWhiteSpace(address))
             throw InvalidLocationException.EmptyAddress();
 
-        if (address.Length > 200)
+        if (address.Length > EquipmentDomainConstants.MaxLocationAddressLength)
             throw InvalidLocationException.AddressTooLong(address.Length);
 
         Name = name.Trim();
