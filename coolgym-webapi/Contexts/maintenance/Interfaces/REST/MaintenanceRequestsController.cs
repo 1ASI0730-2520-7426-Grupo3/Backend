@@ -6,6 +6,8 @@ using coolgym_webapi.Contexts.maintenance.Domain.Queries;
 using coolgym_webapi.Contexts.maintenance.Domain.Services;
 using coolgym_webapi.Contexts.maintenance.Interfaces.REST.Resources;
 using coolgym_webapi.Contexts.maintenance.Interfaces.REST.Transform;
+using coolgym_webapi.Contexts.Security.Domain.Model.Entities;
+using coolgym_webapi.Contexts.Security.Domain.Model.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using InvalidDataException = coolgym_webapi.Contexts.maintenance.Domain.Exceptions.InvalidDataException;
@@ -68,6 +70,17 @@ public class MaintenanceRequestsController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateMaintenanceRequest([FromBody] CreateMaintenanceRequestResource resource)
     {
+        // Get authenticated user from middleware
+        var authenticatedUser = HttpContext.Items["User"] as User;
+
+        // Authorization: User must be authenticated
+        if (authenticatedUser == null)
+            return Unauthorized(new { message = "Authentication required" });
+
+        // Authorization: Only Clients can create maintenance requests
+        if (authenticatedUser.Role.ToRoleName() != "Client")
+            return StatusCode(403, new { message = "Only clients can create maintenance requests" });
+
         try
         {
             var command = CreateMaintenanceRequestCommandFromResourceAssembler.ToCommandFromResource(resource);
@@ -86,7 +99,7 @@ public class MaintenanceRequestsController(
         }
         catch (EquipmentNotFoundException ex)
         {
-            return NotFound(new { message = localizer[ex.Message].Value });
+            return NotFound(new { message = localizer["Equipment with id {0} was not found.", ex.EquipmentId].Value });
         }
         catch (InvalidDataException ex)
         {
@@ -122,6 +135,14 @@ public class MaintenanceRequestsController(
     [ProducesResponseType(typeof(IEnumerable<MaintenanceRequestResource>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllMaintenanceRequests()
     {
+        // Get authenticated user from middleware
+        var authenticatedUser = HttpContext.Items["User"] as User;
+
+        // Authorization: User must be authenticated
+        if (authenticatedUser == null)
+            return Unauthorized(new { message = "Authentication required" });
+
+        // Both Clients and Providers can view maintenance requests
         var query = new GetAllMaintenanceRequests();
         var maintenanceRequests = await maintenanceRequestQueryService.Handle(query);
         var resources = MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequests);
@@ -201,6 +222,17 @@ public class MaintenanceRequestsController(
     public async Task<IActionResult> UpdateMaintenanceRequestStatus(int id,
         [FromBody] UpdateMaintenanceRequestStatusResource resource)
     {
+        // Get authenticated user from middleware
+        var authenticatedUser = HttpContext.Items["User"] as User;
+
+        // Authorization: User must be authenticated
+        if (authenticatedUser == null)
+            return Unauthorized(new { message = "Authentication required" });
+
+        // Authorization: Only Providers can update maintenance request status
+        if (authenticatedUser.Role.ToRoleName() != "Provider")
+            return StatusCode(403, new { message = "Only providers can update maintenance request status" });
+
         try
         {
             var command =
@@ -257,6 +289,17 @@ public class MaintenanceRequestsController(
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> DeleteMaintenanceRequest(int id)
     {
+        // Get authenticated user from middleware
+        var authenticatedUser = HttpContext.Items["User"] as User;
+
+        // Authorization: User must be authenticated
+        if (authenticatedUser == null)
+            return Unauthorized(new { message = "Authentication required" });
+
+        // Authorization: Only Providers can delete maintenance requests
+        if (authenticatedUser.Role.ToRoleName() != "Provider")
+            return StatusCode(403, new { message = "Only providers can delete maintenance requests" });
+
         try
         {
             var command = new DeleteMaintenanceRequestCommand(id);

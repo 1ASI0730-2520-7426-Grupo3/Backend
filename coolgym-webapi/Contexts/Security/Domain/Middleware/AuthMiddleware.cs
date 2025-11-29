@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using coolgym_webapi.Contexts.Security.Domain.Model.ValueObjects;
 using coolgym_webapi.Contexts.Security.Domain.Services;
 using Microsoft.AspNetCore.Authorization;
 
@@ -50,6 +52,18 @@ public class AuthMiddleware
 
         // Store user in context for controllers
         context.Items["User"] = user;
+
+        // Also set HttpContext.User for ASP.NET Core authorization middleware
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email.Value),
+            new Claim(ClaimTypes.Name, user.Name),
+            new Claim(ClaimTypes.Role, user.Role.ToRoleName())
+        };
+        var identity = new ClaimsIdentity(claims, "CustomAuth");
+        var principal = new ClaimsPrincipal(identity);
+        context.User = principal;
 
         await _next(context);
     }

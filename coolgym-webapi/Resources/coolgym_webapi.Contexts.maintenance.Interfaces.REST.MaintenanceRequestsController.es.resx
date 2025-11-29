@@ -36,4 +36,7 @@
     <data name="Maintenance request with id {0} was not found." xml:space="preserve">
         <value>No se encontró una solicitud de mantenimiento con id {0}.</value>
     </data>
+    <data name="Equipment with id {0} was not found." xml:space="preserve">
+        <value>No se encontró un equipo con id {0}.</value>
+    </data>
 </root>
