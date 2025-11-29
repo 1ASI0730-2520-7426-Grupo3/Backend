@@ -20,14 +20,13 @@ public record RegisterUserResource
     [StringLength(100)]
     public string Name { get; init; } = string.Empty;
 
+    // Optional fields - can be updated later in user profile
     [Phone]
     public string? Phone { get; init; }
 
-    [Required]
     [RegularExpression("^(individual|company)$")]
-    public string Type { get; init; } = "individual";
+    public string? Type { get; init; }
 
-    [Required]
     [RegularExpression("^(Client|Provider)$")]
-    public string Role { get; init; } = "Client";
+    public string? Role { get; init; }
 }
