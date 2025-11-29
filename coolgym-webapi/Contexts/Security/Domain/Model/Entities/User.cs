@@ -6,7 +6,7 @@ using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
 namespace coolgym_webapi.Contexts.Security.Domain.Model.Entities;
 
 /// <summary>
-/// User aggregate root - represents an authenticated user in the system (simplified)
+/// User aggregate root - represents an authenticated user in the system
 /// </summary>
 public class User : BaseEntity
 {
