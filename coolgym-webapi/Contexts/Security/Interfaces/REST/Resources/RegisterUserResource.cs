@@ -27,6 +27,8 @@ public record RegisterUserResource
     [RegularExpression("^(individual|company)$")]
     public string? Type { get; init; }
 
+    // Required - identifies user type (Client or Provider)
+    [Required]
     [RegularExpression("^(Client|Provider)$")]
-    public string? Role { get; init; }
+    public string Role { get; init; } = "Client";
 }
