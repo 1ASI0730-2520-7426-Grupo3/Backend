@@ -15,6 +15,12 @@ using coolgym_webapi.Contexts.maintenance.Application.QueryServices;
 using coolgym_webapi.Contexts.maintenance.Domain.Repositories;
 using coolgym_webapi.Contexts.maintenance.Domain.Services;
 using coolgym_webapi.Contexts.maintenance.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.Security.Application.CommandServices;
+using coolgym_webapi.Contexts.Security.Application.QueryServices;
+using coolgym_webapi.Contexts.Security.Domain.Infrastructure;
+using coolgym_webapi.Contexts.Security.Domain.Middleware;
+using coolgym_webapi.Contexts.Security.Domain.Services;
+using coolgym_webapi.Contexts.Security.Infrastructure;
 using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
@@ -78,6 +84,12 @@ builder.Services.AddScoped<IBillingInvoiceRepository, BillingInvoiceRepository>(
 builder.Services.AddTransient<IInvoiceQueryService, InvoiceQueryService>();
 builder.Services.AddTransient<IInvoiceCommandService, InvoiceCommandService>();
 
+// Security Context
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IPasswordHashService, PasswordHashService>();
+builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
+builder.Services.AddTransient<IUserCommandService, UserCommandService>();
+builder.Services.AddTransient<IUserQueryService, UserQueryService>();
 
 //Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -157,7 +169,7 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseMiddleware<AuthMiddleware>();
 
 app.MapControllers();
 
