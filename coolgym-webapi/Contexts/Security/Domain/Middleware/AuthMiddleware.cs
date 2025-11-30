@@ -19,7 +19,7 @@ public class AuthMiddleware
 
     public async Task InvokeAsync(HttpContext context, IJwtTokenService jwtTokenService)
     {
-        // Skip authentication for endpoints with [AllowAnonymous]
+
         var isAnonymousEndpoint = context.GetEndpoint()?.Metadata
             .GetMetadata<AllowAnonymousAttribute>() != null;
 

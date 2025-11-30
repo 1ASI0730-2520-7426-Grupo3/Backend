@@ -1,4 +1,5 @@
 ﻿using coolgym_webapi.Contexts.BillingInvoices.Domain.Model.Entities;
+using coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities;
 using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 using coolgym_webapi.Contexts.maintenance.Domain.Model.Entities;
 using coolgym_webapi.Contexts.Rentals.Domain.Model.Entities;
@@ -14,6 +15,7 @@ public class CoolgymContext(DbContextOptions<CoolgymContext> options) : DbContex
     public DbSet<BillingInvoice> BillingInvoices { get; set; }
     public DbSet<RentalRequest> RentalRequests { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<ClientPlan> ClientPlans { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

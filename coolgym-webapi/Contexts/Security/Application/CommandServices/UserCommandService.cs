@@ -63,6 +63,39 @@ public class UserCommandService(
     }
 
     /// <summary>
+    /// Update user profile
+    /// </summary>
+    public async Task<User?> Handle(UpdateUserProfileCommand command)
+    {
+        var user = await userRepository.FindByIdAsync(command.UserId);
+        if (user == null) return null;
+
+        // Update profile fields if provided
+        if (!string.IsNullOrEmpty(command.Name) || command.Phone != null || command.ProfilePhoto != null)
+        {
+            user.UpdateProfile(
+                command.Name ?? user.Name,
+                command.Phone,
+                command.ProfilePhoto
+            );
+        }
+
+        // Update client plan if provided (no validation on planId for now)
+        // In production, you'd want to validate the planId exists
+        if (command.ClientPlanId.HasValue)
+        {
+            // Since we don't have a setter, we need to use reflection or add a method to User entity
+            // For now, let's add an UpdateClientPlan method to User entity
+            user.UpdateClientPlan(command.ClientPlanId.Value);
+        }
+
+        userRepository.Update(user);
+        await unitOfWork.CompleteAsync();
+
+        return user;
+    }
+
+    /// <summary>
     /// Authenticate user and generate JWT token
     /// </summary>
     public async Task<(User User, string AccessToken)> Handle(LoginUserCommand command)

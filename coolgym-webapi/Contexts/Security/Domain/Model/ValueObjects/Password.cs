@@ -4,7 +4,7 @@ using coolgym_webapi.Contexts.Security.Domain.Model.Exceptions;
 namespace coolgym_webapi.Contexts.Security.Domain.Model.ValueObjects;
 
 /// <summary>
-/// Password value object with basic validation (simplified)
+/// Password value object with basic validation 
 /// </summary>
 public record Password
 {

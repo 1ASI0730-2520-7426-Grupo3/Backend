@@ -88,6 +88,12 @@ public class User : BaseEntity
         UpdatedDate = DateTime.UtcNow;
     }
 
+    public void UpdateClientPlan(int planId)
+    {
+        ClientPlanId = planId;
+        UpdatedDate = DateTime.UtcNow;
+    }
+
     public bool IsClient() => Role == UserRole.Client;
     public bool IsProvider() => Role == UserRole.Provider;
 }

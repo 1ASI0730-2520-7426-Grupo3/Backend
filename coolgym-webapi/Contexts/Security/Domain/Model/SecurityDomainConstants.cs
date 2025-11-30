@@ -2,7 +2,7 @@ namespace coolgym_webapi.Contexts.Security.Domain.Model;
 
 public static class SecurityDomainConstants
 {
-    // Password rules (simplified)
+    // Password rules 
     public const int MinPasswordLength = 6;
     public const int MaxPasswordLength = 128;
 

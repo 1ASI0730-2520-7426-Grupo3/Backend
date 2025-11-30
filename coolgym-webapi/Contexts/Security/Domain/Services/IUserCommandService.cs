@@ -7,4 +7,5 @@ public interface IUserCommandService
 {
     Task<User> Handle(CreateUserCommand command);
     Task<(User User, string AccessToken)> Handle(LoginUserCommand command);
+    Task<User?> Handle(UpdateUserProfileCommand command);
 }

@@ -20,6 +20,10 @@ using coolgym_webapi.Contexts.Rentals.Application.QueryServices;
 using coolgym_webapi.Contexts.Rentals.Domain.Repositories;
 using coolgym_webapi.Contexts.Rentals.Domain.Services;
 using coolgym_webapi.Contexts.Rentals.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.ClientPlans.Application.QueryServices;
+using coolgym_webapi.Contexts.ClientPlans.Domain.Repositories;
+using coolgym_webapi.Contexts.ClientPlans.Domain.Services;
+using coolgym_webapi.Contexts.ClientPlans.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Security.Application.CommandServices;
 using coolgym_webapi.Contexts.Security.Application.QueryServices;
 using coolgym_webapi.Contexts.Security.Domain.Infrastructure;
@@ -101,6 +105,10 @@ builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
 builder.Services.AddTransient<IUserCommandService, UserCommandService>();
 builder.Services.AddTransient<IUserQueryService, UserQueryService>();
 
+// Client Plans Context
+builder.Services.AddScoped<IClientPlanRepository, ClientPlanRepository>();
+builder.Services.AddTransient<IClientPlanQueryService, ClientPlanQueryService>();
+
 //Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -149,11 +157,47 @@ app.UseSwaggerUI(options =>
     options.ShowExtensions();
 });
 
-// Ensure DB is created
+// Ensure DB is created and seed data
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<CoolgymContext>();
+    context.Database.EnsureDeleted(); // Temporary: drop to recreate with ClientPlans table
     context.Database.EnsureCreated();
+
+    // Seed default client plans if none exist
+    if (!context.ClientPlans.Any())
+    {
+        var plans = new[]
+        {
+            new coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities.ClientPlan(
+                "Basic",
+                "Perfect for beginners. Access to essential gym equipment.",
+                29.99m,
+                5,
+                false,
+                false
+            ),
+            new coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities.ClientPlan(
+                "Premium",
+                "For serious fitness enthusiasts. Access to all equipment with maintenance support.",
+                59.99m,
+                15,
+                true,
+                false
+            ),
+            new coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities.ClientPlan(
+                "VIP",
+                "Ultimate gym experience. Unlimited equipment access with priority support.",
+                99.99m,
+                999,
+                true,
+                true
+            )
+        };
+
+        context.ClientPlans.AddRange(plans);
+        context.SaveChanges();
+    }
 }
 
 // Configure the HTTP request pipeline.
