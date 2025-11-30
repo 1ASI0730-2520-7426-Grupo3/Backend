@@ -194,9 +194,10 @@ public class EquipmentsController(
             if (authenticatedUser == null)
                 return Unauthorized(new { message = "Authentication required" });
 
-            // Authorization: Only Providers can create equipment
-            if (authenticatedUser.Role.ToRoleName() != "Provider")
-                return StatusCode(403, new { message = "Only providers can create equipment" });
+            // Authorization: Both Clients and Providers can create equipment
+            var userRole = authenticatedUser.Role.ToRoleName();
+            if (userRole != "Provider" && userRole != "Client")
+                return StatusCode(403, new { message = "Only providers and clients can create equipment" });
 
             var command = CreateEquipmentCommandFromResourceAssembler.ToCommandFromResource(resource);
             var equipment = await equipmentCommandService.Handle(command);
@@ -297,9 +298,10 @@ public class EquipmentsController(
             if (authenticatedUser == null)
                 return Unauthorized(new { message = "Authentication required" });
 
-            // Authorization: Only Providers can update equipment
-            if (authenticatedUser.Role.ToRoleName() != "Provider")
-                return StatusCode(403, new { message = "Only providers can update equipment" });
+            // Authorization: Both Clients and Providers can update equipment
+            var userRole = authenticatedUser.Role.ToRoleName();
+            if (userRole != "Provider" && userRole != "Client")
+                return StatusCode(403, new { message = "Only providers and clients can update equipment" });
 
             var command = UpdateEquipmentCommandFromResourceAssembler.ToCommandFromResource(id, resource);
             var equipment = await equipmentCommandService.Handle(command);
@@ -377,9 +379,10 @@ public class EquipmentsController(
             if (authenticatedUser == null)
                 return Unauthorized(new { message = "Authentication required" });
 
-            // Authorization: Only Providers can delete equipment
-            if (authenticatedUser.Role.ToRoleName() != "Provider")
-                return StatusCode(403, new { message = "Only providers can delete equipment" });
+            // Authorization: Both Clients and Providers can delete equipment
+            var userRole = authenticatedUser.Role.ToRoleName();
+            if (userRole != "Provider" && userRole != "Client")
+                return StatusCode(403, new { message = "Only providers and clients can delete equipment" });
 
             var command = new DeleteEquipmentCommand(id);
             var result = await equipmentCommandService.Handle(command);
