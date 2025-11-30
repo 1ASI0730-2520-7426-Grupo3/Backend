@@ -24,7 +24,12 @@ public class InvoiceCommandService(
             command.Status,
             command.IssuedAt,
             command.PaidAt
-        );
+        )
+        {
+            ProviderId = command.ProviderId,
+            MaintenanceRequestId = command.MaintenanceRequestId,
+            RentalRequestId = command.RentalRequestId
+        };
 
         await invoiceRepository.AddAsync(invoice);
         await unitOfWork.CompleteAsync();

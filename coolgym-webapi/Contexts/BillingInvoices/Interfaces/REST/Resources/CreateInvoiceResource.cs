@@ -11,4 +11,6 @@ public record CreateInvoiceResource(
     string Status,
     string IssuedAt,
     string? PaidAt = null,
-    int? MaintenanceRequestId = null);
+    int? ProviderId = null,
+    int? MaintenanceRequestId = null,
+    int? RentalRequestId = null);

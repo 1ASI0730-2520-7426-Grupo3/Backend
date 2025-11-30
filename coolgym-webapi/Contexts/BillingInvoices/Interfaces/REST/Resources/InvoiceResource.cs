@@ -12,5 +12,8 @@ public record InvoiceResource(
     string Currency,
     string Status,
     string IssuedAt, // ISO 8601 date format (yyyy-MM-dd)
-    string? PaidAt // ISO 8601 date format (yyyy-MM-dd) or null
+    string? PaidAt, // ISO 8601 date format (yyyy-MM-dd) or null
+    int? ProviderId,
+    int? MaintenanceRequestId,
+    int? RentalRequestId
 );

@@ -18,7 +18,10 @@ public static class InvoiceResourceFromEntityAssembler
             entity.Amount.Currency,
             entity.Status.Value,
             entity.IssuedAt.ToString("yyyy-MM-dd"),
-            entity.PaidAt?.ToString("yyyy-MM-dd")
+            entity.PaidAt?.ToString("yyyy-MM-dd"),
+            entity.ProviderId,
+            entity.MaintenanceRequestId,
+            entity.RentalRequestId
         );
     }
 }

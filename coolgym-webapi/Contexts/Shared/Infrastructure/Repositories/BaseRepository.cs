@@ -8,12 +8,12 @@ namespace coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 public class BaseRepository<TEntity>(CoolgymContext context)
     : IBaseRepository<TEntity> where TEntity : class
 {
-    public async Task AddAsync(TEntity entity)
+    public virtual async Task AddAsync(TEntity entity)
     {
         await context.AddAsync(entity);
     }
 
-    public async Task<TEntity?> FindByIdAsync(int id)
+    public virtual async Task<TEntity?> FindByIdAsync(int id)
     {
         var entity = await context.Set<TEntity>().FindAsync(id);
 
@@ -23,17 +23,17 @@ public class BaseRepository<TEntity>(CoolgymContext context)
         return entity;
     }
 
-    public void Update(TEntity entity)
+    public virtual void Update(TEntity entity)
     {
         context.Set<TEntity>().Update(entity);
     }
 
-    public void Remove(TEntity entity)
+    public virtual void Remove(TEntity entity)
     {
         context.Set<TEntity>().Remove(entity);
     }
 
-    public async Task<IEnumerable<TEntity>> ListAsync()
+    public virtual async Task<IEnumerable<TEntity>> ListAsync()
     {
         if (typeof(BaseEntity).IsAssignableFrom(typeof(TEntity)))
             return await context.Set<TEntity>()

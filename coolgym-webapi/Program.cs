@@ -15,6 +15,11 @@ using coolgym_webapi.Contexts.maintenance.Application.QueryServices;
 using coolgym_webapi.Contexts.maintenance.Domain.Repositories;
 using coolgym_webapi.Contexts.maintenance.Domain.Services;
 using coolgym_webapi.Contexts.maintenance.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.Rentals.Application.CommandServices;
+using coolgym_webapi.Contexts.Rentals.Application.QueryServices;
+using coolgym_webapi.Contexts.Rentals.Domain.Repositories;
+using coolgym_webapi.Contexts.Rentals.Domain.Services;
+using coolgym_webapi.Contexts.Rentals.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Security.Application.CommandServices;
 using coolgym_webapi.Contexts.Security.Application.QueryServices;
 using coolgym_webapi.Contexts.Security.Domain.Infrastructure;
@@ -83,6 +88,11 @@ builder.Services.AddScoped<IMaintenanceRequestQueryService, MaintenanceRequestQu
 builder.Services.AddScoped<IBillingInvoiceRepository, BillingInvoiceRepository>();
 builder.Services.AddTransient<IInvoiceQueryService, InvoiceQueryService>();
 builder.Services.AddTransient<IInvoiceCommandService, InvoiceCommandService>();
+
+// Rental Requests Context
+builder.Services.AddScoped<IRentalRequestRepository, RentalRequestRepository>();
+builder.Services.AddTransient<IRentalRequestCommandService, RentalRequestCommandService>();
+builder.Services.AddTransient<IRentalRequestQueryService, RentalRequestQueryService>();
 
 // Security Context
 builder.Services.AddTransient<IUserRepository, UserRepository>();

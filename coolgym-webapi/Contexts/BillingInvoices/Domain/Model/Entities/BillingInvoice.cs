@@ -65,6 +65,9 @@ public class BillingInvoice : BaseEntity
     }
 
     public int UserId { get; private set; }
+    public int? ProviderId { get; set; }
+    public int? MaintenanceRequestId { get; set; }
+    public int? RentalRequestId { get; set; }
     public string CompanyName { get; private set; }
     public Money Amount { get; private set; }
     public InvoiceStatus Status { get; private set; }
