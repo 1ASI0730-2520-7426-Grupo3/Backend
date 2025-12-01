@@ -70,15 +70,15 @@ public class UserController(
         }
         catch (PasswordValidationException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new { message = localizer[ex.Message].Value });
         }
         catch (UserValidationException ex)
         {
-            return BadRequest(new { message = ex.Message });
+            return BadRequest(new { message = localizer[ex.Message].Value });
         }
         catch (RegistrationException ex)
         {
-            return Conflict(new { message = ex.Message });
+            return Conflict(new { message = localizer[ex.Message].Value });
         }
     }
 
@@ -122,7 +122,7 @@ public class UserController(
         }
         catch (AuthenticationException)
         {
-            return BadRequest(new { message = "Invalid email or password" });
+            return BadRequest(new { message = localizer["Invalid email or password"].Value });
         }
     }
 
@@ -138,7 +138,7 @@ public class UserController(
         var user = await queryService.GetByIdAsync(id);
 
         if (user == null)
-            return NotFound(new { message = $"User with ID {id} not found" });
+            return NotFound(new { message = localizer["User with ID {0} not found", id].Value });
 
         var resource = UserResourceFromEntityAssembler.ToResourceFromEntity(user);
         return Ok(resource);
@@ -162,7 +162,7 @@ public class UserController(
 
         var user = await authCommandService.Handle(command);
         if (user == null)
-            return NotFound(new { message = $"User with ID {id} not found" });
+            return NotFound(new { message = localizer["User with ID {0} not found", id].Value });
 
         var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(user);
         return Ok(userResource);
