@@ -15,6 +15,21 @@ using coolgym_webapi.Contexts.maintenance.Application.QueryServices;
 using coolgym_webapi.Contexts.maintenance.Domain.Repositories;
 using coolgym_webapi.Contexts.maintenance.Domain.Services;
 using coolgym_webapi.Contexts.maintenance.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.Rentals.Application.CommandServices;
+using coolgym_webapi.Contexts.Rentals.Application.QueryServices;
+using coolgym_webapi.Contexts.Rentals.Domain.Repositories;
+using coolgym_webapi.Contexts.Rentals.Domain.Services;
+using coolgym_webapi.Contexts.Rentals.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.ClientPlans.Application.QueryServices;
+using coolgym_webapi.Contexts.ClientPlans.Domain.Repositories;
+using coolgym_webapi.Contexts.ClientPlans.Domain.Services;
+using coolgym_webapi.Contexts.ClientPlans.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.Security.Application.CommandServices;
+using coolgym_webapi.Contexts.Security.Application.QueryServices;
+using coolgym_webapi.Contexts.Security.Domain.Infrastructure;
+using coolgym_webapi.Contexts.Security.Domain.Middleware;
+using coolgym_webapi.Contexts.Security.Domain.Services;
+using coolgym_webapi.Contexts.Security.Infrastructure;
 using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
@@ -78,6 +93,21 @@ builder.Services.AddScoped<IBillingInvoiceRepository, BillingInvoiceRepository>(
 builder.Services.AddTransient<IInvoiceQueryService, InvoiceQueryService>();
 builder.Services.AddTransient<IInvoiceCommandService, InvoiceCommandService>();
 
+// Rental Requests Context
+builder.Services.AddScoped<IRentalRequestRepository, RentalRequestRepository>();
+builder.Services.AddTransient<IRentalRequestCommandService, RentalRequestCommandService>();
+builder.Services.AddTransient<IRentalRequestQueryService, RentalRequestQueryService>();
+
+// Security Context
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IPasswordHashService, PasswordHashService>();
+builder.Services.AddTransient<IJwtTokenService, JwtTokenService>();
+builder.Services.AddTransient<IUserCommandService, UserCommandService>();
+builder.Services.AddTransient<IUserQueryService, UserQueryService>();
+
+// Client Plans Context
+builder.Services.AddScoped<IClientPlanRepository, ClientPlanRepository>();
+builder.Services.AddTransient<IClientPlanQueryService, ClientPlanQueryService>();
 
 //Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -127,11 +157,47 @@ app.UseSwaggerUI(options =>
     options.ShowExtensions();
 });
 
-// Ensure DB is created
+// Ensure DB is created and seed data
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<CoolgymContext>();
+    context.Database.EnsureDeleted(); // Temporary: drop to recreate with ClientPlans table
     context.Database.EnsureCreated();
+
+    // Seed default client plans if none exist
+    if (!context.ClientPlans.Any())
+    {
+        var plans = new[]
+        {
+            new coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities.ClientPlan(
+                "Basic",
+                "Perfect for beginners. Access to essential gym equipment.",
+                29.99m,
+                5,
+                false,
+                false
+            ),
+            new coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities.ClientPlan(
+                "Premium",
+                "For serious fitness enthusiasts. Access to all equipment with maintenance support.",
+                59.99m,
+                15,
+                true,
+                false
+            ),
+            new coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities.ClientPlan(
+                "VIP",
+                "Ultimate gym experience. Unlimited equipment access with priority support.",
+                99.99m,
+                999,
+                true,
+                true
+            )
+        };
+
+        context.ClientPlans.AddRange(plans);
+        context.SaveChanges();
+    }
 }
 
 // Configure the HTTP request pipeline.
@@ -157,7 +223,7 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseMiddleware<AuthMiddleware>();
 
 app.MapControllers();
 

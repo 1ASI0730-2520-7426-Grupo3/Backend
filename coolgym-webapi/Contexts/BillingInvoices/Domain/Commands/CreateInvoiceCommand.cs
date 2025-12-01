@@ -10,5 +10,8 @@ public record CreateInvoiceCommand(
     string Currency,
     string Status,
     DateTime IssuedAt,
-    DateTime? PaidAt = null
+    DateTime? PaidAt = null,
+    int? ProviderId = null,
+    int? MaintenanceRequestId = null,
+    int? RentalRequestId = null
 );

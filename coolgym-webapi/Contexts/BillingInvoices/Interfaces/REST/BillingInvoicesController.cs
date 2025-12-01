@@ -8,6 +8,8 @@ using coolgym_webapi.Contexts.Equipments.Domain.Queries;
 using coolgym_webapi.Contexts.Equipments.Domain.Services;
 using coolgym_webapi.Contexts.maintenance.Domain.Queries;
 using coolgym_webapi.Contexts.maintenance.Domain.Services;
+using coolgym_webapi.Contexts.Security.Domain.Model.Entities;
+using coolgym_webapi.Contexts.Security.Domain.Model.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 
@@ -54,6 +56,21 @@ public class BillingInvoicesController(
     [HttpGet]
     public async Task<IActionResult> GetInvoicesByUserId([FromQuery] int userId)
     {
+        // Get authenticated user from middleware
+        var authenticatedUser = HttpContext.Items["User"] as User;
+
+        // Authorization: User must be authenticated
+        if (authenticatedUser == null)
+            return Unauthorized(new { message = "Authentication required" });
+
+        // Authorization: Must be a Client to access billing invoices
+        if (authenticatedUser.Role.ToRoleName() != "Client")
+            return StatusCode(403, new { message = "Only clients can access billing invoices" });
+
+        // Authorization: Clients can only view their own invoices
+        if (authenticatedUser.Id != userId)
+            return StatusCode(403, new { message = "You can only access your own invoices" });
+
         if (userId <= 0) return BadRequest(new { message = localizer["User ID must be positive."].Value });
 
         var query = new GetInvoicesByUserId(userId);
@@ -77,9 +94,24 @@ public class BillingInvoicesController(
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetInvoiceById([FromRoute] int id)
     {
+        // Get authenticated user from middleware
+        var authenticatedUser = HttpContext.Items["User"] as User;
+
+        // Authorization: User must be authenticated
+        if (authenticatedUser == null)
+            return Unauthorized(new { message = "Authentication required" });
+
+        // Authorization: Must be a Client to access billing invoices
+        if (authenticatedUser.Role.ToRoleName() != "Client")
+            return StatusCode(403, new { message = "Only clients can access billing invoices" });
+
         var query = new GetInvoiceById(id);
         var invoice = await invoiceQueryService.Handle(query);
         if (invoice == null) return NotFound(new { message = localizer[$"Invoice with ID {id} was not found."].Value });
+
+        // Authorization: Clients can only view their own invoices
+        if (authenticatedUser.Id != invoice.UserId)
+            return StatusCode(403, new { message = "You can only access your own invoices" });
 
         var resource = InvoiceResourceFromEntityAssembler.ToResourceFromEntity(invoice);
         return Ok(resource);
@@ -221,6 +253,27 @@ public class BillingInvoicesController(
     {
         try
         {
+            // Get authenticated user from middleware
+            var authenticatedUser = HttpContext.Items["User"] as User;
+
+            // Authorization: User must be authenticated
+            if (authenticatedUser == null)
+                return Unauthorized(new { message = "Authentication required" });
+
+            // Authorization: Must be a Client to pay invoices
+            if (authenticatedUser.Role.ToRoleName() != "Client")
+                return StatusCode(403, new { message = "Only clients can pay invoices" });
+
+            // First, fetch the invoice to check ownership
+            var invoiceQuery = new GetInvoiceById(id);
+            var existingInvoice = await invoiceQueryService.Handle(invoiceQuery);
+            if (existingInvoice == null)
+                return NotFound(new { message = localizer[$"Invoice with ID {id} was not found."].Value });
+
+            // Authorization: Clients can only pay their own invoices
+            if (authenticatedUser.Id != existingInvoice.UserId)
+                return StatusCode(403, new { message = "You can only pay your own invoices" });
+
             var command = MarkInvoiceAsPaidCommandFromResourceAssembler.ToCommandFromResource(id, resource);
             var invoice = await invoiceCommandService.Handle(command);
             var invoiceResource = InvoiceResourceFromEntityAssembler.ToResourceFromEntity(invoice);
