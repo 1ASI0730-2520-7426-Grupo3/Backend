@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 namespace coolgym_webapi.Contexts.Security.Interfaces.REST;
 
 /// <summary>
-/// Authentication controller - handles login and register
+///     Authentication controller - handles login and register
 /// </summary>
 [ApiController]
 [Route("api/v1/users")]
@@ -22,28 +22,28 @@ public class UserController(
     IStringLocalizer<UserController> localizer) : ControllerBase
 {
     /// <summary>
-    /// Register new user account
+    ///     Register new user account
     /// </summary>
-    ///     /// <summary>
-    /// Register new user account
+    /// ///
+    /// <summary>
+    ///     Register new user account
     /// </summary>
     /// <remarks>
-    /// Creates a new user account with basic validation:
-    /// - Username: 3-50 characters, unique
-    /// - Email: Valid format, unique
-    /// - Password: Min 6 characters
-    /// - Role: "Client" or "Provider"
-    ///
-    /// Example request:
-    /// POST /api/v1/auth/register
-    /// {
-    ///   "username": "johndoe",
-    ///   "email": "john@example.com",
-    ///   "password": "password123",
-    ///   "name": "John Doe",
-    ///   "phone": "987654321",
-    ///   "role": "Client"
-    /// }
+    ///     Creates a new user account with basic validation:
+    ///     - Username: 3-50 characters, unique
+    ///     - Email: Valid format, unique
+    ///     - Password: Min 6 characters
+    ///     - Role: "Client" or "Provider"
+    ///     Example request:
+    ///     POST /api/v1/auth/register
+    ///     {
+    ///     "username": "johndoe",
+    ///     "email": "john@example.com",
+    ///     "password": "password123",
+    ///     "name": "John Doe",
+    ///     "phone": "987654321",
+    ///     "role": "Client"
+    ///     }
     /// </remarks>
     /// <response code="201">User registered successfully</response>
     /// <response code="400">Validation failed</response>
@@ -82,26 +82,25 @@ public class UserController(
     }
 
     /// <summary>
-    /// Login with email and password
+    ///     Login with email and password
     /// </summary>
     /// <remarks>
-    /// Authenticates user and returns JWT access token.
-    ///     /// <summary>
-    /// Login with email and password
-    /// </summary>
-    /// <remarks>
-    /// Authenticates user and returns JWT access token.
-    ///
-    /// Example request:
-    /// POST /api/v1/auth/login
-    /// {
-    ///   "email": "john@example.com",
-    ///   "password": "password123"
-    /// }
-    /// </remarks>
-    /// <response code="200">Login successful, returns token</response>
-    /// <response code="400">Invalid credentials</response>
-
+    ///     Authenticates user and returns JWT access token.
+    ///     ///
+    ///     <summary>
+    ///         Login with email and password
+    ///     </summary>
+    ///     <remarks>
+    ///         Authenticates user and returns JWT access token.
+    ///         Example request:
+    ///         POST /api/v1/auth/login
+    ///         {
+    ///         "email": "john@example.com",
+    ///         "password": "password123"
+    ///         }
+    ///     </remarks>
+    ///     <response code="200">Login successful, returns token</response>
+    ///     <response code="400">Invalid credentials</response>
     [HttpPost("login")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(AuthenticationResultResource), StatusCodes.Status200OK)]
@@ -130,7 +129,7 @@ public class UserController(
     }
 
     /// <summary>
-    /// Get user by ID to test the valid tkoen
+    ///     Get user by ID to test the valid tkoen
     /// </summary>
     [HttpGet("{id:int}")]
     [ProducesResponseType(typeof(UserResource), StatusCodes.Status200OK)]
@@ -148,7 +147,7 @@ public class UserController(
     }
 
     /// <summary>
-    /// Update user profile (name, phone, photo, plan)
+    ///     Update user profile (name, phone, photo, plan)
     /// </summary>
     [HttpPatch("{id:int}")]
     [ProducesResponseType(typeof(UserResource), StatusCodes.Status200OK)]

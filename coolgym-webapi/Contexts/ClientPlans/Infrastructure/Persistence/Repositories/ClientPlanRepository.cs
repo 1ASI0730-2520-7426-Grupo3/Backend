@@ -6,7 +6,7 @@ using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;
 namespace coolgym_webapi.Contexts.ClientPlans.Infrastructure.Persistence.Repositories;
 
 /// <summary>
-/// Repository implementation for ClientPlan entity
+///     Repository implementation for ClientPlan entity
 /// </summary>
 public class ClientPlanRepository(CoolgymContext context)
     : BaseRepository<ClientPlan>(context), IClientPlanRepository

@@ -1,5 +1,4 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain;
-using coolgym_webapi.Contexts.Equipments.Domain.Constants;
+﻿using coolgym_webapi.Contexts.Equipments.Domain.Constants;
 using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 
 namespace coolgym_webapi.Contexts.Equipments.Domain.Model.ValueObjects;

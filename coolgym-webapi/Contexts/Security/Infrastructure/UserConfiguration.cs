@@ -1,6 +1,5 @@
 using coolgym_webapi.Contexts.Security.Domain.Model;
 using coolgym_webapi.Contexts.Security.Domain.Model.Entities;
-using coolgym_webapi.Contexts.Security.Domain.Model.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

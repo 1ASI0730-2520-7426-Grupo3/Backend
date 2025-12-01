@@ -1,5 +1,4 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain;
-using coolgym_webapi.Contexts.Equipments.Domain.Commands;
+﻿using coolgym_webapi.Contexts.Equipments.Domain.Commands;
 using coolgym_webapi.Contexts.Equipments.Domain.Constants;
 using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
@@ -100,9 +99,7 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
 
         if (equipment == null ||
             equipment.IsDeleted == EquipmentDomainConstants.DeletedFlagTrue)
-        {
             throw new EquipmentNotFoundException(command.Id);
-        }
 
         // Business rules for deletion are now inside the aggregate root
         equipment.SoftDelete();

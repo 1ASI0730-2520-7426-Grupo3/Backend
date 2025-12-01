@@ -11,19 +11,19 @@ using Microsoft.IdentityModel.Tokens;
 namespace coolgym_webapi.Contexts.Security.Application.CommandServices;
 
 /// <summary>
-/// JWT token generation and validation service
+///     JWT token generation and validation service
 /// </summary>
 public class JwtTokenService : IJwtTokenService
 {
-    private readonly string _secret;
-    private readonly string _issuer;
     private readonly string _audience;
+    private readonly string _issuer;
+    private readonly string _secret;
     private readonly IServiceProvider _serviceProvider;
 
     public JwtTokenService(IConfiguration configuration, IServiceProvider serviceProvider)
     {
         _secret = configuration["Jwt:Secret"]
-            ?? throw new InvalidOperationException("JWT secret not configured");
+                  ?? throw new InvalidOperationException("JWT secret not configured");
         _issuer = configuration["Jwt:Issuer"] ?? "CoolGym";
         _audience = configuration["Jwt:Audience"] ?? "CoolGymApp";
         _serviceProvider = serviceProvider;
@@ -50,12 +50,12 @@ public class JwtTokenService : IJwtTokenService
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
-            issuer: _issuer,
-            audience: _audience,
-            claims: claims,
-            notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow.AddHours(1), // 1 hour expiration
-            signingCredentials: credentials
+            _issuer,
+            _audience,
+            claims,
+            DateTime.UtcNow,
+            DateTime.UtcNow.AddHours(1), // 1 hour expiration
+            credentials
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);

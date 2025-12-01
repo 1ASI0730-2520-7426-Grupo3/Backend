@@ -10,10 +10,10 @@ public static class SecurityDomainConstants
     public const int MinUsernameLength = 3;
     public const int MaxUsernameLength = 50;
 
-    // User types
-    public static readonly string[] ValidUserTypes = { "individual", "company" };
-
     // Soft delete
     public const int DeletedFlagTrue = 1;
     public const int DeletedFlagFalse = 0;
+
+    // User types
+    public static readonly string[] ValidUserTypes = { "individual", "company" };
 }

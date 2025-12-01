@@ -1,5 +1,5 @@
-using coolgym_webapi.Contexts.Security.Domain.Model;
 using coolgym_webapi.Contexts.Security.Domain.Infrastructure;
+using coolgym_webapi.Contexts.Security.Domain.Model;
 using coolgym_webapi.Contexts.Security.Domain.Model.Entities;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Repositories;

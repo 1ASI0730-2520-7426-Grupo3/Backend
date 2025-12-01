@@ -1,7 +1,7 @@
 namespace coolgym_webapi.Contexts.Security.Domain.Commands;
 
 /// <summary>
-/// Command to register a new user
+///     Command to register a new user
 /// </summary>
 public record CreateUserCommand(
     string Username,

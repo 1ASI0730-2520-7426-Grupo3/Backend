@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace coolgym_webapi.Contexts.ClientPlans.Interfaces.REST;
 
 /// <summary>
-/// REST controller for client plans
+///     REST controller for client plans
 /// </summary>
 [ApiController]
 [Route("api/v1/clientPlans")]
@@ -15,7 +15,7 @@ namespace coolgym_webapi.Contexts.ClientPlans.Interfaces.REST;
 public class ClientPlansController(IClientPlanQueryService clientPlanQueryService) : ControllerBase
 {
     /// <summary>
-    /// Get all client plans
+    ///     Get all client plans
     /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetAllPlans()
@@ -27,7 +27,7 @@ public class ClientPlansController(IClientPlanQueryService clientPlanQueryServic
     }
 
     /// <summary>
-    /// Get client plan by ID
+    ///     Get client plan by ID
     /// </summary>
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetPlanById(int id)

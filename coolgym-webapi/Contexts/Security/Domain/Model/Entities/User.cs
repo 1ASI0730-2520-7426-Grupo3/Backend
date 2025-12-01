@@ -1,4 +1,3 @@
-using coolgym_webapi.Contexts.Security.Domain.Model;
 using coolgym_webapi.Contexts.Security.Domain.Model.Exceptions;
 using coolgym_webapi.Contexts.Security.Domain.Model.ValueObjects;
 using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
@@ -6,7 +5,7 @@ using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
 namespace coolgym_webapi.Contexts.Security.Domain.Model.Entities;
 
 /// <summary>
-/// User aggregate root - represents an authenticated user in the system
+///     User aggregate root - represents an authenticated user in the system
 /// </summary>
 public class User : BaseEntity
 {
@@ -63,7 +62,7 @@ public class User : BaseEntity
     public string Name { get; private set; }
     public string? Phone { get; private set; }
     public string Type { get; private set; } // 'individual' or 'company'
-    public UserRole Role { get; private set; } // Client or Provider
+    public UserRole Role { get; } // Client or Provider
     public int? ClientPlanId { get; private set; }
     public string? ProfilePhoto { get; private set; }
 
@@ -94,6 +93,13 @@ public class User : BaseEntity
         UpdatedDate = DateTime.UtcNow;
     }
 
-    public bool IsClient() => Role == UserRole.Client;
-    public bool IsProvider() => Role == UserRole.Provider;
+    public bool IsClient()
+    {
+        return Role == UserRole.Client;
+    }
+
+    public bool IsProvider()
+    {
+        return Role == UserRole.Provider;
+    }
 }

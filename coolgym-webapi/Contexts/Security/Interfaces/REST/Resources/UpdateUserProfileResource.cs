@@ -1,7 +1,7 @@
 namespace coolgym_webapi.Contexts.Security.Interfaces.REST.Resources;
 
 /// <summary>
-/// Resource for updating user profile
+///     Resource for updating user profile
 /// </summary>
 public record UpdateUserProfileResource
 {

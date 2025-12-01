@@ -5,6 +5,11 @@ using coolgym_webapi.Contexts.BillingInvoices.Application.QueryServices;
 using coolgym_webapi.Contexts.BillingInvoices.Domain.Repositories;
 using coolgym_webapi.Contexts.BillingInvoices.Domain.Services;
 using coolgym_webapi.Contexts.BillingInvoices.Infrastructure.Persistence.Repositories;
+using coolgym_webapi.Contexts.ClientPlans.Application.QueryServices;
+using coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities;
+using coolgym_webapi.Contexts.ClientPlans.Domain.Repositories;
+using coolgym_webapi.Contexts.ClientPlans.Domain.Services;
+using coolgym_webapi.Contexts.ClientPlans.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Equipments.Application.CommandServices;
 using coolgym_webapi.Contexts.Equipments.Application.QueryServices;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
@@ -20,10 +25,6 @@ using coolgym_webapi.Contexts.Rentals.Application.QueryServices;
 using coolgym_webapi.Contexts.Rentals.Domain.Repositories;
 using coolgym_webapi.Contexts.Rentals.Domain.Services;
 using coolgym_webapi.Contexts.Rentals.Infrastructure.Persistence.Repositories;
-using coolgym_webapi.Contexts.ClientPlans.Application.QueryServices;
-using coolgym_webapi.Contexts.ClientPlans.Domain.Repositories;
-using coolgym_webapi.Contexts.ClientPlans.Domain.Services;
-using coolgym_webapi.Contexts.ClientPlans.Infrastructure.Persistence.Repositories;
 using coolgym_webapi.Contexts.Security.Application.CommandServices;
 using coolgym_webapi.Contexts.Security.Application.QueryServices;
 using coolgym_webapi.Contexts.Security.Domain.Infrastructure;
@@ -161,15 +162,13 @@ app.UseSwaggerUI(options =>
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<CoolgymContext>();
-    context.Database.EnsureDeleted(); // Temporary: drop to recreate with ClientPlans table
     context.Database.EnsureCreated();
-
-    // Seed default client plans if none exist
+    
     if (!context.ClientPlans.Any())
     {
         var plans = new[]
         {
-            new coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities.ClientPlan(
+            new ClientPlan(
                 "Basic",
                 "Perfect for beginners. Access to essential gym equipment.",
                 29.99m,
@@ -177,7 +176,7 @@ using (var scope = app.Services.CreateScope())
                 false,
                 false
             ),
-            new coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities.ClientPlan(
+            new ClientPlan(
                 "Premium",
                 "For serious fitness enthusiasts. Access to all equipment with maintenance support.",
                 59.99m,
@@ -185,7 +184,7 @@ using (var scope = app.Services.CreateScope())
                 true,
                 false
             ),
-            new coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities.ClientPlan(
+            new ClientPlan(
                 "VIP",
                 "Ultimate gym experience. Unlimited equipment access with priority support.",
                 99.99m,
@@ -218,7 +217,7 @@ var localizationOptions = new RequestLocalizationOptions
 };
 
 app.UseRequestLocalization(localizationOptions);
-// Usar el middleware de CORS ANTES de UseAuthorization()
+
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();

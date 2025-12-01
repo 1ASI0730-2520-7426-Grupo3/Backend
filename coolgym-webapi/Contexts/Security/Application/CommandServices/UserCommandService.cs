@@ -1,8 +1,8 @@
 using coolgym_webapi.Contexts.Security.Domain.Commands;
-using coolgym_webapi.Contexts.Security.Domain.Model;
-using coolgym_webapi.Contexts.Security.Domain.Model.Exceptions;
 using coolgym_webapi.Contexts.Security.Domain.Infrastructure;
+using coolgym_webapi.Contexts.Security.Domain.Model;
 using coolgym_webapi.Contexts.Security.Domain.Model.Entities;
+using coolgym_webapi.Contexts.Security.Domain.Model.Exceptions;
 using coolgym_webapi.Contexts.Security.Domain.Model.ValueObjects;
 using coolgym_webapi.Contexts.Security.Domain.Services;
 using coolgym_webapi.Contexts.Shared.Domain.Repositories;
@@ -10,7 +10,7 @@ using coolgym_webapi.Contexts.Shared.Domain.Repositories;
 namespace coolgym_webapi.Contexts.Security.Application.CommandServices;
 
 /// <summary>
-/// Authentication command service - handles registration and login 
+///     Authentication command service - handles registration and login
 /// </summary>
 public class UserCommandService(
     IUserRepository userRepository,
@@ -19,7 +19,7 @@ public class UserCommandService(
     IUnitOfWork unitOfWork) : IUserCommandService
 {
     /// <summary>
-    /// Register new user
+    ///     Register new user
     /// </summary>
     public async Task<User> Handle(CreateUserCommand command)
     {
@@ -63,7 +63,7 @@ public class UserCommandService(
     }
 
     /// <summary>
-    /// Update user profile
+    ///     Update user profile
     /// </summary>
     public async Task<User?> Handle(UpdateUserProfileCommand command)
     {
@@ -72,22 +72,18 @@ public class UserCommandService(
 
         // Update profile fields if provided
         if (!string.IsNullOrEmpty(command.Name) || command.Phone != null || command.ProfilePhoto != null)
-        {
             user.UpdateProfile(
                 command.Name ?? user.Name,
                 command.Phone,
                 command.ProfilePhoto
             );
-        }
 
         // Update client plan if provided (no validation on planId for now)
         // In production, you'd want to validate the planId exists
         if (command.ClientPlanId.HasValue)
-        {
             // Since we don't have a setter, we need to use reflection or add a method to User entity
             // For now, let's add an UpdateClientPlan method to User entity
             user.UpdateClientPlan(command.ClientPlanId.Value);
-        }
 
         userRepository.Update(user);
         await unitOfWork.CompleteAsync();
@@ -96,7 +92,7 @@ public class UserCommandService(
     }
 
     /// <summary>
-    /// Authenticate user and generate JWT token
+    ///     Authenticate user and generate JWT token
     /// </summary>
     public async Task<(User User, string AccessToken)> Handle(LoginUserCommand command)
     {
@@ -113,9 +109,7 @@ public class UserCommandService(
 
         // Verify password
         if (!passwordHasher.VerifyPassword(command.Password, user.PasswordHash))
-        {
             throw AuthenticationException.InvalidCredentials();
-        }
 
         // Generate JWT token
         var accessToken = tokenService.GenerateAccessToken(user);

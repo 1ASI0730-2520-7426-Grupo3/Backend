@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace coolgym_webapi.Contexts.Security.Infrastructure.Persistence.Configuration;
 
 /// <summary>
-/// Entity Framework configuration for User entity
+///     Entity Framework configuration for User entity
 /// </summary>
 public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 {
@@ -51,8 +51,8 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Role)
             .IsRequired()
             .HasConversion(
-                v => v.ToRoleName(),           // To database: UserRole → "Client"/"Provider"
-                v => UserRoleExtensions.FromString(v)  // From database: "Client"/"Provider" → UserRole
+                v => v.ToRoleName(), // To database: UserRole → "Client"/"Provider"
+                v => UserRoleExtensions.FromString(v) // From database: "Client"/"Provider" → UserRole
             )
             .HasMaxLength(50);
 

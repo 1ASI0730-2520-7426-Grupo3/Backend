@@ -1,5 +1,4 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain;
-using coolgym_webapi.Contexts.Equipments.Domain.Constants;
+﻿using coolgym_webapi.Contexts.Equipments.Domain.Constants;
 using coolgym_webapi.Contexts.Equipments.Domain.Exceptions;
 using coolgym_webapi.Contexts.Equipments.Domain.Model.ValueObjects;
 using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
@@ -107,23 +106,21 @@ public class Equipment : BaseEntity
     }
 
     /// <summary>
-    /// Turns the equipment on enforcing business rules:
-    /// - Equipment cannot be turned on if it is in maintenance or inactive.
+    ///     Turns the equipment on enforcing business rules:
+    ///     - Equipment cannot be turned on if it is in maintenance or inactive.
     /// </summary>
     public void TurnOn()
     {
         if (Status == EquipmentDomainConstants.StatusMaintenance ||
             Status == EquipmentDomainConstants.StatusInactive)
-        {
             // We reuse InvalidStatusException so the controller can localize it.
             throw new InvalidStatusException(Status);
-        }
 
         IsPoweredOn = true;
     }
 
     /// <summary>
-    /// Turns the equipment off without extra rules.
+    ///     Turns the equipment off without extra rules.
     /// </summary>
     public void TurnOff()
     {
@@ -131,9 +128,9 @@ public class Equipment : BaseEntity
     }
 
     /// <summary>
-    /// Performs a soft delete of the equipment, enforcing:
-    /// - It must not be powered on.
-    /// - It must not be under maintenance.
+    ///     Performs a soft delete of the equipment, enforcing:
+    ///     - It must not be powered on.
+    ///     - It must not be under maintenance.
     /// </summary>
     public void SoftDelete()
     {

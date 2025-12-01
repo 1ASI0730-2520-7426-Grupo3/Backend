@@ -3,7 +3,7 @@ using coolgym_webapi.Contexts.Security.Domain.Services;
 namespace coolgym_webapi.Contexts.Security.Application.CommandServices;
 
 /// <summary>
-/// BCrypt-based password hashing implementation 
+///     BCrypt-based password hashing implementation
 /// </summary>
 public class PasswordHashService : IPasswordHashService
 {

@@ -3,43 +3,67 @@ namespace coolgym_webapi.Contexts.Security.Domain.Model.Exceptions;
 // User validation exceptions
 public class UserValidationException : Exception
 {
-    private UserValidationException(string key) : base(key) { }
+    private UserValidationException(string key) : base(key)
+    {
+    }
 
     public static UserValidationException InvalidUsername()
-        => new("UserInvalidUsername");
+    {
+        return new UserValidationException("UserInvalidUsername");
+    }
 
     public static UserValidationException UsernameLengthInvalid(int length)
-        => new($"UserUsernameLengthInvalid:{length}");
+    {
+        return new UserValidationException($"UserUsernameLengthInvalid:{length}");
+    }
 
     public static UserValidationException EmptyName()
-        => new("UserEmptyName");
+    {
+        return new UserValidationException("UserEmptyName");
+    }
 
     public static UserValidationException EmptyEmail()
-        => new("UserEmptyEmail");
+    {
+        return new UserValidationException("UserEmptyEmail");
+    }
 
     public static UserValidationException EmailTooLong(int length)
-        => new($"UserEmailTooLong:{length}");
+    {
+        return new UserValidationException($"UserEmailTooLong:{length}");
+    }
 
     public static UserValidationException InvalidEmailFormat(string email)
-        => new($"UserInvalidEmailFormat:{email}");
+    {
+        return new UserValidationException($"UserInvalidEmailFormat:{email}");
+    }
 
     public static UserValidationException InvalidUserType(string type)
-        => new($"UserInvalidType:{type}");
+    {
+        return new UserValidationException($"UserInvalidType:{type}");
+    }
 }
 
 // Password validation exceptions
 public class PasswordValidationException : Exception
 {
-    private PasswordValidationException(string key) : base(key) { }
+    private PasswordValidationException(string key) : base(key)
+    {
+    }
 
     public static PasswordValidationException EmptyPassword()
-        => new("PasswordEmpty");
+    {
+        return new PasswordValidationException("PasswordEmpty");
+    }
 
     public static PasswordValidationException TooShort(int length)
-        => new($"PasswordTooShort:{length}");
+    {
+        return new PasswordValidationException($"PasswordTooShort:{length}");
+    }
 
     public static PasswordValidationException TooLong(int length)
-        => new($"PasswordTooLong:{length}");
+    {
+        return new PasswordValidationException($"PasswordTooLong:{length}");
+    }
 }
 
 // Authentication exceptions
@@ -47,22 +71,32 @@ public class AuthenticationException : Exception
 {
     public const string ResourceKey = "AuthenticationFailed";
 
-    public AuthenticationException(string message) : base(message) { }
+    public AuthenticationException(string message) : base(message)
+    {
+    }
 
     public static AuthenticationException InvalidCredentials()
-        => new("InvalidCredentials");
+    {
+        return new AuthenticationException("InvalidCredentials");
+    }
 }
 
 // Registration exceptions
 public class RegistrationException : Exception
 {
-    private RegistrationException(string key) : base(key) { }
+    private RegistrationException(string key) : base(key)
+    {
+    }
 
     public static RegistrationException EmailAlreadyExists(string email)
-        => new($"EmailAlreadyExists:{email}");
+    {
+        return new RegistrationException($"EmailAlreadyExists:{email}");
+    }
 
     public static RegistrationException UsernameAlreadyExists(string username)
-        => new($"UsernameAlreadyExists:{username}");
+    {
+        return new RegistrationException($"UsernameAlreadyExists:{username}");
+    }
 }
 
 // User not found exception

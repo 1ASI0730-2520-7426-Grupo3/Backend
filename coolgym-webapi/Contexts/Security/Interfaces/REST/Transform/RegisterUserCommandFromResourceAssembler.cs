@@ -12,9 +12,9 @@ public static class CreateUserCommandFromResourceAssembler
             resource.Email,
             resource.Password,
             resource.Name,
-            resource.Phone ?? string.Empty,           // Default to empty if not provided
-            resource.Type ?? "individual",            // Default to individual
-            resource.Role ?? "Client"                 // Default to Client
+            resource.Phone ?? string.Empty, // Default to empty if not provided
+            resource.Type ?? "individual", // Default to individual
+            resource.Role ?? "Client" // Default to Client
         );
     }
 }

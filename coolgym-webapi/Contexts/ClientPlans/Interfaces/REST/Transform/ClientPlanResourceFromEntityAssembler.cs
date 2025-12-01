@@ -4,7 +4,7 @@ using coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.Resources;
 namespace coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.Transform;
 
 /// <summary>
-/// Assembler to transform ClientPlan entity to ClientPlanResource
+///     Assembler to transform ClientPlan entity to ClientPlanResource
 /// </summary>
 public static class ClientPlanResourceFromEntityAssembler
 {

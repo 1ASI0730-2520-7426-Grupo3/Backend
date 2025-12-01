@@ -22,9 +22,7 @@ public class RentalRequestCommandService(
             r.Status == "pending");
 
         if (hasPendingRequest)
-        {
             throw new InvalidOperationException("A pending rental request already exists for this equipment");
-        }
 
         var rentalRequest = new RentalRequest(
             command.EquipmentId,
@@ -64,16 +62,16 @@ public class RentalRequestCommandService(
         // Auto-create invoice for the client
         var clientName = rentalRequest.Client?.Email ?? $"Client #{rentalRequest.ClientId}";
         var invoiceCommand = new CreateInvoiceCommand(
-            UserId: rentalRequest.ClientId,
-            CompanyName: clientName,
-            Amount: rentalRequest.MonthlyPrice,
-            Currency: "USD",
-            Status: "pending",
-            IssuedAt: DateTime.UtcNow,
-            PaidAt: null,
-            ProviderId: command.ProviderId,
-            MaintenanceRequestId: null,
-            RentalRequestId: rentalRequest.Id
+            rentalRequest.ClientId,
+            clientName,
+            rentalRequest.MonthlyPrice,
+            "USD",
+            "pending",
+            DateTime.UtcNow,
+            null,
+            command.ProviderId,
+            null,
+            rentalRequest.Id
         );
 
         await invoiceCommandService.Handle(invoiceCommand);

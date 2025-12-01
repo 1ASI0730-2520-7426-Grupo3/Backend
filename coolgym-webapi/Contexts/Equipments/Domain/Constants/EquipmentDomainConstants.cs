@@ -1,9 +1,9 @@
 namespace coolgym_webapi.Contexts.Equipments.Domain.Constants;
 
 /// <summary>
-/// Domain-wide constants for the Equipment bounded context.
-/// Centralizes flags, status values and default configuration
-/// to avoid magic numbers and magic strings.
+///     Domain-wide constants for the Equipment bounded context.
+///     Centralizes flags, status values and default configuration
+///     to avoid magic numbers and magic strings.
 /// </summary>
 public static class EquipmentDomainConstants
 {

@@ -4,7 +4,7 @@ using coolgym_webapi.Contexts.Security.Domain.Model.Exceptions;
 namespace coolgym_webapi.Contexts.Security.Domain.Model.ValueObjects;
 
 /// <summary>
-/// Email value object with validation
+///     Email value object with validation
 /// </summary>
 public record Email
 {
@@ -30,6 +30,13 @@ public record Email
 
     public string Value { get; init; }
 
-    public static implicit operator string(Email email) => email.Value;
-    public override string ToString() => Value;
+    public static implicit operator string(Email email)
+    {
+        return email.Value;
+    }
+
+    public override string ToString()
+    {
+        return Value;
+    }
 }

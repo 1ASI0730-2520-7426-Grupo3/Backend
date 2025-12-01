@@ -6,7 +6,7 @@ using coolgym_webapi.Contexts.ClientPlans.Domain.Services;
 namespace coolgym_webapi.Contexts.ClientPlans.Application.QueryServices;
 
 /// <summary>
-/// Query service for client plans
+///     Query service for client plans
 /// </summary>
 public class ClientPlanQueryService(IClientPlanRepository clientPlanRepository) : IClientPlanQueryService
 {

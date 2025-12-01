@@ -4,7 +4,7 @@ using coolgym_webapi.Contexts.ClientPlans.Domain.Queries;
 namespace coolgym_webapi.Contexts.ClientPlans.Domain.Services;
 
 /// <summary>
-/// Query service interface for client plans
+///     Query service interface for client plans
 /// </summary>
 public interface IClientPlanQueryService
 {

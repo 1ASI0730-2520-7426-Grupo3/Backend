@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace coolgym_webapi.Contexts.Security.Domain.Middleware;
 
 /// <summary>
-/// Custom authentication middleware for JWT token validation
+///     Custom authentication middleware for JWT token validation
 /// </summary>
 public class AuthMiddleware
 {
@@ -19,7 +19,6 @@ public class AuthMiddleware
 
     public async Task InvokeAsync(HttpContext context, IJwtTokenService jwtTokenService)
     {
-
         var isAnonymousEndpoint = context.GetEndpoint()?.Metadata
             .GetMetadata<AllowAnonymousAttribute>() != null;
 

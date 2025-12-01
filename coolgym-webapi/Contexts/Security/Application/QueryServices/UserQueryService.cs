@@ -5,7 +5,7 @@ using coolgym_webapi.Contexts.Security.Domain.Model.Entities;
 namespace coolgym_webapi.Contexts.Security.Application.QueryServices;
 
 /// <summary>
-/// User query service - handles user queries
+///     User query service - handles user queries
 /// </summary>
 public class UserQueryService(IUserRepository userRepository) : IUserQueryService
 {

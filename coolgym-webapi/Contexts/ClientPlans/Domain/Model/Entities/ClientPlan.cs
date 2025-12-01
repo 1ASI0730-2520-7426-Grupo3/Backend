@@ -3,7 +3,7 @@ using coolgym_webapi.Contexts.Shared.Domain.Model.Entities;
 namespace coolgym_webapi.Contexts.ClientPlans.Domain.Model.Entities;
 
 /// <summary>
-/// ClientPlan entity - represents a subscription plan for clients
+///     ClientPlan entity - represents a subscription plan for clients
 /// </summary>
 public class ClientPlan : BaseEntity
 {

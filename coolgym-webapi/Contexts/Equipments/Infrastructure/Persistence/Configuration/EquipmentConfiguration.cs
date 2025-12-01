@@ -1,5 +1,4 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain;
-using coolgym_webapi.Contexts.Equipments.Domain.Constants;
+﻿using coolgym_webapi.Contexts.Equipments.Domain.Constants;
 using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

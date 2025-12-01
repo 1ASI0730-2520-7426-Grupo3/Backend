@@ -1,7 +1,7 @@
 namespace coolgym_webapi.Contexts.Security.Domain.Model.ValueObjects;
 
 /// <summary>
-/// User role enum - defines authorization roles
+///     User role enum - defines authorization roles
 /// </summary>
 public enum UserRole
 {
@@ -11,17 +11,23 @@ public enum UserRole
 
 public static class UserRoleExtensions
 {
-    public static string ToRoleName(this UserRole role) => role switch
+    public static string ToRoleName(this UserRole role)
     {
-        UserRole.Client => "Client",
-        UserRole.Provider => "Provider",
-        _ => throw new ArgumentOutOfRangeException(nameof(role))
-    };
+        return role switch
+        {
+            UserRole.Client => "Client",
+            UserRole.Provider => "Provider",
+            _ => throw new ArgumentOutOfRangeException(nameof(role))
+        };
+    }
 
-    public static UserRole FromString(string roleName) => roleName switch
+    public static UserRole FromString(string roleName)
     {
-        "Client" => UserRole.Client,
-        "Provider" => UserRole.Provider,
-        _ => throw new ArgumentException($"Invalid role: {roleName}")
-    };
+        return roleName switch
+        {
+            "Client" => UserRole.Client,
+            "Provider" => UserRole.Provider,
+            _ => throw new ArgumentException($"Invalid role: {roleName}")
+        };
+    }
 }

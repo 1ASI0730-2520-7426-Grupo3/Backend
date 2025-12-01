@@ -9,6 +9,23 @@ namespace coolgym_webapi.Contexts.Rentals.Domain.Model.Entities;
 /// </summary>
 public class RentalRequest : BaseEntity
 {
+    public RentalRequest()
+    {
+        Status = "pending";
+        RequestDate = DateTime.UtcNow;
+        MonthlyPrice = 0;
+    }
+
+    public RentalRequest(int equipmentId, int clientId, decimal monthlyPrice, string? notes = null)
+    {
+        EquipmentId = equipmentId;
+        ClientId = clientId;
+        MonthlyPrice = monthlyPrice;
+        Notes = notes;
+        Status = "pending";
+        RequestDate = DateTime.UtcNow;
+    }
+
     /// <summary>
     ///     Equipment identifier being requested for rental
     /// </summary>
@@ -49,23 +66,6 @@ public class RentalRequest : BaseEntity
     ///     Monthly rental price at the time of request
     /// </summary>
     public decimal MonthlyPrice { get; set; }
-
-    public RentalRequest()
-    {
-        Status = "pending";
-        RequestDate = DateTime.UtcNow;
-        MonthlyPrice = 0;
-    }
-
-    public RentalRequest(int equipmentId, int clientId, decimal monthlyPrice, string? notes = null)
-    {
-        EquipmentId = equipmentId;
-        ClientId = clientId;
-        MonthlyPrice = monthlyPrice;
-        Notes = notes;
-        Status = "pending";
-        RequestDate = DateTime.UtcNow;
-    }
 
     /// <summary>
     ///     Updates the status of the rental request

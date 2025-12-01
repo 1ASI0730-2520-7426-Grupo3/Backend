@@ -1,5 +1,4 @@
-﻿using coolgym_webapi.Contexts.Equipments.Domain;
-using coolgym_webapi.Contexts.Equipments.Domain.Constants;
+﻿using coolgym_webapi.Contexts.Equipments.Domain.Constants;
 using coolgym_webapi.Contexts.Equipments.Domain.Model.Entities;
 using coolgym_webapi.Contexts.Equipments.Domain.Repositories;
 using coolgym_webapi.Contexts.Shared.Infrastructure.Persistence.Configuration;
