@@ -52,20 +52,20 @@
             <LastGenOutput>coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.es.Designer.cs</LastGenOutput>
         </EmbeddedResource>
         <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.en.resx">
-          <Generator>ResXFileCodeGenerator</Generator>
-          <LastGenOutput>coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.en.Designer.cs</LastGenOutput>
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.en.Designer.cs</LastGenOutput>
         </EmbeddedResource>
         <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.es.resx">
-          <Generator>ResXFileCodeGenerator</Generator>
-          <LastGenOutput>coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.es.Designer.cs</LastGenOutput>
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.es.Designer.cs</LastGenOutput>
         </EmbeddedResource>
         <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.en.resx">
-          <Generator>ResXFileCodeGenerator</Generator>
-          <LastGenOutput>coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.en.Designer.cs</LastGenOutput>
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.en.Designer.cs</LastGenOutput>
         </EmbeddedResource>
         <EmbeddedResource Update="Resources\coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.es.resx">
-          <Generator>ResXFileCodeGenerator</Generator>
-          <LastGenOutput>coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.es.Designer.cs</LastGenOutput>
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.es.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
 
@@ -101,24 +101,24 @@
             <DependentUpon>coolgym_webapi.Contexts.Equipments.Interfaces.REST.EquipmentsController.es.resx</DependentUpon>
         </Compile>
         <Compile Update="Resources\coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.en.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.en.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.en.resx</DependentUpon>
         </Compile>
         <Compile Update="Resources\coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.es.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.es.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.ClientPlans.Interfaces.REST.ClientPlansController.es.resx</DependentUpon>
         </Compile>
         <Compile Update="Resources\coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.en.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.en.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.en.resx</DependentUpon>
         </Compile>
         <Compile Update="Resources\coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.es.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.es.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRequestsController.es.resx</DependentUpon>
         </Compile>
     </ItemGroup>
 

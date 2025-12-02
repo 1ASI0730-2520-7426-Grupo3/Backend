@@ -38,8 +38,8 @@ namespace coolgym_webapi.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("coolgym-webapi.Resources.coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRe" +
-                            "questsController.es", typeof(coolgym_webapi_Contexts_Rentals_Interfaces_REST_RentalRequestsController_es).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager(("coolgym-webapi.Resources.coolgym_webapi.Contexts.Rentals.Interfaces.REST.RentalRe" +
+                            "questsController.es"), typeof(coolgym_webapi_Contexts_Rentals_Interfaces_REST_RentalRequestsController_es).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -27,12 +27,19 @@ public class UserController(
     /// <remarks>
     ///     Creates a new user account applying the following rules:
     ///     <list type="bullet">
-    ///         <item><description>Username: 3–50 characters, unique.</description></item>
-    ///         <item><description>Email: valid format, unique.</description></item>
-    ///         <item><description>Password: minimum 6 characters.</description></item>
-    ///         <item><description>Role: <c>"Client"</c> or <c>"Provider"</c>.</description></item>
+    ///         <item>
+    ///             <description>Username: 3–50 characters, unique.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Email: valid format, unique.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Password: minimum 6 characters.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Role: <c>"Client"</c> or <c>"Provider"</c>.</description>
+    ///         </item>
     ///     </list>
-    ///
     ///     <para>Sample request:</para>
     ///     <code language="json">
     ///     POST /api/v1/users/register
@@ -87,7 +94,6 @@ public class UserController(
     /// </summary>
     /// <remarks>
     ///     Authenticates the user and returns a JWT access token on success.
-    ///
     ///     <para>Sample request:</para>
     ///     <code language="json">
     ///     POST /api/v1/users/login

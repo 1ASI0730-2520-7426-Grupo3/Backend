@@ -36,11 +36,16 @@ public class RentalRequestsController(
     /// <remarks>
     ///     Business rules:
     ///     <list type="bullet">
-    ///         <item><description>The caller must be authenticated.</description></item>
-    ///         <item><description>Only users with role <c>Client</c> can create rental requests.</description></item>
-    ///         <item><description>A client cannot create more than one pending request for the same equipment.</description></item>
+    ///         <item>
+    ///             <description>The caller must be authenticated.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Only users with role <c>Client</c> can create rental requests.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>A client cannot create more than one pending request for the same equipment.</description>
+    ///         </item>
     ///     </list>
-    ///
     ///     <para>Sample request body:</para>
     ///     <code language="json">
     ///     POST /api/v1/RentalRequests
@@ -179,11 +184,19 @@ public class RentalRequestsController(
     /// <remarks>
     ///     Business rules:
     ///     <list type="bullet">
-    ///         <item><description>The caller must be authenticated.</description></item>
-    ///         <item><description>Only users with role <c>Provider</c> can change the status.</description></item>
-    ///         <item><description>Allowed statuses depend on the domain rules (for example: pending, approved, rejected, completed, cancelled).</description></item>
+    ///         <item>
+    ///             <description>The caller must be authenticated.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Only users with role <c>Provider</c> can change the status.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>
+    ///                 Allowed statuses depend on the domain rules (for example: pending, approved, rejected,
+    ///                 completed, cancelled).
+    ///             </description>
+    ///         </item>
     ///     </list>
-    ///
     ///     <para>Sample request body:</para>
     ///     <code language="json">
     ///     PUT /api/v1/RentalRequests/10
@@ -257,10 +270,18 @@ public class RentalRequestsController(
     /// <remarks>
     ///     Business rules:
     ///     <list type="bullet">
-    ///         <item><description>The caller must be authenticated.</description></item>
-    ///         <item><description>Only users with role <c>Provider</c> can approve requests.</description></item>
-    ///         <item><description>Only requests in <c>pending</c> status can be approved.</description></item>
-    ///         <item><description>On approval, an invoice is created for the client based on the monthly price.</description></item>
+    ///         <item>
+    ///             <description>The caller must be authenticated.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Only users with role <c>Provider</c> can approve requests.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>Only requests in <c>pending</c> status can be approved.</description>
+    ///         </item>
+    ///         <item>
+    ///             <description>On approval, an invoice is created for the client based on the monthly price.</description>
+    ///         </item>
     ///     </list>
     /// </remarks>
     /// <param name="id">Rental request identifier.</param>
