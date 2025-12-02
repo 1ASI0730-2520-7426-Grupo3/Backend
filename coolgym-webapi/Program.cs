@@ -50,7 +50,8 @@ builder.Services.AddCors(options =>
             policy.WithOrigins(
                     "http://localhost:5173",
                     "https://localhost:5173",
-                    "https://frontend-coolgym-tf.vercel.app")
+                    "https://frontend-coolgym-tf.vercel.app",
+                    "https://frontend-coolgym-7ii3o8kgq-and12326s-projects.vercel.app")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials();
