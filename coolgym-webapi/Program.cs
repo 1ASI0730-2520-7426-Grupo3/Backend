@@ -168,26 +168,52 @@ using (var scope = app.Services.CreateScope())
     {
         var plans = new[]
         {
+            // Client Plans (Individual users)
             new ClientPlan(
                 "Basic",
-                "Perfect for beginners. Access to essential gym equipment.",
-                29.99m,
-                5,
+                "Perfect for individual users. Access to up to 6 machines.",
+                18.99m,
+                6,
                 false,
                 false
             ),
             new ClientPlan(
-                "Premium",
-                "For serious fitness enthusiasts. Access to all equipment with maintenance support.",
-                59.99m,
-                15,
+                "Standard",
+                "For active users. Access to up to 12 machines with maintenance support.",
+                35.13m,
+                12,
                 true,
                 false
             ),
             new ClientPlan(
-                "VIP",
-                "Ultimate gym experience. Unlimited equipment access with priority support.",
-                99.99m,
+                "Premium",
+                "For power users. Access to up to 24 machines with full support.",
+                67.56m,
+                24,
+                true,
+                true
+            ),
+            // Provider Plans (Company/Business users)
+            new ClientPlan(
+                "Small Company",
+                "Perfect for small businesses. Manage up to 10 clients.",
+                40.51m,
+                10,
+                false,
+                false
+            ),
+            new ClientPlan(
+                "Medium Company",
+                "Ideal for growing companies. Manage up to 30 clients with maintenance support.",
+                81.08m,
+                30,
+                true,
+                false
+            ),
+            new ClientPlan(
+                "Enterprise Premium",
+                "Ultimate solution for large enterprises. Unlimited clients with priority support.",
+                162.16m,
                 999,
                 true,
                 true

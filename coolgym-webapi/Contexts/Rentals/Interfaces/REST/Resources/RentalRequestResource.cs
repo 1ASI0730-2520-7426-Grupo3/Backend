@@ -9,6 +9,8 @@ public record RentalRequestResource(
     int ClientId,
     string? ClientEmail,
     int? ProviderId,
+    string? ProviderEmail,
+    string? ProviderName,
     DateTime RequestDate,
     string Status,
     string? Notes,

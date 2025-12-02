@@ -60,7 +60,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
             .IsRequired(false);
 
         builder.Property(u => u.ProfilePhoto)
-            .HasMaxLength(500)
+            .HasColumnType("LONGTEXT")
             .IsRequired(false);
 
         // Configure Email value object

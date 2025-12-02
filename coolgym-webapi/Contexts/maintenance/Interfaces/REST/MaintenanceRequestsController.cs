@@ -103,7 +103,7 @@ public class MaintenanceRequestsController(
         }
         catch (InvalidDataException ex)
         {
-            return BadRequest(new { message = localizer[ex.Message].Value });
+            return BadRequest(new { message = localizer[ex.ErrorCode, ex.Parameters].Value });
         }
         catch (ArgumentException ex)
         {
@@ -251,7 +251,7 @@ public class MaintenanceRequestsController(
         }
         catch (InvalidDataException ex)
         {
-            return BadRequest(new { message = localizer[ex.Message].Value });
+            return BadRequest(new { message = localizer[ex.ErrorCode, ex.Parameters].Value });
         }
         catch (ArgumentException ex)
         {
