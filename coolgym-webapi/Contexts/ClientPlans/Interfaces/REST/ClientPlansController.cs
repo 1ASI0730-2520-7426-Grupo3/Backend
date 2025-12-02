@@ -36,7 +36,10 @@ public class ClientPlansController(
     {
         var query = new GetAllClientPlans();
         var plans = await clientPlanQueryService.Handle(query);
-        var resources = plans.Select(ClientPlanResourceFromEntityAssembler.ToResourceFromEntity);
+        var resources = plans.Select(plan => ClientPlanResourceFromEntityAssembler.ToResourceFromEntity(
+            plan,
+            localizer[$"Plan.{plan.Name}.Name"].Value,
+            localizer[$"Plan.{plan.Name}.Description"].Value));
         return Ok(resources);
     }
 
@@ -58,7 +61,10 @@ public class ClientPlansController(
         if (plan == null)
             return NotFound(new { message = localizer["ClientPlanNotFound", id].Value });
 
-        var resource = ClientPlanResourceFromEntityAssembler.ToResourceFromEntity(plan);
+        var resource = ClientPlanResourceFromEntityAssembler.ToResourceFromEntity(
+            plan,
+            localizer[$"Plan.{plan.Name}.Name"].Value,
+            localizer[$"Plan.{plan.Name}.Description"].Value);
         return Ok(resource);
     }
 }

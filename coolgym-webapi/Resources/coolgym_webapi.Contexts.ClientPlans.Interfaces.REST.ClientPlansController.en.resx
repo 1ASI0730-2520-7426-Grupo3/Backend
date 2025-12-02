@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"
+                id="root"
+                xmlns="">
         <xsd:element name="root" msdata:IsDataSet="true">
-            
+
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -13,12 +15,61 @@
         <value>1.3</value>
     </resheader>
     <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
     </resheader>
     <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
     </resheader>
+
+    <!-- Client Plans -->
+    <data name="Plan.Basic.Name" xml:space="preserve">
+        <value>Basic</value>
+    </data>
+    <data name="Plan.Basic.Description" xml:space="preserve">
+        <value>Perfect for individual users. Access to up to 6 machines.</value>
+    </data>
+
+    <data name="Plan.Standard.Name" xml:space="preserve">
+        <value>Standard</value>
+    </data>
+    <data name="Plan.Standard.Description" xml:space="preserve">
+        <value>For active users. Access to up to 12 machines with maintenance support.</value>
+    </data>
+
+    <data name="Plan.Premium.Name" xml:space="preserve">
+        <value>Premium</value>
+    </data>
+    <data name="Plan.Premium.Description" xml:space="preserve">
+        <value>For power users. Access to up to 24 machines with full support.</value>
+    </data>
+
+    <!-- Provider Plans -->
+    <data name="Plan.Small Company.Name" xml:space="preserve">
+        <value>Small Company</value>
+    </data>
+    <data name="Plan.Small Company.Description" xml:space="preserve">
+        <value>Perfect for small businesses. Manage up to 10 clients.</value>
+    </data>
+
+    <data name="Plan.Medium Company.Name" xml:space="preserve">
+        <value>Medium Company</value>
+    </data>
+    <data name="Plan.Medium Company.Description" xml:space="preserve">
+        <value>Ideal for growing companies. Manage up to 30 clients with maintenance support.</value>
+    </data>
+
+    <data name="Plan.Enterprise Premium.Name" xml:space="preserve">
+        <value>Enterprise Premium</value>
+    </data>
+    <data name="Plan.Enterprise Premium.Description" xml:space="preserve">
+        <value>Ultimate solution for large enterprises. Unlimited clients with priority support.</value>
+    </data>
+
     <data name="ClientPlanNotFound" xml:space="preserve">
-        <value>Client plan with ID {0} was not found.</value>
+        <value>Client plan with ID {0} not found.</value>
     </data>
 </root>

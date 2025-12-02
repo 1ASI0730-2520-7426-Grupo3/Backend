@@ -20,4 +20,20 @@ public static class ClientPlanResourceFromEntityAssembler
             entity.HasPrioritySupport
         );
     }
+
+    /// <summary>
+    ///     Assembler with localized name and description
+    /// </summary>
+    public static ClientPlanResource ToResourceFromEntity(ClientPlan entity, string localizedName, string localizedDescription)
+    {
+        return new ClientPlanResource(
+            entity.Id,
+            localizedName,
+            localizedDescription,
+            entity.MonthlyPrice,
+            entity.MaxEquipmentAccess,
+            entity.HasMaintenanceSupport,
+            entity.HasPrioritySupport
+        );
+    }
 }
