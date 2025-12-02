@@ -47,9 +47,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy(MyAllowSpecificOrigins,
         policy =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins(
+                    "http://localhost:5173",
+                    "https://localhost:5173",
+                    "https://frontend-coolgym-tf.vercel.app")
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
 });
 
