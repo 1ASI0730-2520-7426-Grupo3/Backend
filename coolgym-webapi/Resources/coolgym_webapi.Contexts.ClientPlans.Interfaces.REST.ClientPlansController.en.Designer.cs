@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace coolgym {
+namespace coolgym_webapi.Resources {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -22,15 +22,15 @@ namespace coolgym {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class coolgym_webapi_Contexts_ClientPlans_Interfaces_REST_ClientPlansController_en {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal coolgym_webapi_Contexts_ClientPlans_Interfaces_REST_ClientPlansController_en() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace coolgym {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,9 +59,117 @@ namespace coolgym {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to Client plan with ID {0} was not found..
+        ///   Looks up a localized string similar to Basic.
+        /// </summary>
+        internal static string Plan_Basic_Name {
+            get {
+                return ResourceManager.GetString("Plan.Basic.Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Perfect for individual users. Access to up to 6 machines..
+        /// </summary>
+        internal static string Plan_Basic_Description {
+            get {
+                return ResourceManager.GetString("Plan.Basic.Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Standard.
+        /// </summary>
+        internal static string Plan_Standard_Name {
+            get {
+                return ResourceManager.GetString("Plan.Standard.Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to For active users. Access to up to 12 machines with maintenance support..
+        /// </summary>
+        internal static string Plan_Standard_Description {
+            get {
+                return ResourceManager.GetString("Plan.Standard.Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Premium.
+        /// </summary>
+        internal static string Plan_Premium_Name {
+            get {
+                return ResourceManager.GetString("Plan.Premium.Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to For power users. Access to up to 24 machines with full support..
+        /// </summary>
+        internal static string Plan_Premium_Description {
+            get {
+                return ResourceManager.GetString("Plan.Premium.Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Small Company.
+        /// </summary>
+        internal static string Plan_Small_Company_Name {
+            get {
+                return ResourceManager.GetString("Plan.Small Company.Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Perfect for small businesses. Manage up to 10 clients..
+        /// </summary>
+        internal static string Plan_Small_Company_Description {
+            get {
+                return ResourceManager.GetString("Plan.Small Company.Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Medium Company.
+        /// </summary>
+        internal static string Plan_Medium_Company_Name {
+            get {
+                return ResourceManager.GetString("Plan.Medium Company.Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Ideal for growing companies. Manage up to 30 clients with maintenance support..
+        /// </summary>
+        internal static string Plan_Medium_Company_Description {
+            get {
+                return ResourceManager.GetString("Plan.Medium Company.Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enterprise Premium.
+        /// </summary>
+        internal static string Plan_Enterprise_Premium_Name {
+            get {
+                return ResourceManager.GetString("Plan.Enterprise Premium.Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Ultimate solution for large enterprises. Unlimited clients with priority support..
+        /// </summary>
+        internal static string Plan_Enterprise_Premium_Description {
+            get {
+                return ResourceManager.GetString("Plan.Enterprise Premium.Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Client plan with ID {0} not found..
         /// </summary>
         internal static string ClientPlanNotFound {
             get {
