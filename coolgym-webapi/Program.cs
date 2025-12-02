@@ -47,14 +47,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(MyAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins(
-                    "http://localhost:5173",
-                    "https://localhost:5173",
-                    "https://frontend-coolgym-tf.vercel.app",
-                    "https://frontend-coolgym-7ii3o8kgq-and12326s-projects.vercel.app")
+            policy.AllowAnyOrigin()
                 .AllowAnyHeader()
-                .AllowAnyMethod()
-                .AllowCredentials();
+                .AllowAnyMethod();
         });
 });
 
@@ -168,7 +163,7 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<CoolgymContext>();
     context.Database.EnsureCreated();
-    
+
     if (!context.ClientPlans.Any())
     {
         var plans = new[]

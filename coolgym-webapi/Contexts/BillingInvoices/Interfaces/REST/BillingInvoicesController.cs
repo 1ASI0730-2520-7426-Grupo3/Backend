@@ -72,7 +72,7 @@ public class BillingInvoicesController(
         var query = new GetInvoicesByUserId(userId);
         var invoices = await invoiceQueryService.Handle(query);
         var resources = invoices.Select(InvoiceResourceFromEntityAssembler.ToResourceFromEntity);
-        
+
         return Ok(resources);
     }
 

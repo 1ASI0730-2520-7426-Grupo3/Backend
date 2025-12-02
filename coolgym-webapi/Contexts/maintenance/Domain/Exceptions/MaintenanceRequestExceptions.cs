@@ -23,15 +23,15 @@ public class DuplicateEquipmentMaintenanceRequestException : Exception
 
 public class InvalidDataException : Exception
 {
-    public string ErrorCode { get; }
-    public object?[] Parameters { get; }
-
     public InvalidDataException(string errorCode, params object?[] parameters)
         : base($"Invalid data: {errorCode}")
     {
         ErrorCode = errorCode;
         Parameters = parameters;
     }
+
+    public string ErrorCode { get; }
+    public object?[] Parameters { get; }
 
     public static InvalidDataException EmptyObservation()
     {

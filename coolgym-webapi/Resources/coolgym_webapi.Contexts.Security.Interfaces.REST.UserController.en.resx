@@ -1,118 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+                xmlns="">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
 
-  <!-- Authentication Messages -->
-  <data name="Invalid email or password" xml:space="preserve">
+    <!-- Authentication Messages -->
+    <data name="Invalid email or password" xml:space="preserve">
     <value>Invalid email or password</value>
   </data>
 
-  <!-- User Not Found Messages -->
-  <data name="User with ID {0} not found" xml:space="preserve">
+    <!-- User Not Found Messages -->
+    <data name="User with ID {0} not found" xml:space="preserve">
     <value>User with ID {0} not found</value>
   </data>
 
-  <!-- Password Validation Messages -->
-  <data name="Password must be at least 6 characters long" xml:space="preserve">
+    <!-- Password Validation Messages -->
+    <data name="Password must be at least 6 characters long" xml:space="preserve">
     <value>Password must be at least 6 characters long</value>
   </data>
 
-  <data name="Password is required" xml:space="preserve">
+    <data name="Password is required" xml:space="preserve">
     <value>Password is required</value>
   </data>
 
-  <!-- User Validation Messages -->
-  <data name="Username is required" xml:space="preserve">
+    <!-- User Validation Messages -->
+    <data name="Username is required" xml:space="preserve">
     <value>Username is required</value>
   </data>
 
-  <data name="Username must be between 3 and 50 characters" xml:space="preserve">
+    <data name="Username must be between 3 and 50 characters" xml:space="preserve">
     <value>Username must be between 3 and 50 characters</value>
   </data>
 
-  <data name="Email is required" xml:space="preserve">
+    <data name="Email is required" xml:space="preserve">
     <value>Email is required</value>
   </data>
 
-  <data name="Invalid email format" xml:space="preserve">
+    <data name="Invalid email format" xml:space="preserve">
     <value>Invalid email format</value>
   </data>
 
-  <data name="Full name is required" xml:space="preserve">
+    <data name="Full name is required" xml:space="preserve">
     <value>Full name is required</value>
   </data>
 
-  <data name="Role must be Client or Provider" xml:space="preserve">
+    <data name="Role must be Client or Provider" xml:space="preserve">
     <value>Role must be Client or Provider</value>
   </data>
 
-  <!-- Registration Messages -->
-  <data name="Email already exists" xml:space="preserve">
+    <!-- Registration Messages -->
+    <data name="Email already exists" xml:space="preserve">
     <value>Email already exists</value>
   </data>
 
-  <data name="Username already exists" xml:space="preserve">
+    <data name="Username already exists" xml:space="preserve">
     <value>Username already exists</value>
   </data>
 
-  <data name="User registration failed" xml:space="preserve">
+    <data name="User registration failed" xml:space="preserve">
     <value>User registration failed</value>
   </data>
 </root>
