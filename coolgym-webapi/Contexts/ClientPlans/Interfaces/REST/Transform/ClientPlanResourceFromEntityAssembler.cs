@@ -17,7 +17,8 @@ public static class ClientPlanResourceFromEntityAssembler
             entity.MonthlyPrice,
             entity.MaxEquipmentAccess,
             entity.HasMaintenanceSupport,
-            entity.HasPrioritySupport
+            entity.HasPrioritySupport,
+            entity.TargetUserRole
         );
     }
 }

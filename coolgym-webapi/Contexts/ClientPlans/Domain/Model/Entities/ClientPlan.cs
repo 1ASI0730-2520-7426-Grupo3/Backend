@@ -20,7 +20,8 @@ public class ClientPlan : BaseEntity
         decimal monthlyPrice,
         int maxEquipmentAccess,
         bool hasMaintenanceSupport,
-        bool hasPrioritySupport)
+        bool hasPrioritySupport,
+        string targetUserRole = "Client")
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Plan name cannot be empty");
@@ -37,6 +38,7 @@ public class ClientPlan : BaseEntity
         MaxEquipmentAccess = maxEquipmentAccess;
         HasMaintenanceSupport = hasMaintenanceSupport;
         HasPrioritySupport = hasPrioritySupport;
+        TargetUserRole = targetUserRole;
         CreatedDate = DateTime.UtcNow;
     }
 
@@ -46,4 +48,5 @@ public class ClientPlan : BaseEntity
     public int MaxEquipmentAccess { get; private set; }
     public bool HasMaintenanceSupport { get; private set; }
     public bool HasPrioritySupport { get; private set; }
+    public string TargetUserRole { get; private set; } = "Client";
 }

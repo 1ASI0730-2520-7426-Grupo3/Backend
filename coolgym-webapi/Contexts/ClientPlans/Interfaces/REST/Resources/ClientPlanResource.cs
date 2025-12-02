@@ -10,5 +10,6 @@ public record ClientPlanResource(
     decimal MonthlyPrice,
     int MaxEquipmentAccess,
     bool HasMaintenanceSupport,
-    bool HasPrioritySupport
+    bool HasPrioritySupport,
+    string TargetUserRole
 );

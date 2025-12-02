@@ -168,29 +168,62 @@ using (var scope = app.Services.CreateScope())
     {
         var plans = new[]
         {
+            // Plans for CLIENTS (machine-based limits)
             new ClientPlan(
                 "Basic",
-                "Perfect for beginners. Access to essential gym equipment.",
-                29.99m,
-                5,
+                "Perfect for individual users. Access to up to 6 machines.",
+                18.99m,
+                6,
                 false,
-                false
+                false,
+                "Client"
+            ),
+            new ClientPlan(
+                "Standard",
+                "For active users. Access to up to 12 machines with maintenance support.",
+                35.13m,
+                12,
+                true,
+                false,
+                "Client"
             ),
             new ClientPlan(
                 "Premium",
-                "For serious fitness enthusiasts. Access to all equipment with maintenance support.",
-                59.99m,
-                15,
+                "For power users. Access to up to 24 machines with full support.",
+                67.56m,
+                24,
                 true,
-                false
+                true,
+                "Client"
+            ),
+
+            // Plans for PROVIDERS (client-based limits)
+            new ClientPlan(
+                "Small Company",
+                "Perfect for small businesses. Manage up to 10 clients.",
+                40.51m,
+                10,
+                false,
+                false,
+                "Provider"
             ),
             new ClientPlan(
-                "VIP",
-                "Ultimate gym experience. Unlimited equipment access with priority support.",
-                99.99m,
+                "Medium Company",
+                "Ideal for growing companies. Manage up to 30 clients with maintenance support.",
+                81.08m,
+                30,
+                true,
+                false,
+                "Provider"
+            ),
+            new ClientPlan(
+                "Enterprise Premium",
+                "Ultimate solution for large enterprises. Unlimited clients with priority support.",
+                162.16m,
                 999,
                 true,
-                true
+                true,
+                "Provider"
             )
         };
 

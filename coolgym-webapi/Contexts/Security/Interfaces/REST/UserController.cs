@@ -167,4 +167,31 @@ public class UserController(
         var userResource = UserResourceFromEntityAssembler.ToResourceFromEntity(user);
         return Ok(userResource);
     }
+
+    /// <summary>
+    ///     Gets user's current usage statistics against their plan limit.
+    /// </summary>
+    /// <remarks>
+    ///     Returns the current usage count, plan limit, and usage type (machines or clients).
+    ///     <list type="bullet">
+    ///         <item><description>For Clients: counts active rented machines</description></item>
+    ///         <item><description>For Providers: counts unique clients served</description></item>
+    ///     </list>
+    /// </remarks>
+    [HttpGet("{id:int}/usage")]
+    [ProducesResponseType(typeof(UserUsageStatisticsResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUserUsageStatistics(int id)
+    {
+        var queryService = HttpContext.RequestServices.GetRequiredService<IUserQueryService>();
+        var user = await queryService.GetByIdAsync(id);
+
+        if (user == null)
+            return NotFound(new { message = localizer["User with ID {0} not found", id].Value });
+
+        var (currentUsage, planLimit, usageType) = await queryService.GetUserUsageStatisticsAsync(id);
+
+        var resource = new UserUsageStatisticsResource(currentUsage, planLimit, usageType);
+        return Ok(resource);
+    }
 }

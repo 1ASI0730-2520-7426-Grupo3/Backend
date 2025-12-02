@@ -9,4 +9,5 @@ public interface IUserQueryService
 {
     Task<User?> GetByIdAsync(int userId);
     Task<User?> GetByEmailAsync(string email);
+    Task<(int currentUsage, int planLimit, string usageType)> GetUserUsageStatisticsAsync(int userId);
 }
