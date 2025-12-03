@@ -199,7 +199,7 @@ public class EquipmentsController(
             if (userRole != "Provider" && userRole != "Client")
                 return StatusCode(403, new { message = "Only providers and clients can create equipment" });
 
-            var command = CreateEquipmentCommandFromResourceAssembler.ToCommandFromResource(resource);
+            var command = CreateEquipmentCommandFromResourceAssembler.ToCommandFromResource(resource, authenticatedUser.Id);
             var equipment = await equipmentCommandService.Handle(command);
             var equipmentResource = EquipmentResourceFromEntityAssembler.ToResourceFromEntity(equipment);
 

@@ -96,6 +96,10 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
             .HasMaxLength(500)
             .IsRequired(false);
 
+        builder.Property(e => e.OwnerUserId)
+            .HasColumnName("owner_user_id")
+            .IsRequired(false);
+
         builder.HasIndex(e => e.SerialNumber)
             .IsUnique()
             .HasDatabaseName("ix_equipments_serial_number");

@@ -10,9 +10,12 @@ public static class MaintenanceRequestResourceFromEntityAssembler
         return new MaintenanceRequestResource(
             entity.Id,
             entity.EquipmentId,
+            entity.RequestedByUserId,
+            entity.AssignedToProviderId,
             entity.SelectedDate,
             entity.Observation,
-            entity.Status
+            entity.Status,
+            null // EquipmentName - will be set separately if needed
         );
     }
 

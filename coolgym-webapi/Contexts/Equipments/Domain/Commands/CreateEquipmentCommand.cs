@@ -15,5 +15,6 @@ public record CreateEquipmentCommand(
     int PowerWatts,
     string LocationName,
     string LocationAddress,
-    string? Image
+    string? Image,
+    int? OwnerUserId
 );

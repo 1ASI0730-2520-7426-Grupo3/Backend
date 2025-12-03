@@ -37,6 +37,14 @@ public class MaintenanceRequestConfiguration : IEntityTypeConfiguration<Maintena
             .HasColumnName("equipment_id")
             .IsRequired();
 
+        builder.Property(e => e.RequestedByUserId)
+            .HasColumnName("requested_by_user_id")
+            .IsRequired();
+
+        builder.Property(e => e.AssignedToProviderId)
+            .HasColumnName("assigned_to_provider_id")
+            .IsRequired(false);
+
         builder.Property(e => e.SelectedDate)
             .HasColumnName("selected_date")
             .IsRequired();

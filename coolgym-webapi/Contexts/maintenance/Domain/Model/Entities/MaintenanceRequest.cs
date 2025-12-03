@@ -17,10 +17,13 @@ public class MaintenanceRequest : BaseEntity
     {
     }
 
-    public MaintenanceRequest(int equipmentId, DateTime selectedDate, string observation)
+    public MaintenanceRequest(int equipmentId, DateTime selectedDate, string observation, int requestedByUserId, int? assignedToProviderId = null)
     {
         if (equipmentId <= 0)
             throw new InvalidDataException("Equipment identifier must be positive.");
+
+        if (requestedByUserId <= 0)
+            throw new InvalidDataException("User identifier must be positive.");
 
         if (string.IsNullOrWhiteSpace(observation))
             throw InvalidDataException.EmptyObservation();
@@ -38,6 +41,8 @@ public class MaintenanceRequest : BaseEntity
             throw InvalidDataException.SelectedDateTooSoon(difference, MinimumLeadTime);
 
         EquipmentId = equipmentId;
+        RequestedByUserId = requestedByUserId;
+        AssignedToProviderId = assignedToProviderId;
         SelectedDate = selectedDate;
         Observation = observation.Trim();
         Status = PendingStatus;
@@ -45,6 +50,8 @@ public class MaintenanceRequest : BaseEntity
     }
 
     public int EquipmentId { get; private set; }
+    public int RequestedByUserId { get; private set; }
+    public int? AssignedToProviderId { get; private set; }
     public DateTime SelectedDate { get; private set; }
     public string Observation { get; private set; } = string.Empty;
     public string Status { get; private set; } = PendingStatus;
@@ -65,6 +72,15 @@ public class MaintenanceRequest : BaseEntity
             throw new InvalidMaintenanceRequestStatusException();
 
         Status = normalizedStatus;
+        UpdatedDate = DateTime.UtcNow;
+    }
+
+    public void AssignToProvider(int providerId)
+    {
+        if (providerId <= 0)
+            throw new InvalidDataException("Provider identifier must be positive.");
+
+        AssignedToProviderId = providerId;
         UpdatedDate = DateTime.UtcNow;
     }
 }

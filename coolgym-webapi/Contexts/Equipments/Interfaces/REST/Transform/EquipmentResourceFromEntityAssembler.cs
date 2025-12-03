@@ -29,6 +29,7 @@ public static class EquipmentResourceFromEntityAssembler
             entity.ActiveStatus,
             entity.Notes,
             entity.Image,
+            entity.OwnerUserId,
             new LocationResource(entity.Location.Name, entity.Location.Address),
             new UsageStatsResource(
                 entity.Usage.TotalMinutes,

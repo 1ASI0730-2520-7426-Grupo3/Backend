@@ -32,7 +32,9 @@ public class MaintenanceRequestCommandService(
         var maintenanceRequest = new MaintenanceRequest(
             command.EquipmentId,
             command.SelectedDate,
-            command.Observation);
+            command.Observation,
+            command.RequestedByUserId,
+            command.AssignedToProviderId);
 
         await maintenanceRequestRepository.AddAsync(maintenanceRequest);
         await unitOfWork.CompleteAsync();
@@ -61,6 +63,18 @@ public class MaintenanceRequestCommandService(
             throw new MaintenanceRequestIsAlreadyPendingException();
 
         throw new InvalidMaintenanceRequestStatusException();
+    }
+
+    public async Task<MaintenanceRequest?> Handle(AssignMaintenanceRequestCommand command)
+    {
+        var maintenanceRequest = await maintenanceRequestRepository.FindByIdAsync(command.Id);
+        if (maintenanceRequest == null) throw new MaintenanceRequestNotFoundException(command.Id);
+
+        maintenanceRequest.AssignToProvider(command.ProviderId);
+        maintenanceRequestRepository.Update(maintenanceRequest);
+        await unitOfWork.CompleteAsync();
+
+        return maintenanceRequest;
     }
 
     public async Task<bool> Handle(DeleteMaintenanceRequestCommand command)

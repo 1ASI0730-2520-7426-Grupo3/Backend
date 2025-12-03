@@ -32,7 +32,8 @@ public class Equipment : BaseEntity
         string code,
         DateTime installationDate,
         int powerWatts,
-        Location location)
+        Location location,
+        int? ownerUserId = null)
     {
         Name = name;
         Type = type;
@@ -43,6 +44,7 @@ public class Equipment : BaseEntity
         InstallationDate = installationDate;
         PowerWatts = powerWatts;
         Location = location ?? throw new ArgumentNullException(nameof(location));
+        OwnerUserId = ownerUserId;
 
         Status = EquipmentDomainConstants.StatusActive;
         IsPoweredOn = false;
@@ -75,6 +77,8 @@ public class Equipment : BaseEntity
     public string? Notes { get; set; }
 
     public string? Image { get; set; }
+
+    public int? OwnerUserId { get; set; }
 
     public Location Location { get; private set; } = null!;
     public UsageStats Usage { get; private set; } = null!;

@@ -12,7 +12,7 @@ public static class CreateEquipmentCommandFromResourceAssembler
     /// <summary>
     ///     Converts CreateEquipmentResource into CreateEquipmentCommand
     /// </summary>
-    public static CreateEquipmentCommand ToCommandFromResource(CreateEquipmentResource resource)
+    public static CreateEquipmentCommand ToCommandFromResource(CreateEquipmentResource resource, int? ownerUserId = null)
     {
         return new CreateEquipmentCommand(
             resource.Name,
@@ -25,7 +25,8 @@ public static class CreateEquipmentCommandFromResourceAssembler
             resource.PowerWatts,
             resource.LocationName,
             resource.LocationAddress,
-            resource.Image
+            resource.Image,
+            ownerUserId
         );
     }
 }

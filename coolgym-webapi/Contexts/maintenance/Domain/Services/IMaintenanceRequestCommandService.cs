@@ -9,5 +9,7 @@ public interface IMaintenanceRequestCommandService
 
     Task<MaintenanceRequest?> Handle(UpdateMaintenanceRequestStatusCommand command);
 
+    Task<MaintenanceRequest?> Handle(AssignMaintenanceRequestCommand command);
+
     Task<bool> Handle(DeleteMaintenanceRequestCommand command);
 }

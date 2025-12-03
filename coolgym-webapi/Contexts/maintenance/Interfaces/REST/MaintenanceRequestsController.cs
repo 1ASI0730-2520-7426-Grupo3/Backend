@@ -83,7 +83,9 @@ public class MaintenanceRequestsController(
 
         try
         {
-            var command = CreateMaintenanceRequestCommandFromResourceAssembler.ToCommandFromResource(resource);
+            var command = CreateMaintenanceRequestCommandFromResourceAssembler.ToCommandFromResource(
+                resource,
+                authenticatedUser.Id);
             var maintenanceRequest = await maintenanceRequestCommandService.Handle(command);
             var maintenanceRequestResource =
                 MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
@@ -199,6 +201,37 @@ public class MaintenanceRequestsController(
     }
 
     /// <summary>
+    ///     Gets maintenance requests assigned to a specific provider with user information.
+    /// </summary>
+    /// <param name="providerId">Provider user identifier.</param>
+    /// <returns>
+    ///     Returns <c>200 OK</c> with the list of maintenance requests assigned to the provider including client details.
+    /// </returns>
+    /// <remarks>
+    ///     This endpoint returns maintenance requests with client and provider information.
+    ///     Used by providers to see their assigned maintenance tasks with client names.
+    /// </remarks>
+    [HttpGet("provider/{providerId:int}")]
+    [ProducesResponseType(typeof(IEnumerable<MaintenanceWithUserInfoResource>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetMaintenanceRequestsByProviderId(int providerId)
+    {
+        // Get authenticated user from middleware
+        var authenticatedUser = HttpContext.Items["User"] as User;
+
+        // Authorization: User must be authenticated
+        if (authenticatedUser == null)
+            return Unauthorized(new { message = "Authentication required" });
+
+        // Authorization: Providers can only see their own maintenance requests
+        if (authenticatedUser.Role.ToRoleName() == "Provider" && authenticatedUser.Id != providerId)
+            return StatusCode(403, new { message = "You can only view your own maintenance requests" });
+
+        var query = new GetMaintenanceRequestsByProviderId(providerId);
+        var maintenanceRequests = await maintenanceRequestQueryService.Handle(query);
+        return Ok(maintenanceRequests);
+    }
+
+    /// <summary>
     ///     Updates the status of an existing maintenance request.
     /// </summary>
     /// <param name="id">Maintenance request identifier.</param>
@@ -264,6 +297,68 @@ public class MaintenanceRequestsController(
                 new
                 {
                     message = localizer["An error occurred while updating the maintenance request."].Value,
+                    detail = ex.Message
+                });
+        }
+    }
+
+    /// <summary>
+    ///     Assigns a maintenance request to a provider (provider accepts the request).
+    /// </summary>
+    /// <param name="id">Maintenance request identifier.</param>
+    /// <returns>
+    ///     Returns <c>200 OK</c> with the updated maintenance request when the assignment succeeds.
+    ///     Returns <c>404 Not Found</c> when the maintenance request cannot be found.
+    ///     Returns <c>401 Unauthorized</c> when the user is not authenticated.
+    ///     Returns <c>403 Forbidden</c> when the user is not a provider.
+    ///     Returns <c>500 Internal Server Error</c> when an unexpected error occurs.
+    /// </returns>
+    /// <remarks>
+    ///     This endpoint is used when a provider accepts a maintenance request.
+    ///     The authenticated provider will be assigned to the maintenance request.
+    /// </remarks>
+    [HttpPut("{id:int}/assign")]
+    [ProducesResponseType(typeof(MaintenanceRequestResource), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> AssignMaintenanceRequestToProvider(int id)
+    {
+        // Get authenticated user from middleware
+        var authenticatedUser = HttpContext.Items["User"] as User;
+
+        // Authorization: User must be authenticated
+        if (authenticatedUser == null)
+            return Unauthorized(new { message = "Authentication required" });
+
+        // Authorization: Only Providers can accept/assign maintenance requests
+        if (authenticatedUser.Role.ToRoleName() != "Provider")
+            return StatusCode(403, new { message = "Only providers can accept maintenance requests" });
+
+        try
+        {
+            var command = new AssignMaintenanceRequestCommand(id, authenticatedUser.Id);
+            var maintenanceRequest = await maintenanceRequestCommandService.Handle(command);
+
+            if (maintenanceRequest == null)
+                return NotFound(new { message = localizer[$"Maintenance request with id {id} was not found."].Value });
+
+            var maintenanceRequestResource =
+                MaintenanceRequestResourceFromEntityAssembler.ToResourceFromEntity(maintenanceRequest);
+            return Ok(maintenanceRequestResource);
+        }
+        catch (MaintenanceRequestNotFoundException ex)
+        {
+            return NotFound(new { message = localizer[ex.Message].Value });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(
+                StatusCodes.Status500InternalServerError,
+                new
+                {
+                    message = localizer["An error occurred while assigning the maintenance request."].Value,
                     detail = ex.Message
                 });
         }

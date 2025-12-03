@@ -19,6 +19,7 @@ public record EquipmentResource(
     string ActiveStatus,
     string? Notes,
     string? Image,
+    int? OwnerUserId,
     LocationResource Location,
     UsageStatsResource Usage,
     ControlSettingsResource Controls,

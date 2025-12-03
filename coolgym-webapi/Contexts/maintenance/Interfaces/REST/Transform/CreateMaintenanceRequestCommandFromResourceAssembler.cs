@@ -5,12 +5,17 @@ namespace coolgym_webapi.Contexts.maintenance.Interfaces.REST.Transform;
 
 public static class CreateMaintenanceRequestCommandFromResourceAssembler
 {
-    public static CreateMaintenanceRequestCommand ToCommandFromResource(CreateMaintenanceRequestResource resource)
+    public static CreateMaintenanceRequestCommand ToCommandFromResource(
+        CreateMaintenanceRequestResource resource,
+        int requestedByUserId,
+        int? assignedToProviderId = null)
     {
         return new CreateMaintenanceRequestCommand(
             resource.EquipmentId,
             resource.SelectedDate,
-            resource.Observation
+            resource.Observation,
+            requestedByUserId,
+            assignedToProviderId
         );
     }
 }

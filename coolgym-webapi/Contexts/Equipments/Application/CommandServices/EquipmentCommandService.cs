@@ -38,7 +38,8 @@ public class EquipmentCommandService(IEquipmentRepository equipmentRepository, I
             command.Code,
             command.InstallationDate,
             command.PowerWatts,
-            location
+            location,
+            command.OwnerUserId
         );
 
         if (!string.IsNullOrWhiteSpace(command.Image))
